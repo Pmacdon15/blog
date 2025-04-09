@@ -199,7 +199,7 @@ export default function BlogPage() {
                             return (
                                 <div key={index}>
                                     <h1 className="text-5xl text-center">{section.title}</h1>
-                                    <p>Published on {section.publishDate}</p>
+                                    <p className='text-center md:text-left'>Published on {section.publishDate}</p>
                                 </div>
                             );
                         case 2:
@@ -238,12 +238,12 @@ export default function BlogPage() {
 function Paragraph({ section }: { section: Section }) {
     if (section.type === 3) {
         return (
-            <div className='w-full' >
-                {section.title && <h1 className='text-4xl my-4'>{section.title}</h1>}
-                <p className='indent-8 text'>
+            <div className="w-full text-center md:text-left">
+                {section.title && <h1 className="text-4xl my-4 ">{section.title}</h1>}
+                <p className="indent-8">
                     {renderTextWithLinks(section.text || '')}
                 </p>
             </div>
-        )
+        );
     }
 }
