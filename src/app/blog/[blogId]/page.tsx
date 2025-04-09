@@ -204,7 +204,14 @@ export default function BlogPage() {
                             );
                         case 2:
                             return (
-                                <Image className={`w-${section.width} h-auto`} key={index} src={section.src || ''} alt={section.alt || ''} />
+                                <Image 
+                                className="w-36 h-auto" 
+                                key={index} 
+                                src={section.src || ''} 
+                                alt={section.alt || ''} 
+                                width={600} 
+                                height={600} 
+                            />
                             );
                         case 3:
                             return (

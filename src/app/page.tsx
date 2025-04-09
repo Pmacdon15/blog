@@ -1,19 +1,11 @@
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { redirect } from 'next/navigation'
+export default async function Home() {
 
-export default function Home() {
-  const codeString = `function add(a, b) {
-    return a + b;
-  }`;
-
-
+  redirect('/blog/1')
   return (
-    <div className=" font-[family-name:var(--font-geist-sans)]">
- 
-      
-      <SyntaxHighlighter language="javascript" style={solarizedlight} showLineNumbers>
-        {codeString}
-      </SyntaxHighlighter>
+    <div className=" min-h-screen flex font-[family-name:var(--font-geist-sans)]">
+
+
     </div>
   );
 };
