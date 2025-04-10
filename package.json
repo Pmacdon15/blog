@@ -33,12 +33,10 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "resolutions": {
-    "prismjs": "1.30.0"
-  },
- "overrides": {
-  "babel-runtime": "@babel/runtime@7.24.0", 
-  "highlight.js": "^11.11.1", 
-  "prismjs": "^1.30.0" 
-}
+
+  "overrides": {
+    "babel-runtime": "@babel/runtime@7.24.0",
+    "highlight.js": "^11.11.1",
+    "prismjs": "^1.30.0"
+  }
 }

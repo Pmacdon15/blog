@@ -135,3 +135,5 @@ VALUES
         you can bridge this gap and develop a deeper understanding of the subject.
         Keep an open mind, ask questions, and seek out additional resources until the concepts click into place
     ');
+
+SELECT * FROM Section;

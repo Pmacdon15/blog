@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -190,9 +191,8 @@ const renderTextWithLinks = (text: string) => {
 
 export default function BlogPage() {
 
-    // const { data } =  useGetSections();
-    
-    // console.log(data)
+    const { data } =  useGetSections();    
+    console.log(data)
     return (
         <div className="flex flex-col justify-center items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
 
