@@ -4,6 +4,7 @@ import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Section } from '@/types/types';
+import { useGetSections } from '@/hooks/hooks';
 
 
 const blogPostSections: Section[] = [
@@ -189,6 +190,9 @@ const renderTextWithLinks = (text: string) => {
 
 export default function BlogPage() {
 
+    // const { data } =  useGetSections();
+    
+    // console.log(data)
     return (
         <div className="flex flex-col justify-center items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
 
@@ -204,14 +208,14 @@ export default function BlogPage() {
                             );
                         case 2:
                             return (
-                                <Image 
-                                className="w-36 h-auto" 
-                                key={index} 
-                                src={section.src || ''} 
-                                alt={section.alt || ''} 
-                                width={600} 
-                                height={600} 
-                            />
+                                <Image
+                                    className="w-36 h-auto"
+                                    key={index}
+                                    src={section.src || ''}
+                                    alt={section.alt || ''}
+                                    width={600}
+                                    height={600}
+                                />
                             );
                         case 3:
                             return (
