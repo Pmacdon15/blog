@@ -1,32 +1,16 @@
-// section.ts
-interface BaseSection {
+// src/types/types.ts
+export interface Section {
     id: number;
-    type: number;
-}
-
-interface TitleSection extends BaseSection {
-    type: 1;
-    title: string;
-    publishDate: string;
-}
-
-interface ImageSection extends BaseSection {
-    type: 2;
-    src: string;
-    alt: string;
-    width: number;
-}
-
-interface ParagraphSection extends BaseSection {
-    type: 3;
-    title?: string;
-    text: string;
-}
-
-interface CodeSection extends BaseSection {
-    type: 4;
-    language: string;
-    code: string;
-}
-
-export type Section = TitleSection | ImageSection | ParagraphSection | CodeSection;
+    blog_id: number;
+    section_type_id: number;
+    section_type: 'title' | 'image' | 'paragraph' | 'code';
+    title_section_title: string | null;
+    publish_date: string | null;
+    src: string | null;
+    alt: string | null;
+    width: number | null;
+    paragraph_title: string | null;
+    text: string | null;
+    language: string | null;
+    code: string | null;
+  }
