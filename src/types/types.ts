@@ -1,3 +1,4 @@
+// src/types/types.ts
 export interface Section {
     id: number;
     blog_id: number;
