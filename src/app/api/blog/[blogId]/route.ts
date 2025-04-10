@@ -3,9 +3,13 @@ import { NextRequest } from 'next/server';
 import { Section } from '@/types/types';
 
 export async function GET(request: NextRequest) {
+  const url = request.nextUrl;
+  const pathSegments = url.pathname.split('/');
+  const blogId = pathSegments[pathSegments.length - 1];
+  console.log(blogId)
   try {
     const sql = neon(`${process.env.DATABASE_URL}`);
-    const result1 = await sql`
+    const result = await sql`
       SELECT 
         s.id,
         s.blog_id,
@@ -30,13 +34,11 @@ export async function GET(request: NextRequest) {
       LEFT JOIN "imagesection" ims ON s.id = ims.id AND s.type = 2
       LEFT JOIN "paragraphsection" ps ON s.id = ps.id AND s.type = 3
       LEFT JOIN "codesection" cs ON s.id = cs.id AND s.type = 4
-      WHERE s.blog_id = 1
+      WHERE s.blog_id = ${Number(blogId)}
       ORDER BY s.id
     `;
 
-    console.log('Result:', result1);
-
-    return new Response(JSON.stringify(result1 as Section[]), {
+    return new Response(JSON.stringify(result as Section[]), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
