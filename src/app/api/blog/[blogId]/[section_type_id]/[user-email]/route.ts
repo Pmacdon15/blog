@@ -23,7 +23,7 @@ export async function PUT(request: NextRequest) {
     const url = request.nextUrl;
     const pathSegments = url.pathname.split('/');
     const blogId = Number(pathSegments[pathSegments.length - 3]);
-    const sectionTypeId = Number(pathSegments[pathSegments.length - 2]);   
+    const sectionTypeId = Number(pathSegments[pathSegments.length - 2]);
     const userEmail = pathSegments[pathSegments.length - 1];
 
     const formData = await request.formData();
@@ -74,11 +74,10 @@ export async function PUT(request: NextRequest) {
     } else if (sectionTypeId === 3) {
         const data = validatedFields.data as UpdateParagraphSection;
         await sql`
-      UPDATE ParagraphSection
-      SET title = ${data.title || ""}, text = ${data.text}
-      FROM Section
-      WHERE ParagraphSection.id = Section.id AND Section.blog_id = ${data.blog_id} AND Section.type = 3
-    `;
+  UPDATE ParagraphSection
+  SET title = ${data.title || ""}, text = ${data.text}
+  WHERE id = ${sectionTypeId}
+`;
     }
 
     return NextResponse.json(
