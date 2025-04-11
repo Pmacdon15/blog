@@ -183,62 +183,51 @@ INSERT INTO
 VALUES (
         5,
         'typescript',
-        '
-        const result = useQuery({
-          queryKey: [''projects'', page],
-          queryFn: fetchProjects,
-        })
-    '
+        'const result = useQuery({
+    queryKey: [''projects'', page],
+    queryFn: fetchProjects,
+})'
     ),
     (
         7,
         'typescript',
-        '
-        const { isPending, isError, error, data, isFetching, isPlaceholderData } =
-        useQuery({
-            queryKey: [''projects'', page],
-            queryFn: () => fetchProjects(page),
-            placeholderData: keepPreviousData,
-        })
-    '
+        'const { isPending, isError, error, data, isFetching, isPlaceholderData } =
+    useQuery({
+        queryKey: [''projects'', page],
+        queryFn: () => fetchProjects(page),
+        placeholderData: keepPreviousData,
+    })'
     ),
     (
         9,
         'typescript',
-        '
-        const fetchPastTrips = async ({ driverEmail, page }: { driverEmail: string, page: number }) => {
-            const response = await fetch(`/api/pastTrips/${driverEmail}?page=${page}&limit=${<limitValue>}`);
-            return await response.json();
-        }
-    '
+        'const fetchPastTrips = async ({ driverEmail, page }: { driverEmail: string, page: number }) => {
+    const response = await fetch(`/api/pastTrips/${driverEmail}?page=${page}&limit=${<limitValue>}`);
+    return await response.json();
+}'
     ),
     (
         14,
         'typescript',
-        '
-        import { NextRequest, NextResponse } from ''next/server'';
+        'import { NextRequest, NextResponse } from ''next/server'';
 
-        export async function GET(request: NextRequest) {
-          
-          const url = request.nextUrl;
-          const page = Number(url.searchParams.get(''page'')) || 1;
-          const limit = Number(url.searchParams.get(''limit'')) || 4;
-    '
+export async function GET(request: NextRequest) {
+    
+    const url = request.nextUrl;
+    const page = Number(url.searchParams.get(''page'')) || 1;
+    const limit = Number(url.searchParams.get(''limit'')) || 4;'
     ),
     (
         16,
         'sql',
-        '
-        const offset = (page - 1) * limit;  
-        const result = await sql`
-            SELECT *
-            FROM PTTrips
-            WHERE driverEmail = ${uriDecodedDriverEmail}
-            ORDER BY date DESC
-            LIMIT ${limit}
-            OFFSET ${offset}
-        `;
-    '
+        'const offset = (page - 1) * limit;  
+const result = await sql`
+    SELECT *
+    FROM PTTrips
+    WHERE driverEmail = ${uriDecodedDriverEmail}
+    ORDER BY date DESC
+    LIMIT ${limit}
+    OFFSET ${offset}`;'
     );
 
 SELECT * FROM TitleSection;

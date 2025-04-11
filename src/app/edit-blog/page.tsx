@@ -5,9 +5,10 @@ import { Section } from "@/types/types";
 // import Image from 'next/image';
 
 export default function BlogPage() {
-    const { data } = useGetSections(2);
+    const blogId = 1;
+    const { data } = useGetSections(blogId);
     const userEmail = "pmacdonald15@gmail.com";
-    const blogId = 2;
+  
 
     const { mutate } = useUpdateSection(blogId, userEmail);
 
