@@ -7,8 +7,6 @@ import Image from 'next/image';
 export default function BlogPage() {
     const { data } = useGetSections(2);
     const userEmail = "pmacdonald15@gmail.com";
-    console.log(data)
-
     const blogId = 2;
 
     const { mutate } = useUpdateTitleSection(blogId, userEmail);
@@ -32,8 +30,8 @@ export default function BlogPage() {
                         //             height={600}
                         //         />;
                         //     </>
-                        // case 3:
-                        //     return <></>;
+                        case 3:
+                            return <Paragraph key={index} section={section}></Paragraph>;
                         // case 4:
                         //     return (
                         //         <></>
@@ -60,26 +58,51 @@ function TitleSection({ section, formAction }:
     return (
         <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-4" >
+            className="flex flex-col gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] " >
             <input
                 type='text'
                 name='title'
                 placeholder="Title"
                 defaultValue={section.title_section_title || ""}
-                className="text-5xl text-center border rounded-sm"
+                className="text-5xl text-center border rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]"
             />
             <input
                 name='publish_date'
                 type='date'
                 defaultValue={new Date().toISOString().slice(0, 10)}
-                className="text-center md-start border rounded-sm w-full md:w-2/6 p-2 "
+                className="text-center md-start border rounded-sm w-full md:w-2/6 p-2 bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]"
             />
-            <button
-                className="border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110"
-                style={{ background: 'var(--background)' }}
+            <button className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
             >
                 Update Section
             </button>
+
         </form >
     )
+}
+function Paragraph({ section }: { section: Section }) {
+    if (section.section_type_id === 3) {
+        return (
+            <div className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
+                <input
+                    type='text'
+                    name='title'
+                    placeholder="Title"
+                    defaultValue={section.paragraph_title || ""}
+                    className="text-4xl border rounded-sm">
+                </input>
+                <textarea
+                    className="indent-8 min-h-36 border p-4 rounded-sm "
+                    name="text"
+                    defaultValue={section.text || ""}
+                />
+
+                <button className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border  p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
+                >
+                    Update Section
+                </button>
+            </div>
+        );
+    }
+    return null;
 }
