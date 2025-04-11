@@ -1,11 +1,18 @@
 'use client';
 import { useGetSections } from "@/hooks/hooks";
+import { useUpdateTitleSection } from "@/mutations/mutations";
 import { Section } from "@/types/types";
 import Image from 'next/image';
-export default function BlogPage({ blogId }: { blogId: number }) {
+
+export default function BlogPage() {
     const { data } = useGetSections(2);
     const userEmail = "pmacdonald15@gmail.com";
     console.log(data)
+
+    const blogId = 2;
+
+    const { mutate } = useUpdateTitleSection(blogId, userEmail);
+
     return (
         <div className="flex flex-col justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
             <div className="flex flex-col gap-4 p-4 w-full md:w-4/6 ">
@@ -13,7 +20,7 @@ export default function BlogPage({ blogId }: { blogId: number }) {
                 {data?.map((section, index) => {
                     switch (section.section_type_id) {
                         case 1:
-                            return <TitleSection key={index} section={section} />
+                            return <TitleSection key={index} section={section} formAction={mutate} />
                         // case 2:
                         //     return <>
                         //         <Image
@@ -39,17 +46,30 @@ export default function BlogPage({ blogId }: { blogId: number }) {
     );
 }
 
-function TitleSection({ section }: { section: Section }) {
+function TitleSection({ section, formAction }:
+    {
+        section: Section,
+        formAction: (formData: FormData) => void;
+    }) {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        formAction(formData);
+    };
+
     return (
-        <form className="flex flex-col gap-4">
+        <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-4" >
             <input
                 type='text'
+                name='title'
                 placeholder="Title"
                 defaultValue={section.title_section_title || ""}
                 className="text-5xl text-center border rounded-sm"
             />
             <input
-                name='date'
+                name='publish_date'
                 type='date'
                 defaultValue={new Date().toISOString().slice(0, 10)}
                 className="text-center md-start border rounded-sm w-full md:w-2/6 p-2 "
@@ -60,6 +80,6 @@ function TitleSection({ section }: { section: Section }) {
             >
                 Update Section
             </button>
-        </form>
+        </form >
     )
 }
