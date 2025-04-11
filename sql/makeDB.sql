@@ -65,8 +65,8 @@ VALUES (1, 1, 1),
     (13, 1, 3),
     (14, 1, 4),
     (15, 1, 3),
-    (16, 1, 3),
-    (17, 1, 4);
+    (16, 1, 4),
+    (17, 1, 3);
 
 -- Insert into TitleSection table
 INSERT INTO
@@ -125,7 +125,7 @@ VALUES (
     '
     ),
     (
-        11,
+        10,
         NULL,
         '
         I wasted way more time then I would like to admit using old API routes and added search queries to the URL. I think admitting when you spent too much time on something simple is important. 
@@ -134,7 +134,7 @@ VALUES (
     '
     ),
     (
-        12,
+        11,
         'The next place to look',
         '
         At this point it was 11:00pm and I needed to get ready for bed, and as I was brushing my teeth it hit me like a brick wall. How could I not have seen it, what 
@@ -143,7 +143,7 @@ VALUES (
     '
     ),
     (
-        13,
+        12,
         NULL,
         '
         From there it was fairly simple, get the search params from the url and update the SQL. I know very funny using sql instead of an ORM, it''s on my list of things to learn.
@@ -151,7 +151,7 @@ VALUES (
     '
     ),
     (
-        14,
+        13,
         'The SQL',
         '
         I''ll admit SQL is not my strong side and I am quick to use the LLM magic to achieve a quick out come. But that doesnt mean we can''t also learn from what it produced.
@@ -168,7 +168,7 @@ VALUES (
     '
     ),
     (
-        16,
+        17,
         'Biggest take away',
         '
         Even if you read the documentation and watch videos, if it seems like magic, it''s because there''s a gap in your understanding. With patience and persistence, 
@@ -226,7 +226,7 @@ VALUES (
     '
     ),
     (
-        17,
+        16,
         'sql',
         '
         const offset = (page - 1) * limit;  
