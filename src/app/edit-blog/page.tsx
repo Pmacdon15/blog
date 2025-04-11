@@ -1,6 +1,6 @@
 'use client';
 import { useGetSections } from "@/hooks/hooks";
-import { useUpdateTitleSection } from "@/mutations/mutations";
+import { useUpdateSection } from "@/mutations/mutations";
 import { Section } from "@/types/types";
 import Image from 'next/image';
 
@@ -9,7 +9,7 @@ export default function BlogPage() {
     const userEmail = "pmacdonald15@gmail.com";
     const blogId = 2;
 
-    const { mutate } = useUpdateTitleSection(blogId, userEmail);
+    const { mutate } = useUpdateSection(blogId, userEmail);
 
     return (
         <div className="flex flex-col justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
@@ -31,7 +31,7 @@ export default function BlogPage() {
                         //         />;
                         //     </>
                         case 3:
-                            return <Paragraph key={index} section={section}></Paragraph>;
+                            return <Paragraph key={index} section={section} formAction={mutate}></Paragraph>;
                         // case 4:
                         //     return (
                         //         <></>
@@ -47,12 +47,13 @@ export default function BlogPage() {
 function TitleSection({ section, formAction }:
     {
         section: Section,
-        formAction: (formData: FormData) => void;
+        formAction: (input: { formData: FormData; sectionTypeId: number }) => void;
     }) {
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        formAction(formData);
+        formAction({ formData, sectionTypeId: section.section_type_id });
     };
 
     return (
@@ -80,29 +81,39 @@ function TitleSection({ section, formAction }:
         </form >
     )
 }
-function Paragraph({ section }: { section: Section }) {
-    if (section.section_type_id === 3) {
-        return (
-            <div className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
-                <input
-                    type='text'
-                    name='title'
-                    placeholder="Title"
-                    defaultValue={section.paragraph_title || ""}
-                    className="text-4xl border rounded-sm">
-                </input>
-                <textarea
-                    className="indent-8 min-h-36 border p-4 rounded-sm "
-                    name="text"
-                    defaultValue={section.text || ""}
-                />
 
-                <button className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border  p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
-                >
-                    Update Section
-                </button>
-            </div>
-        );
-    }
-    return null;
+function Paragraph({ section, formAction }:
+    {
+        section: Section,
+        formAction: (input: { formData: FormData; sectionTypeId: number }) => void;
+    }) {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        formAction({ formData, sectionTypeId: section.section_type_id });
+    };
+
+
+    return (
+        <form
+            onSubmit={handleSubmit} className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
+            <input
+                type='text'
+                name='title'
+                placeholder="Title"
+                defaultValue={section.paragraph_title || ""}
+                className="text-4xl border rounded-sm">
+            </input>
+            <textarea
+                className="indent-8 min-h-36 border p-4 rounded-sm "
+                name="text"
+                defaultValue={section.text || ""}
+            />
+
+            <button className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border  p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
+            >
+                Update Section
+            </button>
+        </form>
+    );
 }
