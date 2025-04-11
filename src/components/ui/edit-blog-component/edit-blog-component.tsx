@@ -13,7 +13,7 @@ export default function EditBlogComponent({ userEmail, blogId}: { userEmail: str
 
     console.log(data)
     return (
-        <div className="flex flex-col w-full md:w-4/6 gap-4 justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
+        <div className="flex flex-col w-full md:w-4/6 gap-8 justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
             {/* <div className="flex flex-col gap-4 p-4 w-full md:w-4/6 "> */}
 
                 {data?.map((section: Section, index: Key | null | undefined) => {

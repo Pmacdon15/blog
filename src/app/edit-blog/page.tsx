@@ -5,6 +5,7 @@ import { Section } from "@/types/types";
 // import Image from 'next/image';
 import EditBlogComponent from "@/components/ui/edit-blog-component/edit-blog-component";
 import BlogComponent from "@/components/ui/blog-component/blog-component";
+import ContextController from "@/components/ui/context-controller/context-controller";
 
 export default function Page() {
     const blogId = 1;
@@ -14,13 +15,7 @@ export default function Page() {
 
     return (
         <div className="flex flex-col justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
-
-            <>
-                <EditBlogComponent userEmail={userEmail} blogId={blogId} />
-                {/* <BlogComponent userEmail={userEmail} blogId={blogId} /> */}
-            </>
-
-
+            <ContextController userEmail={userEmail} blogId={blogId} />
         </div>
     );
 }
