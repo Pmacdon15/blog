@@ -241,4 +241,4 @@ VALUES (
     '
     );
 
-SELECT * FROM CodeSection;
+SELECT * FROM TitleSection;

@@ -64,6 +64,7 @@ export async function PUT(request: NextRequest) {
 
     if (sectionTypeId === 1) {
         const data = validatedFields.data as UpdateTitleSection;
+        console.log(data.publish_date)
         await sql`
       UPDATE TitleSection
       SET title = ${data.title}, publish_date = ${data.publish_date}

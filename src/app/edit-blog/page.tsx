@@ -2,7 +2,7 @@
 import { useGetSections } from "@/hooks/hooks";
 import { useUpdateSection } from "@/mutations/mutations";
 import { Section } from "@/types/types";
-import Image from 'next/image';
+// import Image from 'next/image';
 
 export default function BlogPage() {
     const { data } = useGetSections(2);
@@ -11,6 +11,7 @@ export default function BlogPage() {
 
     const { mutate } = useUpdateSection(blogId, userEmail);
 
+    console.log(data)
     return (
         <div className="flex flex-col justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
             <div className="flex flex-col gap-4 p-4 w-full md:w-4/6 ">
@@ -70,7 +71,7 @@ function TitleSection({ section, formAction }:
             <input
                 name='publish_date'
                 type='date'
-                defaultValue={new Date().toISOString().slice(0, 10)}
+                defaultValue={section.publish_date ? new Date(section.publish_date).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)}
                 className="text-center md-start border rounded-sm w-full md:w-2/6 p-2 bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]"
             />
             <button className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
