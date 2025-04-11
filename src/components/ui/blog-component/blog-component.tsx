@@ -27,7 +27,7 @@ const renderTextWithLinks = (text: string) => {
     });
 };
 
-export default function BlogPage({ blogId }: { blogId: number }) {
+export default function BlogComponent({ userEmail, blogId }: { userEmail: string, blogId: number }) {
     const { data } = useGetSections(blogId);
     console.log('BlogPage data:', data);
 

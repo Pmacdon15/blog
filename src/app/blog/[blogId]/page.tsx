@@ -1,5 +1,5 @@
 import React from 'react';
-import BlogPage from '@/components/ui/blog-page/blog-page';
+import BlogComponent from '@/components/ui/blog-component/blog-component';
 
 export default async function Page({
     params,
@@ -8,10 +8,11 @@ export default async function Page({
 }) {
 
     const { blogId } = await params;
+    const userEmail = "pmacdonald15@gmail.com"
  
     return (
         <div className="flex flex-col justify-center min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
-            <BlogPage blogId={blogId} />
+            <BlogComponent userEmail={userEmail} blogId={blogId} />
         </div>
     );
 }
