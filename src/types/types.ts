@@ -33,6 +33,7 @@ export interface FormActionProps {
     formActionDelete: (input: FormActionInputDelete) => void;
 }
 
+
 // Define the type for the section state in the parent component
 export type SectionState = {
     [key: number]: string | null | undefined;

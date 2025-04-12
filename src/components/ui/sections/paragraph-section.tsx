@@ -1,0 +1,28 @@
+import { handleSubmit } from "@/lib/utit";
+import { FormActionProps, Section } from "@/types/types";
+import { Title } from "./section-components/title";
+import { UpdateButton } from "./section-components/update-button";
+
+export function Paragraph({ section, formActionUpdate, formActionDelete }: { section: Section } & FormActionProps) {
+
+    return (
+        <form
+            onSubmit={(event) => handleSubmit(event, section, formActionUpdate)}
+            className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
+            <Title section={section} formActionDelete={formActionDelete} />
+            <input
+                type='text'
+                name='title'
+                placeholder="Title"
+                defaultValue={section.paragraph_title || ""}
+                className="text-4xl border rounded-sm p-2">
+            </input>
+            <textarea
+                className="indent-8 min-h-36 border p-4 rounded-sm "
+                name="text"
+                defaultValue={section.text || ""}
+            />
+            <UpdateButton />
+        </form>
+    );
+}

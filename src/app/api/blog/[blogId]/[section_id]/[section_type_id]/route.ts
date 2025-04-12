@@ -5,21 +5,33 @@ import { z } from 'zod';
 const schemaUpdateTitleSection = z.object({
     blog_id: z.number(),
     title: z.string(),
-    publish_date: z.date(),   
+    publish_date: z.date(),
+});
+
+const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/svg+xml'];
+
+const schemaUpdatePhotoSection = z.object({
+    blog_id: z.number(),
+    alt: z.string(),
+    // new_file: z.instanceof(File).refine(file => imageMimeTypes.includes(file.type), {
+    //     message: 'Invalid image type',
+    // }),
+    width: z.number(),
 });
 
 const schemaUpdateParagraphSection = z.object({
     blog_id: z.number(),
     title: z.string(),
-    text: z.string(),   
+    text: z.string(),
 });
 
 const schemaUpdateCodeSection = z.object({
     blog_id: z.number(),
-    code: z.string(),   
+    code: z.string(),
 });
 
 type UpdateTitleSection = z.infer<typeof schemaUpdateTitleSection>;
+type UpdatePhotoSection = z.infer<typeof schemaUpdatePhotoSection>;
 type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
 type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
 
@@ -28,8 +40,8 @@ export async function PUT(request: NextRequest) {
     const pathSegments = url.pathname.split('/');
     const blogId = Number(pathSegments[pathSegments.length - 3]);
     const sectionTypeId = Number(pathSegments[pathSegments.length - 1]);
-    const sectionId = Number(pathSegments[pathSegments.length - 2]);  
-    
+    const sectionId = Number(pathSegments[pathSegments.length - 2]);
+
     const formData = await request.formData();
 
     let validatedFields;
@@ -38,7 +50,14 @@ export async function PUT(request: NextRequest) {
         validatedFields = schemaUpdateTitleSection.safeParse({
             blog_id: blogId,
             title: formData.get('title'),
-            publish_date: new Date(formData.get('publish_date') as string),  
+            publish_date: new Date(formData.get('publish_date') as string),
+        });
+    } else if (sectionTypeId === 2) {
+        validatedFields = schemaUpdatePhotoSection.safeParse({
+            blog_id: blogId,
+            new_file: formData.get('new-file'),
+            alt: formData.get('alt'),
+            width: Number(formData.get("width"))
         });
     } else if (sectionTypeId === 3) {
         validatedFields = schemaUpdateParagraphSection.safeParse({
@@ -69,27 +88,41 @@ export async function PUT(request: NextRequest) {
 
     const sql = neon(`${process.env.DATABASE_URL}`);
 
-    if (sectionTypeId === 1) {
-        const data = validatedFields.data as UpdateTitleSection;
-        await sql`
+    try {
+        if (sectionTypeId === 1) {
+            const data = validatedFields.data as UpdateTitleSection;
+            await sql`
       UPDATE TitleSection
       SET title = ${data.title}, publish_date = ${data.publish_date}
       WHERE id = ${sectionId}
     `;
-    } else if (sectionTypeId === 3) {
-        const data = validatedFields.data as UpdateParagraphSection;
-        await sql`
+        } else if (sectionTypeId === 2) {
+            const data = validatedFields.data as UpdatePhotoSection;
+            await sql`
+      UPDATE ImageSection
+      SET alt = ${data.alt}, width = ${data.width}
+      WHERE id = ${sectionId}
+    `;
+        } else if (sectionTypeId === 3) {
+            const data = validatedFields.data as UpdateParagraphSection;
+            await sql`
       UPDATE ParagraphSection
       SET title = ${data.title || ""}, text = ${data.text}
       WHERE id = ${sectionId}
     `;
-    } else if (sectionTypeId === 4) {
-        const data = validatedFields.data as UpdateCodeSection;
-        await sql`
-            UPDATE CodeSection
-            SET code = ${data.code || ""}
-            WHERE id = ${sectionId}
-            `;
+        } else if (sectionTypeId === 4) {
+            const data = validatedFields.data as UpdateCodeSection;
+            await sql`
+        UPDATE CodeSection
+        SET code = ${data.code || ""}
+        WHERE id = ${sectionId}
+        `;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return new Response(`Error: ${error}`, {
+            headers: { 'Content-Type': 'text/plain' },
+        });
     }
 
 
