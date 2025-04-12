@@ -1,4 +1,4 @@
-import { handleSubmit } from "@/lib/utit";
+import { handleSubmit } from "@/lib/utils";
 import { FormActionProps, Section } from "@/types/types";
 import { Title } from "./section-components/title";
 import { UpdateButton } from "./section-components/update-button";

@@ -3,19 +3,8 @@ import { UpdateButton } from "./section-components/update-button";
 import { PhotoSectionProps } from "@/types/types";
 import { Title } from "./section-components/title";
 import Image from "next/image";
-import { handleSubmit } from "@/lib/utit";
-
-// Simple throttle utility
-function throttle<T extends (...args: any[]) => void>(func: T, limit: number): (...args: Parameters<T>) => void {
-    let inThrottle: boolean;
-    return (...args: Parameters<T>) => {
-        if (!inThrottle) {
-            func(...args);
-            inThrottle = true;
-            setTimeout(() => (inThrottle = false), limit);
-        }
-    };
-}
+import { handleSubmit } from "@/lib/utils";
+import { throttle } from '@/lib/utils';
 
 export function PhotoSection({ section, formActionUpdate, formActionDelete, sectionState, handleImageChange }: PhotoSectionProps) {
     const [showOldPhoto, setShowOldPhoto] = useState(true);
@@ -25,17 +14,18 @@ export function PhotoSection({ section, formActionUpdate, formActionDelete, sect
 
     // Throttled setWidth
     const throttledSetWidth = useCallback(
-        throttle((newWidth: number) => {
+        (newWidth: number) => {
             console.log("Throttled width update:", newWidth);
             setWidth(newWidth);
-        }, 50), // 50ms interval
-        []
+        },
+        [setWidth]
     );
-
-    // Observe container width changes from dragging
+    
     useEffect(() => {
+        const throttled = throttle(throttledSetWidth, 50);
+        // Observe container width changes from dragging
         if (!containerRef.current) return;
-
+    
         const observer = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 const newWidth = Math.round(entry.contentRect.width);
@@ -45,12 +35,12 @@ export function PhotoSection({ section, formActionUpdate, formActionDelete, sect
                     console.log("Initial container width:", newWidth);
                     return;
                 }
-                throttledSetWidth(newWidth);
+                throttled(newWidth);
             }
         });
-
+    
         observer.observe(containerRef.current);
-
+    
         // Cleanup on unmount
         return () => {
             observer.disconnect();
