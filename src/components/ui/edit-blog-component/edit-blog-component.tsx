@@ -1,6 +1,6 @@
 'use client';
 import { useUpdateSection } from "@/mutations/mutations";
-import { Section } from "@/types/types";
+import { Section, FormActionProps } from "@/types/types";
 import { Key } from "react";
 
 // import Image from 'next/image';
@@ -28,21 +28,23 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
 }
 
 
-function TitleSection({ section, formAction }:
-    {
-        section: Section,
-        formAction: (input: { formData: FormData; sectionId: number; sectionTypeId: number }) => void;
-    }) {
+const handleSubmit = (event: React.FormEvent<HTMLFormElement>, section: Section, formAction: (input: { formData: FormData; sectionId: number; sectionTypeId: number }) => void) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    formAction({ formData, sectionId: section.id, sectionTypeId: section.section_type_id });
+}
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        formAction({ formData, sectionId: section.id, sectionTypeId: section.section_type_id });
-    };
-
+function UpdateButton() {
+    return (
+        <button className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300">
+            Update Section
+        </button>
+    )
+}
+function TitleSection({ section, formAction }: { section: Section } & FormActionProps) {
     return (
         <form
-            onSubmit={handleSubmit}
+            onSubmit={(event) => handleSubmit(event, section, formAction)}
             className="flex flex-col gap-4 border p-4 w-full rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] " >
             <h1 className="text-xl">{section.section_type.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</h1>
             <input
@@ -58,30 +60,16 @@ function TitleSection({ section, formAction }:
                 defaultValue={section.publish_date ? new Date(section.publish_date).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)}
                 className="text-center md-start border rounded-sm w-full md:w-2/6 p-2 bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]"
             />
-            <button className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
-            >
-                Update Section
-            </button>
-
+            <UpdateButton />
         </form >
     )
 }
 
-function Paragraph({ section, formAction }:
-    {
-        section: Section,
-        formAction: (input: { formData: FormData; sectionId: number; sectionTypeId: number }) => void;
-    }) {
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        formAction({ formData, sectionId: section.id, sectionTypeId: section.section_type_id });
-    };
-
+function Paragraph({ section, formAction }: { section: Section } & FormActionProps) {
     return (
         <form
-            onSubmit={handleSubmit} className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
+            onSubmit={(event) => handleSubmit(event, section, formAction)}
+            className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
             <h1 className="text-xl">{section.section_type.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</h1>
             <input
                 type='text'
@@ -95,41 +83,24 @@ function Paragraph({ section, formAction }:
                 name="text"
                 defaultValue={section.text || ""}
             />
-
-            <button className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border  p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
-            >
-                Update Section
-            </button>
+            <UpdateButton />
         </form>
     );
 }
 
 
-function Code({ section, formAction }:
-    {
-        section: Section,
-        formAction: (input: { formData: FormData; sectionId: number; sectionTypeId: number }) => void;
-    }) {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        formAction({ formData, sectionId: section.id, sectionTypeId: section.section_type_id });
-    };
-
+function Code({ section, formAction }: { section: Section } & FormActionProps) {
     return (
         <form
-            onSubmit={handleSubmit} className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
+            onSubmit={(event) => handleSubmit(event, section, formAction)}
+            className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
             <h1 className="text-xl">{section.section_type.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</h1>
             <textarea
                 className="min-h-36 border p-4 rounded-sm "
                 name="code"
                 defaultValue={section.code || ""}
             />
-
-            <button className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border  p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
-            >
-                Update Section
-            </button>
+            <UpdateButton />
         </form>
     );
 }

@@ -17,3 +17,12 @@ export interface Section {
     language: string | null;
     code: string | null;
   }
+
+export  interface FormActionInput {
+    formData: FormData;
+    sectionId: number;
+    sectionTypeId: number;
+}
+export interface FormActionProps {
+    formAction: (input: FormActionInput) => void;
+}
