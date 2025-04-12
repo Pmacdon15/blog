@@ -17,5 +17,5 @@ jobs:
               issue_number: context.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Hello, Feel free to review your own PR or if you want me to look at it assign me as a reviewer'
+              body: 'Hello, feel free to review your own PR or if you want me to look at it assign me as a reviewer'
             })
