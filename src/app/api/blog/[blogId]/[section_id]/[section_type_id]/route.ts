@@ -5,28 +5,32 @@ import { z } from 'zod';
 const schemaUpdateTitleSection = z.object({
     blog_id: z.number(),
     title: z.string(),
-    publish_date: z.date(),
-    user_email: z.string().email(),
+    publish_date: z.date(),   
 });
 
 const schemaUpdateParagraphSection = z.object({
     blog_id: z.number(),
     title: z.string(),
-    text: z.string(),
-    user_email: z.string().email(),
+    text: z.string(),   
+});
+
+const schemaUpdateCodeSection = z.object({
+    blog_id: z.number(),
+    code: z.string(),   
 });
 
 type UpdateTitleSection = z.infer<typeof schemaUpdateTitleSection>;
 type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
+type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
 
 export async function PUT(request: NextRequest) {
     const url = request.nextUrl;
     const pathSegments = url.pathname.split('/');
-    const blogId = Number(pathSegments[pathSegments.length - 4]);
-    const sectionTypeId = Number(pathSegments[pathSegments.length - 3]);
+    const blogId = Number(pathSegments[pathSegments.length - 3]);
+    const sectionTypeId = Number(pathSegments[pathSegments.length - 1]);
     const sectionId = Number(pathSegments[pathSegments.length - 2]);
-    const userEmail = pathSegments[pathSegments.length - 1];
-
+    // const userEmail = pathSegments[pathSegments.length - 1];
+ console.log(sectionTypeId)
     const formData = await request.formData();
 
     let validatedFields;
@@ -35,15 +39,18 @@ export async function PUT(request: NextRequest) {
         validatedFields = schemaUpdateTitleSection.safeParse({
             blog_id: blogId,
             title: formData.get('title'),
-            publish_date: new Date(formData.get('publish_date') as string),
-            user_email: userEmail,
+            publish_date: new Date(formData.get('publish_date') as string),  
         });
     } else if (sectionTypeId === 3) {
         validatedFields = schemaUpdateParagraphSection.safeParse({
             blog_id: blogId,
             title: formData.get('title'),
             text: formData.get('text'),
-            user_email: userEmail,
+        });
+    } else if (sectionTypeId === 4) {
+        validatedFields = schemaUpdateCodeSection.safeParse({
+            blog_id: blogId,
+            code: formData.get('code'),
         });
     } else {
         return NextResponse.json({ error: 'Unsupported section type' }, { status: 400 });
@@ -64,7 +71,7 @@ export async function PUT(request: NextRequest) {
     const sql = neon(`${process.env.DATABASE_URL}`);
 
     if (sectionTypeId === 1) {
-        const data = validatedFields.data as UpdateTitleSection;       
+        const data = validatedFields.data as UpdateTitleSection;
         await sql`
       UPDATE TitleSection
       SET title = ${data.title}, publish_date = ${data.publish_date}
@@ -77,7 +84,16 @@ export async function PUT(request: NextRequest) {
       SET title = ${data.title || ""}, text = ${data.text}
       WHERE id = ${sectionId}
     `;
+    } else if (sectionTypeId === 4) {
+        const data = validatedFields.data as UpdateCodeSection;
+        await sql`
+            UPDATE CodeSection
+            SET code = ${data.code || ""}
+            WHERE id = ${sectionId}
+            `;
     }
+
+
     return NextResponse.json(
         {
             success: true,

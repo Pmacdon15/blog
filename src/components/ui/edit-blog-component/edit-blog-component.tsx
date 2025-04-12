@@ -1,14 +1,13 @@
 'use client';
-import { useGetSections } from "@/hooks/hooks";
 import { useUpdateSection } from "@/mutations/mutations";
 import { Section } from "@/types/types";
 import { Key } from "react";
 
 // import Image from 'next/image';
 
-export default function EditBlogComponent({ userEmail, blogId, data }: { userEmail: string, blogId: number, data: Section[] }) {
+export default function EditBlogComponent({ blogId, data }: { blogId: number, data: Section[] }) {
 
-    const { mutate } = useUpdateSection(blogId, userEmail);
+    const { mutate } = useUpdateSection(blogId);
 
     return (
         <div className="flex flex-col w-full md:w-4/6 gap-8 justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
@@ -133,7 +132,7 @@ function Code({ section, formAction }:
             onSubmit={handleSubmit} className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
             <h1 className="text-xl">{section.section_type.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</h1>
             <textarea
-                className="indent-8 min-h-36 border p-4 rounded-sm "
+                className="min-h-36 border p-4 rounded-sm "
                 name="code"
                 defaultValue={section.code || ""}
             />
