@@ -19,8 +19,6 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
     const { mutate: mutateUpdate } = useUpdateSection(blogId);
     const { mutate: mutateDelete } = useDeleteSection(blogId);
 
-    console.log(data)
-
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>, sectionId: number) => {
         const file = event.target.files?.[0];
         if (file) {

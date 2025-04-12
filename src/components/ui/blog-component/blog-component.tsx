@@ -30,8 +30,7 @@ export default function BlogComponent({ data }: { data: Section[] | undefined })
 
     return (
         <div className="flex flex-col gap-4 p-4 justify-center items-center w-full md:w-4/6">
-            {data?.map((section) => {
-                console.log(section.width)
+            {data?.map((section) => {               
                 switch (section.section_type_id) {
                     case 1:
                         return (

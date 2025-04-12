@@ -47,8 +47,7 @@ const deleteSection = async (blogId: number, sectionId: number) => {
 export const useDeleteSection = (blogId: number) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ sectionId }: { sectionId: number }) => {
-            console.log("deleting blog: ", blogId, " section: ", sectionId)
+        mutationFn: async ({ sectionId }: { sectionId: number }) => {          
             return await deleteSection(blogId, sectionId);
         },
         onSuccess: () => {

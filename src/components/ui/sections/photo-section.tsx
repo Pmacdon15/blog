@@ -44,7 +44,7 @@ export function PhotoSection({ section, formActionUpdate, formActionDelete, sect
                 </div>
                 <input
                     className="border rounded-sm border-white p-2"
-                    name="new-image"
+                    name="new-file"
                     type="file"
                     placeholder="Select new image"
                     onChange={(e) => {
@@ -58,6 +58,7 @@ export function PhotoSection({ section, formActionUpdate, formActionDelete, sect
                     type="text"
                     defaultValue={section.alt || ""}
                     placeholder="Description"
+                    required
                 />
                 <input
                     className="border rounded-sm border-white p-2"
@@ -88,8 +89,7 @@ function useThrottledWidth(containerRef: React.RefObject<HTMLDivElement | null>,
     const [width, setWidth] = useState(initialWidth);
     const isInitialRender = useRef(true);
     const throttledSetWidth = useCallback(
-        (newWidth: number) => {
-            console.log("Throttled width update:", newWidth);
+        (newWidth: number) => {           
             setWidth(newWidth);
         },
         [setWidth]
@@ -103,8 +103,7 @@ function useThrottledWidth(containerRef: React.RefObject<HTMLDivElement | null>,
             for (const entry of entries) {
                 const newWidth = Math.round(entry.contentRect.width);
                 if (isInitialRender.current) {
-                    isInitialRender.current = false;
-                    console.log("Initial container width:", newWidth);
+                    isInitialRender.current = false;                   
                     return;
                 }
                 throttled(newWidth);

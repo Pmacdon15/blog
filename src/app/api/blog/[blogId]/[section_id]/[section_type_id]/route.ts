@@ -1,39 +1,7 @@
-import { neon } from '@neondatabase/serverless';
+import { dealWithNewPhoto } from '@/lib/blobs';
+import { updateSection } from '@/lib/db';
+import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdatePhotoSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-
-const schemaUpdateTitleSection = z.object({
-    blog_id: z.number(),
-    title: z.string(),
-    publish_date: z.date(),
-});
-
-// const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/svg+xml'];
-
-const schemaUpdatePhotoSection = z.object({
-    blog_id: z.number(),
-    alt: z.string(),
-    // new_file: z.instanceof(File).refine(file => imageMimeTypes.includes(file.type), {
-    //     message: 'Invalid image type',
-    // }),
-    width: z.number(),
-});
-
-const schemaUpdateParagraphSection = z.object({
-    blog_id: z.number(),
-    title: z.string(),
-    text: z.string(),
-});
-
-const schemaUpdateCodeSection = z.object({
-    blog_id: z.number(),
-    code: z.string(),
-});
-
-type UpdateTitleSection = z.infer<typeof schemaUpdateTitleSection>;
-type UpdatePhotoSection = z.infer<typeof schemaUpdatePhotoSection>;
-type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
-type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
 
 export async function PUT(request: NextRequest) {
     const url = request.nextUrl;
@@ -43,8 +11,9 @@ export async function PUT(request: NextRequest) {
     const sectionId = Number(pathSegments[pathSegments.length - 2]);
 
     const formData = await request.formData();
-
+   
     let validatedFields;
+    let newPhotoUrl;
 
     if (Number(sectionTypeId) === 1) {
         validatedFields = schemaUpdateTitleSection.safeParse({
@@ -59,6 +28,10 @@ export async function PUT(request: NextRequest) {
             alt: formData.get('alt'),
             width: Number(formData.get("width"))
         });
+        if (validatedFields.success && validatedFields.data.new_file) {
+            newPhotoUrl = await dealWithNewPhoto(validatedFields.data);           
+        }
+
     } else if (sectionTypeId === 3) {
         validatedFields = schemaUpdateParagraphSection.safeParse({
             blog_id: blogId,
@@ -86,45 +59,13 @@ export async function PUT(request: NextRequest) {
         );
     }
 
-    const sql = neon(`${process.env.DATABASE_URL}`);
-
     try {
-        if (sectionTypeId === 1) {
-            const data = validatedFields.data as UpdateTitleSection;
-            await sql`
-      UPDATE TitleSection
-      SET title = ${data.title}, publish_date = ${data.publish_date}
-      WHERE id = ${sectionId}
-    `;
-        } else if (sectionTypeId === 2) {
-            const data = validatedFields.data as UpdatePhotoSection;
-            await sql`
-      UPDATE ImageSection
-      SET alt = ${data.alt}, width = ${data.width}
-      WHERE id = ${sectionId}
-    `;
-        } else if (sectionTypeId === 3) {
-            const data = validatedFields.data as UpdateParagraphSection;
-            await sql`
-      UPDATE ParagraphSection
-      SET title = ${data.title || ""}, text = ${data.text}
-      WHERE id = ${sectionId}
-    `;
-        } else if (sectionTypeId === 4) {
-            const data = validatedFields.data as UpdateCodeSection;
-            await sql`
-        UPDATE CodeSection
-        SET code = ${data.code || ""}
-        WHERE id = ${sectionId}
-        `;
-        }
+        await updateSection(sectionTypeId, sectionId, validatedFields.data, newPhotoUrl?.url||"");
     } catch (error) {
-        console.error('Error:', error);
         return new Response(`Error: ${error}`, {
             headers: { 'Content-Type': 'text/plain' },
         });
     }
-
 
     return NextResponse.json(
         {
@@ -134,3 +75,4 @@ export async function PUT(request: NextRequest) {
         { status: 200 }
     );
 }
+
