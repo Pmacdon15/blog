@@ -8,7 +8,7 @@ const schemaUpdateTitleSection = z.object({
     publish_date: z.date(),
 });
 
-const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/svg+xml'];
+// const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/svg+xml'];
 
 const schemaUpdatePhotoSection = z.object({
     blog_id: z.number(),
