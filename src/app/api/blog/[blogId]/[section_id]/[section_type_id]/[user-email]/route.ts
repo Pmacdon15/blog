@@ -22,8 +22,9 @@ type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
 export async function PUT(request: NextRequest) {
     const url = request.nextUrl;
     const pathSegments = url.pathname.split('/');
-    const blogId = Number(pathSegments[pathSegments.length - 3]);
-    const sectionTypeId = Number(pathSegments[pathSegments.length - 2]);
+    const blogId = Number(pathSegments[pathSegments.length - 4]);
+    const sectionTypeId = Number(pathSegments[pathSegments.length - 3]);
+    const sectionId = Number(pathSegments[pathSegments.length - 2]);
     const userEmail = pathSegments[pathSegments.length - 1];
 
     const formData = await request.formData();
@@ -63,23 +64,20 @@ export async function PUT(request: NextRequest) {
     const sql = neon(`${process.env.DATABASE_URL}`);
 
     if (sectionTypeId === 1) {
-        const data = validatedFields.data as UpdateTitleSection;
-        console.log(data.publish_date)
+        const data = validatedFields.data as UpdateTitleSection;       
         await sql`
       UPDATE TitleSection
       SET title = ${data.title}, publish_date = ${data.publish_date}
-      FROM Section
-      WHERE TitleSection.id = Section.id AND Section.blog_id = ${data.blog_id} AND Section.type = 1
+      WHERE id = ${sectionId}
     `;
     } else if (sectionTypeId === 3) {
         const data = validatedFields.data as UpdateParagraphSection;
         await sql`
-  UPDATE ParagraphSection
-  SET title = ${data.title || ""}, text = ${data.text}
-  WHERE id = ${sectionTypeId}
-`;
+      UPDATE ParagraphSection
+      SET title = ${data.title || ""}, text = ${data.text}
+      WHERE id = ${sectionId}
+    `;
     }
-
     return NextResponse.json(
         {
             success: true,

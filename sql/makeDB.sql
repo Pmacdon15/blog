@@ -230,4 +230,4 @@ const result = await sql`
     OFFSET ${offset}`;'
     );
 
-SELECT * FROM TitleSection;
+SELECT * FROM ParagraphSection;

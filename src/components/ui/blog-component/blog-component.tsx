@@ -5,7 +5,6 @@ import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Section } from '@/types/types';
-import { useGetSections } from '@/hooks/hooks';
 
 const renderTextWithLinks = (text: string) => {
     const linkRegex = /\[(.*?)\]\((.*?)\)/g;
@@ -27,9 +26,7 @@ const renderTextWithLinks = (text: string) => {
     });
 };
 
-export default function BlogComponent({ userEmail, blogId }: { userEmail: string, blogId: number }) {
-    const { data } = useGetSections(blogId);
-    console.log('BlogPage data:', data);
+export default function BlogComponent({ data }: { data: Section[] | undefined }) {
 
     return (
         <div className="flex flex-col gap-4 p-4 justify-center items-center w-full md:w-4/6">

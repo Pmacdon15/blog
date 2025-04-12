@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
-const updateSection = async (blogId: number, sectionTypeId: number, userEmail: string, formData: FormData) => {
-    const response = await fetch(`/api/blog/${blogId}/${sectionTypeId}/${userEmail}`, {
+const updateSection = async (blogId: number, sectionId: number, sectionTypeId: number, userEmail: string, formData: FormData) => {
+    const response = await fetch(`/api/blog/${blogId}/${sectionId}/${sectionTypeId}/${userEmail}`, {
         method: 'PUT',
         body: formData,
     });
@@ -18,11 +18,11 @@ const updateSection = async (blogId: number, sectionTypeId: number, userEmail: s
 export const useUpdateSection = (blogId: number, userEmail: string) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ formData, sectionTypeId }: { formData: FormData; sectionTypeId: number }) => {
-            return await updateSection(blogId, sectionTypeId, userEmail, formData);
+        mutationFn: async ({ formData, sectionId, sectionTypeId }: { formData: FormData; sectionId: number, sectionTypeId: number }) => {
+            return await updateSection(blogId, sectionId, sectionTypeId, userEmail, formData);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['blog', blogId, userEmail] });
+            queryClient.invalidateQueries({ queryKey: ['blog-sections', blogId], });
         },
         onError: (error) => {
             console.error('Mutation error:', error);
