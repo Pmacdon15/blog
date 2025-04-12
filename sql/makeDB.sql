@@ -10,9 +10,7 @@ DROP TABLE IF EXISTS Section;
 
 DROP TABLE IF EXISTS Blog;
 
-CREATE TABLE Blog (
-    id SERIAL PRIMARY KEY
-);
+CREATE TABLE Blog (id SERIAL PRIMARY KEY);
 
 CREATE TABLE Section (
     id SERIAL PRIMARY KEY,
@@ -84,9 +82,9 @@ INSERT INTO
     ImageSection (id, src, alt, width)
 VALUES (
         2,
-        '/tanstack.png',
+        'https://yiteg94znhby2sle.public.blob.vercel-storage.com/tanstack-1oT1aQaxEpabXra6MSRfLhF2Jqc2nW.png',
         'Tanstack Logo',
-        24
+        500
     );
 
 -- Insert into ParagraphSection table
