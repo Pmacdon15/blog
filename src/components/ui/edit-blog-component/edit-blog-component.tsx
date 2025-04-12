@@ -17,12 +17,12 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
             {data?.map((section: Section, index: Key | null | undefined) => {
                 switch (section.section_type_id) {
                     case 1:
-                        return <TitleSection key={index} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />
+                        return <TitleSection key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />
                     case 2:
                         return (
                             <Image
                                 className="w-36 h-auto"
-                                key={index}
+                                key={section.id}
                                 src={section.src || ''}
                                 alt={section.alt || ''}
                                 width={600}
@@ -30,9 +30,9 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
                             />
                         );
                     case 3:
-                        return <Paragraph key={index} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />;
+                        return <Paragraph key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />;
                     case 4:
-                        return <Code key={index} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />
+                        return <Code key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />
                 }
             })}
         </div>
