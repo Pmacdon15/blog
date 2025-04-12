@@ -137,7 +137,7 @@ function PhotoSection({ section, formActionUpdate, formActionDelete, sectionStat
             <Title section={section} formActionDelete={formActionDelete} />
 
             <div
-                className="overflow-hidden border p-2 w-36 h-auto min-w-36 max-w-[810px] max-h-[810px]"
+                className={`overflow-hidden border rounded-sm p-2 h-auto  w-[${section.width}px] max-w-[810px] max-h-[810px]`}
                 style={{
                     aspectRatio: "1 / 1", // Maintain a square aspect ratio or adjust based on image
                     resize: "horizontal", // Only allow horizontal resizing (optional, can remove if not needed)
@@ -148,11 +148,7 @@ function PhotoSection({ section, formActionUpdate, formActionDelete, sectionStat
                     alt={section.alt || ''}
                     width={800}
                     height={800}
-                    style={{
-                        objectFit: "contain", // Ensure the entire image is shown
-                        width: "100%",
-                        height: "100%",
-                    }}
+                    className="object-contain w-full h-full"
                 />
             </div>
             <input

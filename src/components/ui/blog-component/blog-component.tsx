@@ -31,6 +31,7 @@ export default function BlogComponent({ data }: { data: Section[] | undefined })
     return (
         <div className="flex flex-col gap-4 p-4 justify-center items-center w-full md:w-4/6">
             {data?.map((section, index) => {
+                console.log(section.width)
                 switch (section.section_type_id) {
                     case 1:
                         return (
@@ -42,7 +43,7 @@ export default function BlogComponent({ data }: { data: Section[] | undefined })
                     case 2:
                         return (
                             <Image
-                                className="w-36 h-auto"
+                                className={`w-[${section.width}px] h-auto`}
                                 key={index}
                                 src={section.src || ''}
                                 alt={section.alt || ''}
