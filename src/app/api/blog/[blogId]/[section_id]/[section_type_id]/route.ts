@@ -28,9 +28,8 @@ export async function PUT(request: NextRequest) {
     const pathSegments = url.pathname.split('/');
     const blogId = Number(pathSegments[pathSegments.length - 3]);
     const sectionTypeId = Number(pathSegments[pathSegments.length - 1]);
-    const sectionId = Number(pathSegments[pathSegments.length - 2]);
-    // const userEmail = pathSegments[pathSegments.length - 1];
- console.log(sectionTypeId)
+    const sectionId = Number(pathSegments[pathSegments.length - 2]);  
+    
     const formData = await request.formData();
 
     let validatedFields;

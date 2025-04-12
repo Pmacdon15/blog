@@ -10,36 +10,38 @@ DROP TABLE IF EXISTS Section;
 
 DROP TABLE IF EXISTS Blog;
 
-CREATE TABLE Blog (id SERIAL PRIMARY KEY);
+CREATE TABLE Blog (
+    id SERIAL PRIMARY KEY
+);
 
 CREATE TABLE Section (
     id SERIAL PRIMARY KEY,
     blog_id INTEGER NOT NULL,
     type INTEGER NOT NULL,
-    FOREIGN KEY (blog_id) REFERENCES Blog (id)
+    FOREIGN KEY (blog_id) REFERENCES Blog (id) ON DELETE CASCADE
 );
 
 CREATE TABLE TitleSection (
-    id INTEGER PRIMARY KEY REFERENCES Section (id),
+    id INTEGER PRIMARY KEY REFERENCES Section (id) ON DELETE CASCADE,
     title VARCHAR(100) NOT NULL,
     publish_date DATE NOT NULL
 );
 
 CREATE TABLE ImageSection (
-    id INTEGER PRIMARY KEY REFERENCES Section (id),
+    id INTEGER PRIMARY KEY REFERENCES Section (id) ON DELETE CASCADE,
     src VARCHAR(100) NOT NULL,
     alt VARCHAR(100) NOT NULL,
     width INTEGER NOT NULL
 );
 
 CREATE TABLE ParagraphSection (
-    id INTEGER PRIMARY KEY REFERENCES Section (id),
+    id INTEGER PRIMARY KEY REFERENCES Section (id) ON DELETE CASCADE,
     title VARCHAR(100),
     text TEXT NOT NULL
 );
 
 CREATE TABLE CodeSection (
-    id INTEGER PRIMARY KEY REFERENCES Section (id),
+    id INTEGER PRIMARY KEY REFERENCES Section (id) ON DELETE CASCADE,
     language VARCHAR(50) NOT NULL,
     code TEXT NOT NULL
 );
@@ -230,4 +232,4 @@ const result = await sql`
     OFFSET ${offset}`;'
     );
 
-SELECT * FROM ParagraphSection;
+-- SELECT * FROM ParagraphSection;

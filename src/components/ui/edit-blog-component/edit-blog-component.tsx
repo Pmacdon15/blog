@@ -1,37 +1,48 @@
 'use client';
-import { useUpdateSection } from "@/mutations/mutations";
-import { Section, FormActionProps } from "@/types/types";
+import { useDeleteSection, useUpdateSection } from "@/mutations/mutations";
+import { Section, FormActionProps, FormActionInputDelete } from "@/types/types";
 import { Key } from "react";
 
-// import Image from 'next/image';
+import Image from 'next/image';
 
 export default function EditBlogComponent({ blogId, data }: { blogId: number, data: Section[] }) {
 
-    const { mutate } = useUpdateSection(blogId);
+    const { mutate: mutateUpdate } = useUpdateSection(blogId);
+    const { mutate: mutateDelete } = useDeleteSection(blogId);
+
+    console.log(data)
 
     return (
-        <div className="flex flex-col w-full md:w-4/6 gap-8 justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
+        <div className="flex flex-col w-full md:w-4/6 gap-8 justify-start min-h-screen items-center mt-8 pb-4 font-[family-name:var(--font-geist-sans)]">
             {data?.map((section: Section, index: Key | null | undefined) => {
                 switch (section.section_type_id) {
                     case 1:
-                        return <TitleSection key={index} section={section} formAction={mutate} />
+                        return <TitleSection key={index} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />
                     case 2:
-                        return <div key={index}></div>
+                        return (
+                            <Image
+                                className="w-36 h-auto"
+                                key={index}
+                                src={section.src || ''}
+                                alt={section.alt || ''}
+                                width={600}
+                                height={600}
+                            />
+                        );
                     case 3:
-                        return <Paragraph key={index} section={section} formAction={mutate} />;
+                        return <Paragraph key={index} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />;
                     case 4:
-                        return <Code key={index} section={section} formAction={mutate} />
+                        return <Code key={index} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />
                 }
             })}
         </div>
     );
 }
 
-
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>, section: Section, formAction: (input: { formData: FormData; sectionId: number; sectionTypeId: number }) => void) => {
+const handleSubmit = (event: React.FormEvent<HTMLFormElement>, section: Section, formActionUpdate: (input: { formData: FormData; sectionId: number; sectionTypeId: number }) => void) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    formAction({ formData, sectionId: section.id, sectionTypeId: section.section_type_id });
+    formActionUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id });
 }
 
 function UpdateButton() {
@@ -41,12 +52,31 @@ function UpdateButton() {
         </button>
     )
 }
-function TitleSection({ section, formAction }: { section: Section } & FormActionProps) {
+
+function Title({ section, formActionDelete }: { section: Section; formActionDelete: (input: FormActionInputDelete) => void }) {
+    const handleDelete = () => {
+        formActionDelete({ sectionId: section.id });
+    };
+
+    return (
+        <div className="flex justify-between">
+            <h1 className="text-xl">{section.section_type.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</h1>
+            <button
+                className="ml-auto bg-red-400 w-8 rounded-lg shadow-lg  hover:bg-red-600 hover:scale-110 transition-transform duration-300"
+                onClick={handleDelete}
+            >
+                X
+            </button>
+        </div>
+    )
+}
+
+function TitleSection({ section, formActionUpdate, formActionDelete }: { section: Section } & FormActionProps) {
     return (
         <form
-            onSubmit={(event) => handleSubmit(event, section, formAction)}
+            onSubmit={(event) => handleSubmit(event, section, formActionUpdate)}
             className="flex flex-col gap-4 border p-4 w-full rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] " >
-            <h1 className="text-xl">{section.section_type.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</h1>
+            <Title section={section} formActionDelete={formActionDelete} />
             <input
                 type='text'
                 name='title'
@@ -65,18 +95,19 @@ function TitleSection({ section, formAction }: { section: Section } & FormAction
     )
 }
 
-function Paragraph({ section, formAction }: { section: Section } & FormActionProps) {
+function Paragraph({ section, formActionUpdate, formActionDelete }: { section: Section } & FormActionProps) {
+
     return (
         <form
-            onSubmit={(event) => handleSubmit(event, section, formAction)}
+            onSubmit={(event) => handleSubmit(event, section, formActionUpdate)}
             className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
-            <h1 className="text-xl">{section.section_type.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</h1>
+            <Title section={section} formActionDelete={formActionDelete} />
             <input
                 type='text'
                 name='title'
                 placeholder="Title"
                 defaultValue={section.paragraph_title || ""}
-                className="text-4xl border rounded-sm">
+                className="text-4xl border rounded-sm p-2">
             </input>
             <textarea
                 className="indent-8 min-h-36 border p-4 rounded-sm "
@@ -89,12 +120,13 @@ function Paragraph({ section, formAction }: { section: Section } & FormActionPro
 }
 
 
-function Code({ section, formAction }: { section: Section } & FormActionProps) {
+function Code({ section, formActionUpdate, formActionDelete }: { section: Section } & FormActionProps) {
+
     return (
         <form
-            onSubmit={(event) => handleSubmit(event, section, formAction)}
+            onSubmit={(event) => handleSubmit(event, section, formActionUpdate)}
             className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
-            <h1 className="text-xl">{section.section_type.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</h1>
+            <Title section={section} formActionDelete={formActionDelete} />
             <textarea
                 className="min-h-36 border p-4 rounded-sm "
                 name="code"

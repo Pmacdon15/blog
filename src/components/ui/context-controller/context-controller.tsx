@@ -9,7 +9,7 @@ export default function ContectCooontroller({ blogId, isAdmin }: { blogId: numbe
   const { data } = useGetSections(blogId);
 
   return (
-    <>
+    <div className="flex flex-col gap-2 justify-center w-full  items-center">
       {isAdmin &&
         <button
           className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
@@ -22,6 +22,11 @@ export default function ContectCooontroller({ blogId, isAdmin }: { blogId: numbe
       {!isAdmin &&
         <BlogComponent data={data} />
       }
-    </>
+      {isAdmin &&
+        <button
+          className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
+          onClick={() => { setEditBlog(!editBlog) }}>{`${editBlog ? 'Show Blog' : 'Edit Blog'} `}</button>
+      }
+    </div>
   );
 };
