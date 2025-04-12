@@ -15,23 +15,12 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
                 switch (section.section_type_id) {
                     case 1:
                         return <TitleSection key={index} section={section} formAction={mutate} />
-                    // case 2:
-                    //     return <>
-                    //         <Image
-                    //             className="w-36 h-auto"
-                    //             key={index}
-                    //             src={section.src || ''}
-                    //             alt={section.alt || ''}
-                    //             width={600}
-                    //             height={600}
-                    //         />;
-                    //     </>
+                    case 2:
+                        return <div key={index}></div>
                     case 3:
                         return <Paragraph key={index} section={section} formAction={mutate} />;
                     case 4:
                         return <Code key={index} section={section} formAction={mutate} />
-
-
                 }
             })}
         </div>
