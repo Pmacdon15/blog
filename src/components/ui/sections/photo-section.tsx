@@ -7,45 +7,9 @@ import { handleSubmit } from "@/lib/utils";
 import { throttle } from '@/lib/utils';
 
 export function PhotoSection({ section, formActionUpdate, formActionDelete, sectionState, handleImageChange }: PhotoSectionProps) {
-    const [showOldPhoto, setShowOldPhoto] = useState(true);
-    const [width, setWidth] = useState<number>(section.width || 150); // Initialize with section.width
+    const [showOldPhoto, setShowOldPhoto] = useState(true);    
     const containerRef = useRef<HTMLDivElement>(null);
-    const isInitialRender = useRef(true); // Track first render
-
-    // Throttled setWidth
-    const throttledSetWidth = useCallback(
-        (newWidth: number) => {
-            console.log("Throttled width update:", newWidth);
-            setWidth(newWidth);
-        },
-        [setWidth]
-    );
-    
-    useEffect(() => {
-        const throttled = throttle(throttledSetWidth, 50);
-        // Observe container width changes from dragging
-        if (!containerRef.current) return;
-    
-        const observer = new ResizeObserver((entries) => {
-            for (const entry of entries) {
-                const newWidth = Math.round(entry.contentRect.width);
-                // Skip update on initial render to preserve section.width
-                if (isInitialRender.current) {
-                    isInitialRender.current = false;
-                    console.log("Initial container width:", newWidth);
-                    return;
-                }
-                throttled(newWidth);
-            }
-        });
-    
-        observer.observe(containerRef.current);
-    
-        // Cleanup on unmount
-        return () => {
-            observer.disconnect();
-        };
-    }, [throttledSetWidth]);
+    const { width, setWidth } = useThrottledWidth(containerRef, section.width || 150);
 
     // Image source: new photo if !showOldPhoto and sectionState exists, else old photo
     const imageSrc = !showOldPhoto && sectionState[section.id] ? sectionState[section.id] : section.src || "/placeholder.jpg";
@@ -117,4 +81,42 @@ export function PhotoSection({ section, formActionUpdate, formActionDelete, sect
             )}
         </div>
     );
+}
+
+// At the bottom of the page
+function useThrottledWidth(containerRef: React.RefObject<HTMLDivElement | null>, initialWidth: number) {
+    const [width, setWidth] = useState(initialWidth);
+    const isInitialRender = useRef(true);
+    const throttledSetWidth = useCallback(
+        (newWidth: number) => {
+            console.log("Throttled width update:", newWidth);
+            setWidth(newWidth);
+        },
+        [setWidth]
+    );
+
+    useEffect(() => {
+        const throttled = throttle(throttledSetWidth, 100);
+        if (!containerRef.current) return;
+
+        const observer = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                const newWidth = Math.round(entry.contentRect.width);
+                if (isInitialRender.current) {
+                    isInitialRender.current = false;
+                    console.log("Initial container width:", newWidth);
+                    return;
+                }
+                throttled(newWidth);
+            }
+        });
+
+        observer.observe(containerRef.current);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [throttledSetWidth]);
+
+    return { width, setWidth };
 }
