@@ -10,7 +10,10 @@ DROP TABLE IF EXISTS Section;
 
 DROP TABLE IF EXISTS Blog;
 
-CREATE TABLE Blog (id SERIAL PRIMARY KEY);
+CREATE TABLE Blog (
+    id SERIAL PRIMARY KEY,
+    published BOOLEAN NOT NULL
+);
 
 CREATE TABLE Section (
     id SERIAL PRIMARY KEY,
@@ -45,7 +48,7 @@ CREATE TABLE CodeSection (
 );
 
 -- Insert into Blog table
-INSERT INTO Blog (id) VALUES (1);
+INSERT INTO Blog (id, published) VALUES (1, true);
 
 -- Insert into Section table
 INSERT INTO
@@ -82,7 +85,7 @@ INSERT INTO
     ImageSection (id, src, alt, width)
 VALUES (
         2,
-        'https://yiteg94znhby2sle.public.blob.vercel-storage.com/tanstack-1oT1aQaxEpabXra6MSRfLhF2Jqc2nW.png',
+        'https://yiteg94znhby2sle.public.blob.vercel-storage.com/tanstack-tTDLn3wLKj7OlaWvL9BicFgre6g6oJ.png',
         'Tanstack Logo',
         500
     );
