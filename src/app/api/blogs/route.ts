@@ -5,7 +5,7 @@ import { BlogData } from '@/types/types';
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const pathSegments = url.pathname.split('/');
-  const blogId = pathSegments[pathSegments.length - 1];
+  // const blogId = pathSegments[pathSegments.length - 1];
   const published = Boolean(url.searchParams.get('published')) || false;
 
   try {

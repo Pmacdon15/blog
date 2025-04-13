@@ -7,7 +7,7 @@ import { handleSubmit } from "@/lib/utils";
 import { throttle } from '@/lib/utils';
 
 export function PhotoSection({ section, formActionUpdate, formActionDelete, sectionState, handleImageChange }: PhotoSectionProps) {
-    const [showOldPhoto, setShowOldPhoto] = useState(true);    
+    const [showOldPhoto, setShowOldPhoto] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const { width, setWidth } = useThrottledWidth(containerRef, section.width || 150);
 
@@ -89,7 +89,7 @@ function useThrottledWidth(containerRef: React.RefObject<HTMLDivElement | null>,
     const [width, setWidth] = useState(initialWidth);
     const isInitialRender = useRef(true);
     const throttledSetWidth = useCallback(
-        (newWidth: number) => {           
+        (newWidth: number) => {
             setWidth(newWidth);
         },
         [setWidth]
@@ -103,7 +103,7 @@ function useThrottledWidth(containerRef: React.RefObject<HTMLDivElement | null>,
             for (const entry of entries) {
                 const newWidth = Math.round(entry.contentRect.width);
                 if (isInitialRender.current) {
-                    isInitialRender.current = false;                   
+                    isInitialRender.current = false;
                     return;
                 }
                 throttled(newWidth);
@@ -115,7 +115,7 @@ function useThrottledWidth(containerRef: React.RefObject<HTMLDivElement | null>,
         return () => {
             observer.disconnect();
         };
-    }, [throttledSetWidth]);
+    }, [throttledSetWidth, containerRef]);
 
     return { width, setWidth };
 }

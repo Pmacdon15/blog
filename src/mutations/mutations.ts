@@ -32,7 +32,7 @@ export const useUpdateSection = (blogId: number) => {
 
 
 const deleteSection = async (blogId: number, sectionId: number) => {
-    const response = await fetch(`/api/update-section/${blogId}/${sectionId}`, {
+    const response = await fetch(`/api/delete-section/${blogId}/${sectionId}`, {
         method: 'DELETE',
     });
 
