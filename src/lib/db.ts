@@ -1,6 +1,7 @@
 import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdatePhotoSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { neon } from '@neondatabase/serverless';
 import { z } from 'zod';
+import { deleteBlob } from './blobs';
 
 const sql = neon(`${process.env.DATABASE_URL}`);
 
@@ -25,7 +26,11 @@ export async function updateSection(
             `;
         } else if (sectionTypeId === 2) {
             const photoData = data as UpdatePhotoSection;
-            if (newPhotoUrl !== "") {                
+            if (newPhotoUrl !== "") {
+                const result = await sql`
+                SELECT src FROM ImageSection WHERE id = ${sectionId}
+            `;                
+                await deleteBlob(result[0].src)
                 await sql`
                     UPDATE ImageSection
                     SET src = ${newPhotoUrl}, alt = ${photoData.alt}, width = ${photoData.width}

@@ -1,6 +1,6 @@
 import { schemaUpdatePhotoSection } from "@/zod/zod-schema";
 import { z } from "zod";
-import { put } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 
 export async function dealWithNewPhoto(validatedFields: z.infer<typeof schemaUpdatePhotoSection> | null | undefined) {
     const file = validatedFields?.new_file as File;
@@ -11,4 +11,6 @@ export async function dealWithNewPhoto(validatedFields: z.infer<typeof schemaUpd
     return blob;
 }
 
-
+export async function deleteBlob(blobUrl: string) {
+    await del(blobUrl);
+}
