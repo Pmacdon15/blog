@@ -45,3 +45,12 @@ export interface PhotoSectionProps extends FormActionProps {
     sectionState: SectionState;
     handleImageChange: (event: ChangeEvent<HTMLInputElement>, sectionId: number) => void;
 }
+
+export type BlogData = {
+    id: number;
+    published: boolean;
+    section_id: number;
+    title: string;
+    publish_date: string;
+    image_src?: string;
+};
