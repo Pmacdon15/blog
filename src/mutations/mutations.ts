@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
 const updateSection = async (blogId: number, sectionId: number, sectionTypeId: number, formData: FormData) => {
-    const response = await fetch(`/api/blog/${blogId}/${sectionId}/${sectionTypeId}`, {
+    const response = await fetch(`/api/update-section/${blogId}/${sectionId}/${sectionTypeId}`, {
         method: 'PUT',
         body: formData,
     });
@@ -32,7 +32,7 @@ export const useUpdateSection = (blogId: number) => {
 
 
 const deleteSection = async (blogId: number, sectionId: number) => {
-    const response = await fetch(`/api/blog/${blogId}/${sectionId}`, {
+    const response = await fetch(`/api/update-section/${blogId}/${sectionId}`, {
         method: 'DELETE',
     });
 
