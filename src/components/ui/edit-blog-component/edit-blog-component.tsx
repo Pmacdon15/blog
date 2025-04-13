@@ -39,7 +39,7 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
     };
 
     return (
-        <div className="flex flex-col w-full md:w-4/6 gap-8 justify-start min-h-screen items-center mt-8 pb-4 font-[family-name:var(--font-geist-sans)]">
+        <div className="flex flex-col w-full lg:w-4/6 sm:w-5/6 gap-8 justify-start min-h-screen items-center mt-8 pb-4 font-[family-name:var(--font-geist-sans)]">
             {data?.map((section: Section) => {
                 switch (section.section_type_id) {
                     case 1:
