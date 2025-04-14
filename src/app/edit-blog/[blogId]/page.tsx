@@ -1,8 +1,14 @@
 import ContextController from "@/components/ui/context-controller/context-controller";
 import Link from "next/link";
 
-export default function Page() {
-    const blogId = 1;
+export default async function Page({
+    params,
+}: {
+    params: Promise<{ blogId: number }>
+}) {
+
+    const { blogId } = await params;
+    
     return (
         <div className="flex flex-col justify-start min-h-screen items-center mt-8 gap-4 pb-20 font-[family-name:var(--font-geist-sans)]">
             <ContextController blogId={blogId} isAdmin={true} />

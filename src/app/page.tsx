@@ -2,7 +2,7 @@
 import { useGetBlogs } from "@/hooks/hooks";
 import Link from "next/link";
 import Image from "next/image";
-import { BlogData, ResponseData } from "@/types/types";
+import { BlogData } from "@/types/types";
 import { useState } from "react";
 
 export default function Home() {
@@ -19,7 +19,7 @@ export default function Home() {
 function DisplayBlogs({ published, title }: { published: boolean, title: string }) {
   const [page, setPage] = useState(1);
   const { data } = useGetBlogs(page, published)
-  
+
   return (
     <div className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">
       <h2 className="text-2xl">{title}</h2>
@@ -35,7 +35,7 @@ function BlogCard({ blog, published }: { blog: BlogData, published: boolean }) {
   return (
     <Link
       className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]  rounded-sm shadow-xl gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6"
-      href={`/${published ? 'blog' : 'edit-blog'}blog/${blog.id}`}>
+      href={`/${published ? 'blog' : 'edit-blog'}/${blog.id}`}>
       <h1 className="text-4xl">{blog.title}</h1>
       {blog.image_src &&
         <Image
