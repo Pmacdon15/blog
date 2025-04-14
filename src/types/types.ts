@@ -59,4 +59,10 @@ export type BlogData = {
 export type ResponseData = {
     blogs: BlogData[];
     hasMore: boolean;
-  };
+};
+
+export interface PaginationProps {
+    page: number;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
+    hasMoreBlogs: boolean | undefined;
+}
