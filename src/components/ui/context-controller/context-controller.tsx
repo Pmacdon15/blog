@@ -6,7 +6,10 @@ import { useState } from "react";
 export default function ContectCooontroller({ blogId, isAdmin }: { blogId: number, isAdmin: boolean }) {
 
   const [editBlog, setEditBlog] = useState(true);
-  const { data } = useGetSections(blogId);
+  const { data, isLoading, error } = useGetSections(blogId);
+
+  if (isLoading) return <p className="flex flex-col gap-2 justify-center w-full  items-center">Loading...</p>;
+  if (error) return <p className="flex flex-col gap-2 justify-center w-full  items-center">Error: {error.message}</p>;
 
   return (
     <div className="flex flex-col gap-2 justify-center w-full  items-center">

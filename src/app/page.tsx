@@ -18,15 +18,19 @@ export default function Home() {
 
 function DisplayBlogs({ published, title }: { published: boolean, title: string }) {
   const [page, setPage] = useState(1);
-  const { data } = useGetBlogs(page, published)
+  const { data, isLoading, error } = useGetBlogs(page, published)
+
+  if (isLoading) return <p className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">Loading...</p>;
+  if (error) return <p className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">Error: {error.message}</p>;
+  if (!data || !data.blogs) return <p className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">No blogs found</p>;
 
   return (
     <div className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">
       <h2 className="text-2xl">{title}</h2>
-      {data?.blogs.map((blog: BlogData) => (
+      {data.blogs.map((blog: BlogData) => (
         <BlogCard key={blog.id} blog={blog} published={published} />
       ))}
-      <PaginationButtons page={page} setPage={setPage} hasMoreBlogs={data?.hasMore} />
+      <PaginationButtons page={page} setPage={setPage} hasMoreBlogs={data.hasMore} />
     </div>
   )
 }
