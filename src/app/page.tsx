@@ -10,13 +10,13 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-8 justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
-      <DisplayBlogs published={true} title="Published Blogs" />
-      {isAdmin && <DisplayBlogs published={false} title="Draft Blogs" />}
+      <DisplayBlogs published={true} title="Published Blogs" isAdmin={isAdmin} />
+      {isAdmin && <DisplayBlogs published={false} title="Draft Blogs" isAdmin={isAdmin} />}
     </div>
   );
 }
 
-function DisplayBlogs({ published, title }: { published: boolean, title: string }) {
+function DisplayBlogs({ published, title, isAdmin }: { published: boolean, title: string, isAdmin: boolean }) {
   const [page, setPage] = useState(1);
   const { data, isLoading, error } = useGetBlogs(page, published)
 
@@ -28,30 +28,35 @@ function DisplayBlogs({ published, title }: { published: boolean, title: string 
     <div className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">
       <h2 className="text-2xl">{title}</h2>
       {data.blogs.map((blog: BlogData) => (
-        <BlogCard key={blog.id} blog={blog} published={published} />
+        <BlogCard key={blog.id} blog={blog} published={published} isAdmin={isAdmin} />
       ))}
       <PaginationButtons page={page} setPage={setPage} hasMoreBlogs={data.hasMore} />
     </div>
   )
 }
 
-function BlogCard({ blog, published }: { blog: BlogData, published: boolean }) {
+function BlogCard({ blog, published, isAdmin }: { blog: BlogData, published: boolean, isAdmin: boolean }) {
   return (
-    <Link
-      className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]  rounded-sm shadow-xl gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6"
-      href={`/${published ? 'blog' : 'edit-blog'}/${blog.id}`}>
-      <h1 className="text-4xl">{blog.title}</h1>
-      {blog.image_src &&
-        <Image
-          src={blog.image_src || ""}
-          alt={"Blog Image"}
-          width={800}
-          height={800}
-          className="object-contain w-36 h-auto"
-        />
+    <>
+      <Link
+        className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]  rounded-sm shadow-xl gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6"
+        href={`/${published ? 'blog' : 'edit-blog'}/${blog.id}`}>
+        <h1 className="text-4xl">{blog.title}</h1>
+        {blog.image_src &&
+          <Image
+            src={blog.image_src || ""}
+            alt={"Blog Image"}
+            width={800}
+            height={800}
+            className="object-contain w-36 h-auto"
+          />
+        }
+        {published ? 'Go to This Blog' : 'Edit This Blog'}
+      </Link>
+      {isAdmin &&
+        <Link href={`/edit-blog/${blog.id}`}>Edit This Blog</Link>
       }
-      {published ? 'Go to This Blog' : 'Edit This Blog'}
-    </Link>
+    </>
   )
 }
 
