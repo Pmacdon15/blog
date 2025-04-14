@@ -53,4 +53,10 @@ export type BlogData = {
     title: string;
     publish_date: string;
     image_src?: string;
+    hasMore: boolean;
 };
+
+export type ResponseData = {
+    blogs: BlogData[];
+    hasMore: boolean;
+  };
