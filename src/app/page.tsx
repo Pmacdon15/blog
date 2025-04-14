@@ -53,7 +53,7 @@ function BlogCard({ blog, published, isAdmin }: { blog: BlogData, published: boo
         }
         {published ? 'Go to This Blog' : 'Edit This Blog'}
       </Link>
-      {isAdmin &&
+      {isAdmin && published &&
         <Link href={`/edit-blog/${blog.id}`}>Edit This Blog</Link>
       }
     </>
