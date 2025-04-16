@@ -58,6 +58,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error:', error);
     return new Response(`Error: ${error}`, {
+      status: 500,
       headers: { 'Content-Type': 'text/plain' },
     });
   }
