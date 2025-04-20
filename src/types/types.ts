@@ -44,6 +44,7 @@ export interface PhotoSectionProps extends FormActionProps {
     section: Section; // Ensure this matches the specific type if you've refined it (e.g., ImageSection)
     sectionState: SectionState;
     handleImageChange: (event: ChangeEvent<HTMLInputElement>, sectionId: number) => void;
+    isPending: boolean;
 }
 
 export type BlogData = {

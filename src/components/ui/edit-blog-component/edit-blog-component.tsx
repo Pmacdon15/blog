@@ -6,6 +6,7 @@ import { Code } from "../sections/code-section";
 import { TitleSection } from "../sections/title-section";
 import { Paragraph } from "../sections/paragraph-section";
 import { PhotoSection } from "../sections/photo-section";
+import { AddSectionForm } from "../sections/add-section-form/add-section-form";
 
 // Define the type for sectionState
 type SectionState = {
@@ -16,8 +17,8 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
     // Use the defined SectionState type for sectionState
     const [sectionState, setSectionState] = useState<SectionState>({});
 
-    const { mutate: mutateUpdate } = useUpdateSection(blogId);
-    const { mutate: mutateDelete } = useDeleteSection(blogId);
+    const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection(blogId);
+    const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(blogId);
 
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>, sectionId: number) => {
         const file = event.target.files?.[0];
@@ -43,7 +44,7 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
             {data?.map((section: Section) => {
                 switch (section.section_type_id) {
                     case 1:
-                        return <TitleSection key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />;
+                        return <TitleSection key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     case 2:
                         return (
                             <PhotoSection
@@ -53,18 +54,19 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
                                 formActionDelete={mutateDelete}
                                 sectionState={sectionState}
                                 handleImageChange={handleImageChange}
+                                isPending={isPendingUpdate || isPendingDelete}
                             />
                         );
                     case 3:
-                        return <Paragraph key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />;
+                        return <Paragraph key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     case 4:
-                        return <Code key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} />;
+                        return <Code key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     default:
                         return null;
                 }
             })}
+            <AddSectionForm />
         </div>
     );
 }
-
 

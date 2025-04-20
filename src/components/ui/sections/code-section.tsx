@@ -1,9 +1,9 @@
 import { handleSubmit } from "@/lib/utils";
 import { FormActionProps, Section } from "@/types/types";
-import { UpdateButton } from "./section-components/update-button";
-import { Title } from "./section-components/title";
+import { UpdateButton } from "./update-button";
+import { Title } from "./edit-section-components/title";
 
-export function Code({ section, formActionUpdate, formActionDelete }: { section: Section } & FormActionProps) {
+export function Code({ section, formActionUpdate, formActionDelete, isPending }: { section: Section, isPending: boolean } & FormActionProps) {
 
     return (
         <form
@@ -15,7 +15,7 @@ export function Code({ section, formActionUpdate, formActionDelete }: { section:
                 name="code"
                 defaultValue={section.code || ""}
             />
-            <UpdateButton />
+            <UpdateButton actionString="Update Section" disabled={isPending} />
         </form>
     );
 }
