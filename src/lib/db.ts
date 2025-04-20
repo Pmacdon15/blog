@@ -3,12 +3,24 @@ import { neon } from '@neondatabase/serverless';
 import { z } from 'zod';
 import { deleteBlob } from './blobs';
 
-const sql = neon(`${process.env.DATABASE_URL}`);
-
 type UpdateTitleSection = z.infer<typeof schemaUpdateTitleSection>;
 type UpdateImageSection = z.infer<typeof schemaUpdateImageSection>;
 type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
 type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
+
+
+export async function isBlogPublished(blogId: number) {
+  const sql = neon(`${process.env.DATABASE_URL}`);
+  const results = await sql`
+    SELECT EXISTS (
+      SELECT 1
+      FROM Blog
+      WHERE id = ${blogId} AND published = TRUE
+    ) AS is_published;
+  `;
+
+  return results[0].is_published;
+}
 
 export async function addSection(
     sectionTypeName: string,
@@ -16,6 +28,7 @@ export async function addSection(
     newPhotoUrl?: string
 ) {
     try {
+        const sql = neon(`${process.env.DATABASE_URL}`);
         if (sectionTypeName === 'Title') {
             const titleData = data as UpdateTitleSection;
             await sql`
@@ -78,6 +91,7 @@ export async function updateSection(
     newPhotoUrl?: string
 ) {
     try {
+        const sql = neon(`${process.env.DATABASE_URL}`);
         if (sectionTypeId === 1) {
             const titleData = data as UpdateTitleSection;
             await sql`

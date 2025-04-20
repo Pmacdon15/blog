@@ -7,6 +7,7 @@ import { TitleSection } from "../title-section";
 import { Paragraph } from "../paragraph-section";
 import { ImageSection } from "../image-section";
 import { AddSectionForm } from "../../add-section-components/add-section-form/add-section-form";
+import { useGetIsBlogPublished } from "@/hooks/hooks";
 
 // Define the type for sectionState
 type SectionState = {
@@ -17,6 +18,9 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
 
     const [sectionState, setSectionState] = useState<SectionState>({});
 
+    const { data: dataIsPublished, isLoading } = useGetIsBlogPublished(blogId);
+
+    console.log("data", dataIsPublished);
     const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection(blogId);
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(blogId);
 

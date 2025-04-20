@@ -20,10 +20,19 @@ const fetchBlogs = async (page: number, published: boolean): Promise<ResponseDat
 
 export const useGetBlogs = (page: number, published: boolean) => {
     return useQuery({
-        queryKey: ['blogs', published, page], // Include page in the query key
+        queryKey: ['blogs', published, page],
         queryFn: () => fetchBlogs(page, published),
         placeholderData: keepPreviousData,
     })
 }
 
+const fetchIsBlogPublished = async (blogId: number): Promise<any> => {
+  return (await fetch(`/api/blog/${blogId}`)).json();
+}
 
+export const useGetIsBlogPublished = (blogId: number) => {
+  return useQuery({
+    queryKey: ['blog', blogId],
+    queryFn: () => fetchIsBlogPublished(blogId),
+  })
+}

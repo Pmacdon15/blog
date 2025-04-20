@@ -8,7 +8,7 @@ export default async function Page({
 }) {
 
     const { blogId } = await params;
-    
+   
     return (
         <div className="flex flex-col justify-start min-h-screen items-center mt-8 gap-4 pb-20 font-[family-name:var(--font-geist-sans)]">
             <ContextController blogId={blogId} isAdmin={true} />
