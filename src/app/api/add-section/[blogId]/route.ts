@@ -1,5 +1,5 @@
 import { addSection } from '@/lib/db';
-import { schemaUpdateTitleSection } from '@/zod/zod-schema';
+import { schemaUpdateParagraphSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -24,8 +24,13 @@ export async function POST(request: NextRequest) {
             title: formData.get('title'),
             publish_date: new Date(formData.get('publish_date') as string),
         });
+    } else if (sectionTypeName === 'Paragraph') {
+        validatedFields = schemaUpdateParagraphSection.safeParse({
+            blog_id: blogId,
+            title: formData.get('title'),
+            text: formData.get('text'),
+        });
     }
-
 
 
     if (!validatedFields?.success) {

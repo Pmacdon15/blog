@@ -15,8 +15,9 @@ export default function ParagraphSection({ isPending, isError }: {
             <textarea
                 className="indent-8 min-h-36 border p-4 rounded-sm "
                 name="text"
+                required
             />
-            <UpdateButton actionString="Update Section" disabled={isPending} />
+            <UpdateButton actionString="Add Section" disabled={isPending} />
             {isPending && <p>Loading...</p>}
             {isError && <p>Error adding section </p>}
         </div>

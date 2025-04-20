@@ -28,6 +28,18 @@ export async function addSection(
                 SELECT id, ${titleData.title}, ${titleData.publish_date}
                 FROM new_section;
             `;
+        } else if (sectionTypeName === 'Paragraph') {
+            const paragraphData = data as UpdateParagraphSection;
+            await sql`
+                WITH new_section AS (
+                INSERT INTO Section (blog_id, type)
+                VALUES (${paragraphData.blog_id}, 3)
+                RETURNING id
+                )
+                INSERT INTO ParagraphSection (id, title, text)
+                SELECT id, ${paragraphData.title}, ${paragraphData.text}
+                FROM new_section;
+            `;
         }
     } catch (error) {
         console.error('Error:', error);
