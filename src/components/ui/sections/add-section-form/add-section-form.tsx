@@ -3,6 +3,7 @@ import { useState } from "react"
 import { TitleSection } from "../add-section-components/title-section"
 import { useAddSection } from "@/mutations/mutations";
 import ParagraphSection from "../add-section-components/paragraph-section";
+import CodeSection from "../add-section-components/code-section";
 
 
 
@@ -52,7 +53,7 @@ export function AddSectionForm({ blogId }: { blogId: number }) {
                 <ParagraphSection isPending={isPending} isError={isError} />
             }
             {currentSection === "Code" &&
-                <p>Code section</p>
+                <CodeSection isPending={isPending} isError={isError} />
             }
         </form>
     )

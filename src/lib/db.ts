@@ -40,6 +40,18 @@ export async function addSection(
                 SELECT id, ${paragraphData.title}, ${paragraphData.text}
                 FROM new_section;
             `;
+        } else if (sectionTypeName === 'Code') {
+            const codeData = data as UpdateCodeSection;
+            await sql`
+                WITH new_section AS (
+                INSERT INTO Section (blog_id, type)
+                VALUES (${codeData.blog_id}, 4)
+                RETURNING id
+                )
+                INSERT INTO CodeSection (id, language, code)
+                SELECT id, ${codeData.language}, ${codeData.code}
+                FROM new_section;
+            `;
         }
     } catch (error) {
         console.error('Error:', error);
@@ -89,10 +101,10 @@ export async function updateSection(
             `;
         } else if (sectionTypeId === 4) {
             const codeData = data as UpdateCodeSection;
-            await sql`
-                UPDATE CodeSection
-                SET code = ${codeData.code || ""}
-                WHERE id = ${sectionId}
+          await sql`
+            UPDATE CodeSection
+            SET code = ${codeData.code || ""}, language = ${codeData.language}
+            WHERE id = ${sectionId}
             `;
         } else {
             throw new Error('Unsupported section type');

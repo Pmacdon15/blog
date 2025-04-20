@@ -2,6 +2,7 @@ import { dealWithNewPhoto } from '@/lib/blobs';
 import { updateSection } from '@/lib/db';
 import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdatePhotoSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { NextRequest, NextResponse } from 'next/server';
+import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
 
 export async function PUT(request: NextRequest) {
     const url = request.nextUrl;
@@ -11,7 +12,7 @@ export async function PUT(request: NextRequest) {
     const sectionId = Number(pathSegments[pathSegments.length - 2]);
 
     const formData = await request.formData();
-   
+
     let validatedFields;
     let newPhotoUrl;
 
@@ -29,7 +30,7 @@ export async function PUT(request: NextRequest) {
             width: Number(formData.get("width"))
         });
         if (validatedFields.success && validatedFields.data.new_file) {
-            newPhotoUrl = await dealWithNewPhoto(validatedFields.data);           
+            newPhotoUrl = await dealWithNewPhoto(validatedFields.data);
         }
 
     } else if (sectionTypeId === 3) {
@@ -41,6 +42,7 @@ export async function PUT(request: NextRequest) {
     } else if (sectionTypeId === 4) {
         validatedFields = schemaUpdateCodeSection.safeParse({
             blog_id: blogId,
+            language: formData.get("language"),
             code: formData.get('code'),
         });
     } else {
@@ -60,7 +62,7 @@ export async function PUT(request: NextRequest) {
     }
 
     try {
-        await updateSection(sectionTypeId, sectionId, validatedFields.data, newPhotoUrl?.url||"");
+        await updateSection(sectionTypeId, sectionId, validatedFields.data, newPhotoUrl?.url || "");
     } catch (error) {
         return new Response(`Error: ${error}`, {
             headers: { 'Content-Type': 'text/plain' },

@@ -1,3 +1,4 @@
+import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
 import { z } from 'zod';
 
 export const schemaUpdateTitleSection = z.object({
@@ -29,6 +30,7 @@ export const schemaUpdateParagraphSection = z.object({
 
 export const schemaUpdateCodeSection = z.object({
     blog_id: z.number(),
+    language: z.string(),
     code: z.string(),
 });
 

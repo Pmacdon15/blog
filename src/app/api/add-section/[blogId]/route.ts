@@ -1,6 +1,7 @@
 import { addSection } from '@/lib/db';
-import { schemaUpdateParagraphSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
+import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { NextRequest, NextResponse } from 'next/server';
+import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
 
 export async function POST(request: NextRequest) {
     const url = request.nextUrl;
@@ -30,6 +31,14 @@ export async function POST(request: NextRequest) {
             title: formData.get('title'),
             text: formData.get('text'),
         });
+    } else if (sectionTypeName === 'Code') {
+        validatedFields = schemaUpdateCodeSection.safeParse({
+            blog_id: blogId,
+            language: formData.get('language'),
+            code: formData.get('code'),
+        });
+    } else {
+        return NextResponse.json({ error: 'Unsupported section type' }, { status: 400 });
     }
 
 

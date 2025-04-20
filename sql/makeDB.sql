@@ -235,4 +235,4 @@ const result = await sql`
 
 SELECT * FROM blog;
 
--- SELECT * FROM sections where blog_id = 2
+SELECT * FROM codeSection
