@@ -48,28 +48,28 @@ CREATE TABLE CodeSection (
 );
 
 -- Insert into Blog table
-INSERT INTO Blog (id, published) VALUES (1, true);
+INSERT INTO Blog (published) VALUES (true);
 
 -- Insert into Section table
 INSERT INTO
-    Section (id, blog_id, type)
-VALUES (1, 1, 1),
-    (2, 1, 2),
-    (3, 1, 3),
-    (4, 1, 3),
-    (5, 1, 4),
-    (6, 1, 3),
-    (7, 1, 4),
-    (8, 1, 3),
-    (9, 1, 4),
-    (10, 1, 3),
-    (11, 1, 3),
-    (12, 1, 3),
-    (13, 1, 3),
-    (14, 1, 4),
-    (15, 1, 3),
-    (16, 1, 4),
-    (17, 1, 3);
+    Section (blog_id, type)
+VALUES (1, 1),
+    (1, 2),
+    (1, 3),
+    (1, 3),
+    (1, 4),
+    (1, 3),
+    (1, 4),
+    (1, 3),
+    (1, 4),
+    (1, 3),
+    (1, 3),
+    (1, 3),
+    (1, 3),
+    (1, 4),
+    (1, 3),
+    (1, 4),
+    (1, 3);
 
 -- Insert into TitleSection table
 INSERT INTO
@@ -233,4 +233,6 @@ const result = await sql`
     OFFSET ${offset}`;'
     );
 
--- SELECT * FROM ParagraphSection;
+SELECT * FROM blog;
+
+-- SELECT * FROM sections where blog_id = 2
