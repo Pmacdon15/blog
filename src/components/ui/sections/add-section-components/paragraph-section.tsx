@@ -1,4 +1,4 @@
-import { UpdateButton } from "../update-button";
+import { UpdateButton } from "../../buttons/update-button";
 
 export default function ParagraphSection({ isPending, isError }: {
     isPending: boolean,

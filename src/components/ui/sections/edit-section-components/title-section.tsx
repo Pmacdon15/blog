@@ -1,7 +1,7 @@
 import { handleSubmit } from "@/lib/utils";
 import { FormActionProps, Section } from "@/types/types";
 import { Title } from "./title";
-import { UpdateButton } from "../update-button";
+import { UpdateButton } from "../../buttons/update-button";
 
 export function TitleSection({ section, formActionUpdate, formActionDelete, isPending }: { section: Section, isPending: boolean } & FormActionProps) {
     return (

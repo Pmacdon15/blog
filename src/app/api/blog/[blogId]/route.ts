@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
                 {
                     success: true,
                     message: 'Blog is Published',
+                    published: true,
                 },
                 { status: 200 }
             );
@@ -21,6 +22,7 @@ export async function GET(request: NextRequest) {
                 {
                     success: true,
                     message: 'Blog is not Published',
+                    published: false,
                 },
                 { status: 200 }
             );

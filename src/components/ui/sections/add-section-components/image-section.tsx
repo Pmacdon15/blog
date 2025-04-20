@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { UpdateButton } from "../update-button";
+import { UpdateButton } from "../../buttons/update-button";
 import { PhotoSectionProps } from "@/types/types";
 import Image from "next/image";
 import { throttle } from '@/lib/utils';

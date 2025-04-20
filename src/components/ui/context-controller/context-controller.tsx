@@ -3,6 +3,7 @@ import { useGetSections } from "@/hooks/hooks";
 import BlogComponent from "../blog-component/blog-component";
 import EditBlogComponent from "../sections/edit-section-components/edit-blog-component/edit-blog-component"
 import { useState } from "react";
+import { Button } from "../buttons/button";
 export default function ContextController({ blogId, isAdmin }: { blogId: number, isAdmin: boolean }) {
 
   const [editBlog, setEditBlog] = useState(true);
@@ -14,9 +15,7 @@ export default function ContextController({ blogId, isAdmin }: { blogId: number,
   return (
     <div className="flex flex-col gap-2 justify-center w-full  items-center">
       {isAdmin &&
-        <button
-          className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
-          onClick={() => { setEditBlog(!editBlog) }}>{`${editBlog ? 'Show Blog' : 'Edit Blog'} `}</button>
+        <Button onClick={() => setEditBlog(!editBlog)} text={`${editBlog ? 'Show Blog' : 'Edit Blog'}`} />
       }
       {editBlog && isAdmin && data ?
         <EditBlogComponent blogId={blogId} data={data} /> :
@@ -33,3 +32,14 @@ export default function ContextController({ blogId, isAdmin }: { blogId: number,
     </div>
   );
 };
+
+// function Button({ onClick, text }: { onClick: () => void, text: string }) {
+//   return (
+//     <button
+//       className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
+//       onClick={onClick}
+//     >
+//       {text}
+//     </button>
+//   );
+// }
