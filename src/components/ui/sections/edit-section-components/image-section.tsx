@@ -6,7 +6,7 @@ import Image from "next/image";
 import { handleSubmit } from "@/lib/utils";
 import { throttle } from '@/lib/utils';
 
-export function PhotoSection({ section, formActionUpdate, formActionDelete, sectionState, handleImageChange, isPending }: PhotoSectionProps) {
+export function ImageSection({ section, formActionUpdate, formActionDelete, sectionState, handleImageChange, isPending }: PhotoSectionProps) {
     const [showOldPhoto, setShowOldPhoto] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const { width, setWidth } = useThrottledWidth(containerRef, section.width || 150);

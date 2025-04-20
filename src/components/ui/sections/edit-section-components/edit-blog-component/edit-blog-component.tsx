@@ -5,7 +5,7 @@ import { useState, ChangeEvent } from "react";
 import { Code } from "../code-section";
 import { TitleSection } from "../title-section";
 import { Paragraph } from "../paragraph-section";
-import { PhotoSection } from "../photo-section";
+import { ImageSection } from "../image-section";
 import { AddSectionForm } from "../../add-section-components/add-section-form/add-section-form";
 
 // Define the type for sectionState
@@ -47,7 +47,7 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
                         return <TitleSection key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     case 2:
                         return (
-                            <PhotoSection
+                            <ImageSection
                                 key={section.id}
                                 section={section}
                                 formActionUpdate={mutateUpdate}
