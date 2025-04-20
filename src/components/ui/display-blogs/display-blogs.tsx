@@ -1,4 +1,3 @@
-'use client'
 import { useGetBlogs } from "@/hooks/hooks";
 import Link from "next/link";
 import Image from "next/image";

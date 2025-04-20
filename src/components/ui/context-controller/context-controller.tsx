@@ -3,7 +3,7 @@ import { useGetSections } from "@/hooks/hooks";
 import BlogComponent from "../blog-component/blog-component";
 import EditBlogComponent from "../edit-blog-component/edit-blog-component"
 import { useState } from "react";
-export default function ContectCooontroller({ blogId, isAdmin }: { blogId: number, isAdmin: boolean }) {
+export default function ContextController({ blogId, isAdmin }: { blogId: number, isAdmin: boolean }) {
 
   const [editBlog, setEditBlog] = useState(true);
   const { data, isLoading, error } = useGetSections(blogId);
