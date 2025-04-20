@@ -2,6 +2,9 @@
 import { useState } from "react"
 import { TitleSection } from "../add-section-components/title-section"
 import { useAddSection } from "@/mutations/mutations";
+import ParagraphSection from "../add-section-components/paragraph-section";
+
+
 
 export function AddSectionForm({ blogId }: { blogId: number }) {
 
@@ -46,7 +49,7 @@ export function AddSectionForm({ blogId }: { blogId: number }) {
                 <p>Image section</p>
             }
             {currentSection === "Paragraph" &&
-                <p>Paragraph section</p>
+                <ParagraphSection isPending={isPending} isError={isError} />
             }
             {currentSection === "Code" &&
                 <p>Code section</p>
