@@ -1,10 +1,11 @@
 'use client'
 import { useState } from "react"
 import { TitleSection } from "../add-section-components/title-section"
+import { useAddSection } from "@/mutations/mutations";
 
-export function AddSectionForm() {
+export function AddSectionForm({ blogId }: { blogId: number }) {
 
-    const { mutate, isPending, isError } = useAddSection();
+    const { mutate, isPending, isError } = useAddSection(blogId);
 
     const sections = ['Title', 'Image', 'Paragraph', 'Code']
     const [currentSection, setCurrentSection] = useState("Title")
@@ -13,8 +14,18 @@ export function AddSectionForm() {
         setCurrentSection(event.target.value);
     };
 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        mutate({ formData, blogId });
+        event.currentTarget.reset();
+    };
+
+
     return (
-        <div className="flex flex-col gap-4 border p-4 w-full rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] " >
+        <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-4 border p-4 w-full rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] " >
             <h1>Add Section</h1>
             <select
                 name="section-type"
@@ -28,7 +39,7 @@ export function AddSectionForm() {
                 ))}
             </select>
             {currentSection === "Title" &&
-                <TitleSection addSection={mutate} isPending={isPending} isError={isError} />
+                <TitleSection isPending={isPending} isError={isError} />
             }
             {/* Add other sections here */}
             {currentSection === "Image" &&
@@ -40,6 +51,6 @@ export function AddSectionForm() {
             {currentSection === "Code" &&
                 <p>Code section</p>
             }
-        </div>
+        </form>
     )
 }

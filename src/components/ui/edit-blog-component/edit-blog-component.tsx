@@ -65,7 +65,7 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
                         return null;
                 }
             })}
-            <AddSectionForm  />
+            <AddSectionForm blogId={blogId} />
         </div>
     );
 }

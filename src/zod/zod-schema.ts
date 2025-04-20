@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 export const schemaUpdateTitleSection = z.object({
     blog_id: z.number(),
     title: z.string(),

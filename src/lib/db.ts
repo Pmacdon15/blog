@@ -10,6 +10,31 @@ type UpdatePhotoSection = z.infer<typeof schemaUpdatePhotoSection>;
 type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
 type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
 
+export async function addSection(
+    sectionTypeName: string,
+    data: UpdateTitleSection | UpdatePhotoSection | UpdateParagraphSection | UpdateCodeSection,
+    newPhotoUrl?: string
+) {
+    try {
+        if (sectionTypeName === 'Title') {
+            const titleData = data as UpdateTitleSection;
+            await sql`
+                WITH new_section AS (
+                INSERT INTO Section (blog_id, type)
+                VALUES (${titleData.blog_id}, 1)
+                RETURNING id
+                )
+                INSERT INTO TitleSection (id, title, publish_date)
+                SELECT id, ${titleData.title}, ${titleData.publish_date}
+                FROM new_section;
+            `;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
 export async function updateSection(
     sectionTypeId: number,
     sectionId: number,
@@ -18,7 +43,7 @@ export async function updateSection(
 ) {
     try {
         if (sectionTypeId === 1) {
-            const titleData = data as UpdateTitleSection; // Type assertion
+            const titleData = data as UpdateTitleSection;
             await sql`
                 UPDATE TitleSection
                 SET title = ${titleData.title}, publish_date = ${titleData.publish_date}
@@ -29,7 +54,7 @@ export async function updateSection(
             if (newPhotoUrl !== "") {
                 const result = await sql`
                 SELECT src FROM ImageSection WHERE id = ${sectionId}
-            `;                
+            `;
                 await deleteBlob(result[0].src)
                 await sql`
                     UPDATE ImageSection
@@ -44,14 +69,14 @@ export async function updateSection(
                 `;
             }
         } else if (sectionTypeId === 3) {
-            const paragraphData = data as UpdateParagraphSection; // Type assertion
+            const paragraphData = data as UpdateParagraphSection;
             await sql`
                 UPDATE ParagraphSection
                 SET title = ${paragraphData.title || ""}, text = ${paragraphData.text}
                 WHERE id = ${sectionId}
             `;
         } else if (sectionTypeId === 4) {
-            const codeData = data as UpdateCodeSection; // Type assertion
+            const codeData = data as UpdateCodeSection;
             await sql`
                 UPDATE CodeSection
                 SET code = ${codeData.code || ""}
