@@ -68,6 +68,8 @@ export function ImageSection({ isPending, isError }: {
                     hidden
                 />
                 <UpdateButton actionString="Add Section" disabled={isPending} />
+                {isPending && <p>Loading...</p>}
+                {isError && <p className="text-red-600">Error adding section </p>}
             </div>
         </div>
     );

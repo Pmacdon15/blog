@@ -1,4 +1,3 @@
-import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
 import { z } from 'zod';
 
 export const schemaUpdateTitleSection = z.object({
@@ -8,7 +7,7 @@ export const schemaUpdateTitleSection = z.object({
 });
 
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/svg+xml'];
-export const schemaUpdatePhotoSection = z.object({
+export const schemaUpdateImageSection = z.object({
     blog_id: z.number(),
     alt: z.string(),
     new_file: z

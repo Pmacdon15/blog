@@ -1,7 +1,8 @@
+import { addNewPhoto } from '@/lib/blobs';
 import { addSection } from '@/lib/db';
-import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
+import { schemaUpdateCodeSection, schemaUpdateImageSection, schemaUpdateParagraphSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { NextRequest, NextResponse } from 'next/server';
-import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
+
 
 export async function POST(request: NextRequest) {
     const url = request.nextUrl;
@@ -15,9 +16,7 @@ export async function POST(request: NextRequest) {
 
 
     let validatedFields;
-    let newPhotoUrl = {
-        url: ""
-    }
+    let newPhotoUrl;
 
     if (sectionTypeName === 'Title') {
         validatedFields = schemaUpdateTitleSection.safeParse({
@@ -25,6 +24,18 @@ export async function POST(request: NextRequest) {
             title: formData.get('title'),
             publish_date: new Date(formData.get('publish_date') as string),
         });
+    } else if (sectionTypeName === 'Image') {
+        validatedFields = schemaUpdateImageSection.safeParse({
+            blog_id: blogId,
+            new_file: formData.get('new-file'),
+            alt: formData.get('alt'),
+            width: Number(formData.get("width"))
+        });
+        if (validatedFields.success && validatedFields.data.new_file) {
+            newPhotoUrl = await addNewPhoto(validatedFields.data);
+            console.log(newPhotoUrl)
+        }
+
     } else if (sectionTypeName === 'Paragraph') {
         validatedFields = schemaUpdateParagraphSection.safeParse({
             blog_id: blogId,

@@ -26,7 +26,6 @@ export function AddSectionForm({ blogId }: { blogId: number }) {
         event.currentTarget.reset();
     };
 
-
     return (
         <form
             onSubmit={handleSubmit}

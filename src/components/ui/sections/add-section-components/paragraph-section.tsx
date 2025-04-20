@@ -19,7 +19,7 @@ export default function ParagraphSection({ isPending, isError }: {
             />
             <UpdateButton actionString="Add Section" disabled={isPending} />
             {isPending && <p>Loading...</p>}
-            {isError && <p>Error adding section </p>}
+            {isError && <p className="text-red-600">Error adding section </p>}
         </div>
     );
 };

@@ -1,8 +1,8 @@
 import { dealWithNewPhoto } from '@/lib/blobs';
 import { updateSection } from '@/lib/db';
-import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdatePhotoSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
+import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdateImageSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { NextRequest, NextResponse } from 'next/server';
-import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
+
 
 export async function PUT(request: NextRequest) {
     const url = request.nextUrl;
@@ -23,7 +23,7 @@ export async function PUT(request: NextRequest) {
             publish_date: new Date(formData.get('publish_date') as string),
         });
     } else if (sectionTypeId === 2) {
-        validatedFields = schemaUpdatePhotoSection.safeParse({
+        validatedFields = schemaUpdateImageSection.safeParse({
             blog_id: blogId,
             new_file: formData.get('new-file'),
             alt: formData.get('alt'),

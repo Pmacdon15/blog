@@ -1,4 +1,4 @@
-import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdatePhotoSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
+import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdateImageSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { neon } from '@neondatabase/serverless';
 import { z } from 'zod';
 import { deleteBlob } from './blobs';
@@ -6,13 +6,13 @@ import { deleteBlob } from './blobs';
 const sql = neon(`${process.env.DATABASE_URL}`);
 
 type UpdateTitleSection = z.infer<typeof schemaUpdateTitleSection>;
-type UpdatePhotoSection = z.infer<typeof schemaUpdatePhotoSection>;
+type UpdateImageSection = z.infer<typeof schemaUpdateImageSection>;
 type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
 type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
 
 export async function addSection(
     sectionTypeName: string,
-    data: UpdateTitleSection | UpdatePhotoSection | UpdateParagraphSection | UpdateCodeSection,
+    data: UpdateTitleSection | UpdateImageSection | UpdateParagraphSection | UpdateCodeSection,
     newPhotoUrl?: string
 ) {
     try {
@@ -26,6 +26,18 @@ export async function addSection(
                 )
                 INSERT INTO TitleSection (id, title, publish_date)
                 SELECT id, ${titleData.title}, ${titleData.publish_date}
+                FROM new_section;
+            `;
+        } else if (sectionTypeName === 'Image') {
+            const imageData = data as UpdateImageSection;
+            await sql`
+                WITH new_section AS (
+                INSERT INTO Section (blog_id, type)
+                VALUES (${imageData.blog_id}, 2)
+                RETURNING id
+                )
+                INSERT INTO ImageSection (id, src, alt, width)
+                SELECT id, ${newPhotoUrl}, ${imageData.alt}, ${imageData.width}
                 FROM new_section;
             `;
         } else if (sectionTypeName === 'Paragraph') {
@@ -62,7 +74,7 @@ export async function addSection(
 export async function updateSection(
     sectionTypeId: number,
     sectionId: number,
-    data: UpdateTitleSection | UpdatePhotoSection | UpdateParagraphSection | UpdateCodeSection,
+    data: UpdateTitleSection | UpdateImageSection | UpdateParagraphSection | UpdateCodeSection,
     newPhotoUrl?: string
 ) {
     try {
@@ -74,7 +86,7 @@ export async function updateSection(
                 WHERE id = ${sectionId}
             `;
         } else if (sectionTypeId === 2) {
-            const photoData = data as UpdatePhotoSection;
+            const photoData = data as UpdateImageSection;
             if (newPhotoUrl !== "") {
                 const result = await sql`
                 SELECT src FROM ImageSection WHERE id = ${sectionId}
