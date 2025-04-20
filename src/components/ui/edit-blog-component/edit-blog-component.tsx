@@ -14,7 +14,7 @@ type SectionState = {
 };
 
 export default function EditBlogComponent({ blogId, data }: { blogId: number, data: Section[] }) {
-    // Use the defined SectionState type for sectionState
+
     const [sectionState, setSectionState] = useState<SectionState>({});
 
     const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection(blogId);
@@ -65,7 +65,7 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
                         return null;
                 }
             })}
-            <AddSectionForm />
+            <AddSectionForm  />
         </div>
     );
 }

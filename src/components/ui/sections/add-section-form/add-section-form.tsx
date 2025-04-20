@@ -3,6 +3,9 @@ import { useState } from "react"
 import { TitleSection } from "../add-section-components/title-section"
 
 export function AddSectionForm() {
+
+    const { mutate, isPending, isError } = useAddSection();
+
     const sections = ['Title', 'Image', 'Paragraph', 'Code']
     const [currentSection, setCurrentSection] = useState("Title")
 
@@ -25,7 +28,7 @@ export function AddSectionForm() {
                 ))}
             </select>
             {currentSection === "Title" &&
-                <TitleSection />
+                <TitleSection addSection={mutate} isPending={isPending} isError={isError} />
             }
             {/* Add other sections here */}
             {currentSection === "Image" &&
