@@ -2,8 +2,6 @@ import { neon } from '@neondatabase/serverless';
 import { NextRequest } from 'next/server';
 import { ResponseData } from '@/types/types';
 
-
-
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
 
@@ -45,7 +43,7 @@ export async function GET(request: NextRequest) {
 
     if (!result[0]) {
       return new Response(JSON.stringify({ message: 'Blog not found' }), {
-        status: 404,
+        status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
     }
@@ -63,3 +61,37 @@ export async function GET(request: NextRequest) {
   }
 }
 
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.formData();
+    const title = body.get('title');
+
+    // Do something with the title
+    console.log(title);
+    const sql = neon(`${process.env.DATABASE_URL}`);
+
+    const result = await sql`
+    WITH new_blog AS (
+    INSERT INTO Blog (published)
+    VALUES (false)
+    RETURNING id
+  ),
+  new_section AS (
+    INSERT INTO Section (blog_id, type)
+    SELECT id, 1 FROM new_blog
+    RETURNING id
+  )
+  INSERT INTO TitleSection (id, title, publish_date)
+  SELECT id, ${title}, CURRENT_DATE
+  FROM new_section;
+  `;
+    return new Response(JSON.stringify({ message: 'Title received' }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    return new Response(`Error: ${error}`, {
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
+}
