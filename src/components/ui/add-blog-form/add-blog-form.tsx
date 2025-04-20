@@ -11,6 +11,7 @@ export default function AddBlogForm() {
                 event.preventDefault();
                 const formData = new FormData(event.currentTarget);
                 mutate({ formData });
+                event.currentTarget.reset();
             }}
         >
             <input
