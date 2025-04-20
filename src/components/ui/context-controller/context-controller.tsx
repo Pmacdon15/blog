@@ -1,7 +1,7 @@
 'use client'
 import { useGetSections } from "@/hooks/hooks";
 import BlogComponent from "../blog-component/blog-component";
-import EditBlogComponent from "../edit-blog-component/edit-blog-component"
+import EditBlogComponent from "../sections/edit-section-components/edit-blog-component/edit-blog-component"
 import { useState } from "react";
 export default function ContextController({ blogId, isAdmin }: { blogId: number, isAdmin: boolean }) {
 

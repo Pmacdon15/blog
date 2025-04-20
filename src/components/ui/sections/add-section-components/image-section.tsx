@@ -1,30 +1,29 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { UpdateButton } from "./update-button";
+import { UpdateButton } from "../update-button";
 import { PhotoSectionProps } from "@/types/types";
-import { Title } from "./edit-section-components/title";
 import Image from "next/image";
-import { handleSubmit } from "@/lib/utils";
 import { throttle } from '@/lib/utils';
 
-export function PhotoSection({ section, formActionUpdate, formActionDelete, sectionState, handleImageChange, isPending }: PhotoSectionProps) {
-    const [showOldPhoto, setShowOldPhoto] = useState(true);
+export function ImageSection({ isPending, isError }: {
+    isPending: boolean,
+    isError: boolean
+}) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { width, setWidth } = useThrottledWidth(containerRef, section.width || 150);
+    const { width, setWidth } = useThrottledWidth(containerRef, 150);
+    const [imageSrc, setImageSrc] = useState("");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-    // Image source: new photo if !showOldPhoto and sectionState exists, else old photo
-    const imageSrc = !showOldPhoto && sectionState[section.id] ? sectionState[section.id] : section.src || "/placeholder.jpg";
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            setSelectedFile(file);
+            setImageSrc(URL.createObjectURL(file));
+        }
+    };
 
     return (
-        <div
-            className="flex flex-col gap-4 justify-center items-center border p-4 w-full rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]"
-            key={section.id}
-        >
-            <form
-                className="w-full flex flex-col gap-4 justify-center items-center"
-                onSubmit={(event) => handleSubmit(event, section, formActionUpdate)}
-            >
-                <Title section={section} formActionDelete={formActionDelete} />
-
+        <div className="flex flex-col gap-4 justify-center items-center border p-4 w-full rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
+            <div className="w-full flex flex-col gap-4 justify-center items-center">
                 <div
                     ref={containerRef}
                     className="overflow-hidden border rounded-sm p-2 h-auto min-w-36 max-w-[810px] max-h-[810px]"
@@ -34,29 +33,27 @@ export function PhotoSection({ section, formActionUpdate, formActionDelete, sect
                         resize: "horizontal",
                     }}
                 >
-                    <Image
-                        src={imageSrc || ""}
-                        alt={section.alt || ""}
-                        width={800}
-                        height={800}
-                        className="object-contain w-full h-full"
-                    />
+                    {imageSrc !== '' &&
+                        <Image
+                            src={imageSrc || ""}
+                            alt={""}
+                            width={800}
+                            height={800}
+                            className="object-contain w-full h-full"
+                        />
+                    }
                 </div>
                 <input
                     className="border rounded-sm border-white p-2"
                     name="new-file"
                     type="file"
                     placeholder="Select new image"
-                    onChange={(e) => {
-                        handleImageChange(e, section.id);
-                        setShowOldPhoto(false); // Show new photo after upload
-                    }}
+                    onChange={handleFileChange}
                 />
                 <input
                     className="border rounded-sm border-white p-2"
                     name="alt"
                     type="text"
-                    defaultValue={section.alt || ""}
                     placeholder="Description"
                     required
                 />
@@ -70,16 +67,8 @@ export function PhotoSection({ section, formActionUpdate, formActionDelete, sect
                     min="0"
                     hidden
                 />
-                <UpdateButton actionString="Update Section" disabled={isPending} />
-            </form>
-            {sectionState[section.id] && (
-                <button
-                    onClick={() => setShowOldPhoto(!showOldPhoto)}
-                    className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
-                >
-                    {showOldPhoto ? "Preview New Photo" : "Show Old Photo"}
-                </button>
-            )}
+                <UpdateButton actionString="Add Section" disabled={isPending} />
+            </div>
         </div>
     );
 }

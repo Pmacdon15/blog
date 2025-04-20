@@ -1,9 +1,10 @@
 'use client'
 import { useState } from "react"
-import { TitleSection } from "../add-section-components/title-section"
+import { TitleSection } from "../title-section"
 import { useAddSection } from "@/mutations/mutations";
-import ParagraphSection from "../add-section-components/paragraph-section";
-import CodeSection from "../add-section-components/code-section";
+import ParagraphSection from "../paragraph-section";
+import CodeSection from "../code-section";
+import { ImageSection } from "../image-section";
 
 
 
@@ -47,7 +48,7 @@ export function AddSectionForm({ blogId }: { blogId: number }) {
             }
             {/* Add other sections here */}
             {currentSection === "Image" &&
-                <p>Image section</p>
+                <ImageSection isPending={isPending} isError={isError} />
             }
             {currentSection === "Paragraph" &&
                 <ParagraphSection isPending={isPending} isError={isError} />

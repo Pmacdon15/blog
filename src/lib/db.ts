@@ -101,10 +101,10 @@ export async function updateSection(
             `;
         } else if (sectionTypeId === 4) {
             const codeData = data as UpdateCodeSection;
-          await sql`
-            UPDATE CodeSection
-            SET code = ${codeData.code || ""}, language = ${codeData.language}
-            WHERE id = ${sectionId}
+            await sql`
+                UPDATE CodeSection
+                SET code = ${codeData.code || ""}, language = ${codeData.language}
+                WHERE id = ${sectionId}
             `;
         } else {
             throw new Error('Unsupported section type');

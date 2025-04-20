@@ -2,11 +2,11 @@
 import { useDeleteSection, useUpdateSection } from "@/mutations/mutations";
 import { Section } from "@/types/types";
 import { useState, ChangeEvent } from "react";
-import { Code } from "../sections/code-section";
-import { TitleSection } from "../sections/title-section";
-import { Paragraph } from "../sections/paragraph-section";
-import { PhotoSection } from "../sections/photo-section";
-import { AddSectionForm } from "../sections/add-section-form/add-section-form";
+import { Code } from "../code-section";
+import { TitleSection } from "../title-section";
+import { Paragraph } from "../paragraph-section";
+import { PhotoSection } from "../photo-section";
+import { AddSectionForm } from "../../add-section-components/add-section-form/add-section-form";
 
 // Define the type for sectionState
 type SectionState = {

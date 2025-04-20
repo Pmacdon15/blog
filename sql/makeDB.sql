@@ -87,7 +87,7 @@ VALUES (
         2,
         'https://yiteg94znhby2sle.public.blob.vercel-storage.com/tanstack-tTDLn3wLKj7OlaWvL9BicFgre6g6oJ.png',
         'Tanstack Logo',
-        500
+        136
     );
 
 -- Insert into ParagraphSection table
@@ -233,6 +233,6 @@ const result = await sql`
     OFFSET ${offset}`;'
     );
 
-SELECT * FROM blog;
+-- SELECT * FROM blog;
 
-SELECT * FROM codeSection
+-- SELECT * FROM codeSection
