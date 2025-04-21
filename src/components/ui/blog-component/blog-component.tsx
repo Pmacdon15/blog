@@ -27,10 +27,10 @@ const renderTextWithLinks = (text: string) => {
 };
 
 export default function BlogComponent({ data }: { data: Section[] | undefined }) {
-
+    console.log("Blog sections : ", data)
     return (
         <div className="flex flex-col gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6">
-            {data?.map((section) => {               
+            {data?.map((section) => {
                 switch (section.section_type_id) {
                     case 1:
                         return (
