@@ -7,7 +7,7 @@ export function TitleSection({ section, formActionUpdate, formActionDelete, isPe
     return (
         <form
             onSubmit={(event) => handleSubmit(event, section, formActionUpdate)}
-            className="flex flex-col gap-4 border p-4 w-full rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] " >
+            className="flex flex-col gap-4  p-4 w-full border shadow-2xl rounded-sm  " >
             <Title section={section} formActionDelete={formActionDelete} />
             <input
                 type='text'
