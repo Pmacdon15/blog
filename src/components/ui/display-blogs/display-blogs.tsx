@@ -10,13 +10,13 @@ export function DisplayBlogs({ published, title, isAdmin }: { published: boolean
     const [page, setPage] = useState(1);
     const { data, isLoading, isError } = useGetBlogs(page, published)
 
-    if (isLoading) return <p className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">Loading...</p>;
-    if (isError) return <p className="flex flex-col justify-center text-red-500 items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">Error loading blogs</p>;
-    if (!data || !data.blogs && !isError) return <p className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">No blogs found</p>;
+    if (isLoading) return <p className="flex flex-col justify-center items-center gap-4  p-4 w-full lg:w-4/6 sm:w-5/6">Loading {title}...</p>;
+    if (isError) return <p className="flex flex-col justify-center text-red-500 items-center gap-4 p-4 w-full lg:w-4/6 sm:w-5/6">Error loading {title}</p>;
+    if (!data || !data.blogs && !isError) return <p className="flex flex-col justify-center items-center gap-4   p-4 w-full lg:w-4/6 sm:w-5/6">No {title} found</p>;
 
     console.log("isError: ", isError)
     return (
-        <div className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6">
+        <div className="flex flex-col justify-center items-center gap-4  p-4 w-full lg:w-4/6 sm:w-5/6">
             <h2 className="text-2xl">{title}</h2>
             {data.blogs.map((blog: BlogData) => (
                 <BlogCard key={blog.id} blog={blog} published={published} isAdmin={isAdmin} />
