@@ -18,7 +18,7 @@ export default function AddBlogForm() {
                 type='text'
                 name='title'
                 placeholder="Title"
-                className="text-5xl text-center border rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]"
+                className="text-5xl text-center w-full md:w-5/6 border rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]"
                 required
             />
             <button>Add Blog</button>

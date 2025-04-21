@@ -29,7 +29,7 @@ export function DisplayBlogs({ published, title, isAdmin }: { published: boolean
 function BlogCard({ blog, published, isAdmin }: { blog: BlogData, published: boolean, isAdmin: boolean }) {
     return (
         <div className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]  rounded-sm shadow-xl gap-4 pt-2 justify-center items-center w-full  lg:w-4/6 sm:w-5/6" >
-            <h1 className="text-4xl">{blog.title}</h1>
+            <h1 className="text-4xl text-center">{blog.title}</h1>
             {blog.image_src &&
                 <Image
                     src={blog.image_src || ""}

@@ -8,7 +8,7 @@ export default async function Home() {
   const isAdmin = session?.user?.email === process.env.OWNERS_EMAIL && process.env.OWNERS_EMAIL !== "" && process.env.OWNERS_EMAIL !== undefined
 
   return (
-    <div className="flex flex-col gap-8 justify-start min-h-screen items-center mt-8 pb-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="flex flex-col gap-8 justify-start min-h-screen items-center mt-8 p-2 pb-20 font-[family-name:var(--font-geist-sans)]">
       <DisplayBlogs published={true} title="Published Blogs" isAdmin={isAdmin} />
       {isAdmin &&
         <>
