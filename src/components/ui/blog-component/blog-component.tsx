@@ -5,7 +5,6 @@ import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Section } from '@/types/types';
-import { useGetSections } from '@/hooks/hooks';
 
 const renderTextWithLinks = (text: string) => {
     const linkRegex = /\[(.*?)\]\((.*?)\)/g;
@@ -27,17 +26,15 @@ const renderTextWithLinks = (text: string) => {
     });
 };
 
-export default function BlogPage({ blogId }: { blogId: number }) {
-    const { data } = useGetSections(blogId);
-    console.log('BlogPage data:', data);
+export default function BlogComponent({ data }: { data: Section[] | undefined }) {
 
     return (
-        <div className="flex flex-col gap-4 p-4 justify-center items-center w-full md:w-4/6">
-            {data?.map((section, index) => {
+        <div className="flex flex-col gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6">
+            {data?.map((section) => {               
                 switch (section.section_type_id) {
                     case 1:
                         return (
-                            <div key={index}>
+                            <div key={section.id}>
                                 <h1 className="text-5xl text-center">{section.title_section_title}</h1>
                                 <p className='text-center md:text-start'>Published on {section.publish_date ? new Date(section.publish_date).toLocaleDateString() : 'N/A'}</p>
                             </div>
@@ -45,8 +42,11 @@ export default function BlogPage({ blogId }: { blogId: number }) {
                     case 2:
                         return (
                             <Image
-                                className="w-36 h-auto"
-                                key={index}
+                                style={{
+                                    width: `${section.width}px`,
+                                }}
+                                className={`h-auto`}
+                                key={section.id}
                                 src={section.src || ''}
                                 alt={section.alt || ''}
                                 width={600}
@@ -54,10 +54,10 @@ export default function BlogPage({ blogId }: { blogId: number }) {
                             />
                         );
                     case 3:
-                        return <Paragraph key={index} section={section} />;
+                        return <Paragraph key={section.id} section={section} />;
                     case 4:
                         return (
-                            <div key={index} className="w-full">
+                            <div key={section.id} className="w-full">
                                 <SyntaxHighlighter
                                     className="min-w-3/6 max-w-fit"
                                     language={section.language || 'text'}

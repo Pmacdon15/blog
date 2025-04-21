@@ -1,50 +1,67 @@
-import { neon } from '@neondatabase/serverless';
-import { NextRequest } from 'next/server';
-import { Section } from '@/types/types';
+import { isBlogPublished, togglePublishBlog } from '@/lib/db';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  const url = request.nextUrl;
-  const pathSegments = url.pathname.split('/');
-  const blogId = pathSegments[pathSegments.length - 1];
-  console.log(blogId)
-  try {
-    const sql = neon(`${process.env.DATABASE_URL}`);
-    const result = await sql`
-      SELECT 
-        s.id,
-        s.blog_id,
-        s.type AS section_type_id,
-        CASE s.type
-          WHEN 1 THEN 'title'
-          WHEN 2 THEN 'image'
-          WHEN 3 THEN 'paragraph'
-          WHEN 4 THEN 'code'
-        END AS section_type,
-        ts.title AS title_section_title,
-        ts.publish_date,
-        ims.src,
-        ims.alt,
-        ims.width,
-        ps.title AS paragraph_title,
-        ps.text,
-        cs.language,
-        cs.code
-      FROM "section" s
-      LEFT JOIN "titlesection" ts ON s.id = ts.id AND s.type = 1
-      LEFT JOIN "imagesection" ims ON s.id = ims.id AND s.type = 2
-      LEFT JOIN "paragraphsection" ps ON s.id = ps.id AND s.type = 3
-      LEFT JOIN "codesection" cs ON s.id = cs.id AND s.type = 4
-      WHERE s.blog_id = ${Number(blogId)}
-      ORDER BY s.id
-    `;
+    const url = request.nextUrl;
+    const pathSegments = url.pathname.split('/');
+    const blogId = Number(pathSegments[pathSegments.length - 1]);
 
-    return new Response(JSON.stringify(result as Section[]), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (error) {
-    console.error('Error:', error);
-    return new Response(`Error: ${error}`, {
-      headers: { 'Content-Type': 'text/plain' },
-    });
-  }
+    try {
+        if (await isBlogPublished(blogId)) {
+            return NextResponse.json(
+                {
+                    success: true,
+                    message: 'Blog is Published',
+                    published: true,
+                },
+                { status: 200 }
+            );
+        } else {
+            return NextResponse.json(
+                {
+                    success: true,
+                    message: 'Blog is not Published',
+                    published: false,
+                },
+                { status: 200 }
+            );
+        }
+
+    } catch (error) {
+        return new Response(`Error: ${error}`, {
+            headers: { 'Content-Type': 'text/plain' },
+        });
+    }
+}
+
+export async function PUT(request: NextRequest) {
+    const url = request.nextUrl;
+    const pathSegments = url.pathname.split('/');
+    const blogId = Number(pathSegments[pathSegments.length - 1]);
+
+    try {
+        if (await togglePublishBlog(blogId)) {
+            return NextResponse.json(
+                {
+                    success: true,
+                    message: 'Blog is Published',
+                    published: true,
+                },
+                { status: 200 }
+            );
+        } else {
+            return NextResponse.json(
+                {
+                    success: true,
+                    message: 'Blog is not Published',
+                    published: false,
+                },
+                { status: 200 }
+            );
+        }
+    } catch (error) {
+        return new Response(`Error: ${error}`, {
+            headers: { 'Content-Type': 'text/plain' },
+        });
+    }
 }

@@ -2,8 +2,8 @@
 
 :root {
   --foreground: #ffffff;
-  --primary: #000000;
-  --secondary: #2c0171;
+  --primary: #000d2c;
+  --secondary: #014797;
   --background: linear-gradient(to bottom right, var(--primary), var(--secondary));
 }
 
@@ -19,8 +19,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground: #ffffff;
-    --primary: #000000;
-    --secondary: #2c0171;
+    --primary: #000d2c;
+    --secondary: #014797;
     --background: linear-gradient(to bottom right, var(--primary), var(--secondary));
   }
 }
