@@ -1,6 +1,35 @@
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
+const togglePublishBlog = async (blogId: number) => {
+    const response = await fetch(`/api/blog/${blogId}`, {
+        method: 'PUT',
+    });
+
+    if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+    }
+
+    return await response.json();
+}
+
+export const useTogglePublishBlog = (blogId: number) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ blogId }: { blogId: number }) => {
+            return await togglePublishBlog(blogId);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['blog', blogId] });
+        },
+        onError: (error) => {
+            console.error('Mutation error:', error);
+        }
+    });
+};
+
+
 const addBlog = async (formData: FormData) => {
     const response = await fetch(`/api/blogs`, {
         method: 'POST',

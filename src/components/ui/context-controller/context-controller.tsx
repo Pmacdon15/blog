@@ -13,7 +13,7 @@ export default function ContextController({ blogId, isAdmin }: { blogId: number,
   if (error) return <p className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]  border rounded-sm shadow-xl gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6">Error: {error.message}</p>;
 
   return (
-    <div className="flex flex-col gap-2 justify-center w-full  items-center">
+    <div className="flex flex-col justify-center w-full items-center">
       {isAdmin &&
         <Button onClick={() => setEditBlog(!editBlog)} text={`${editBlog ? 'Show Blog' : 'Edit Blog'}`} />
       }
