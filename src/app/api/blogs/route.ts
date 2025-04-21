@@ -1,14 +1,27 @@
 import { neon } from '@neondatabase/serverless';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { ResponseData } from '@/types/types';
+import { auth } from '@/auth';
 
 export async function GET(request: NextRequest) {
+
   const url = request.nextUrl;
 
   const published = url.searchParams.get('published') === 'true';
 
   const page = Number(url.searchParams.get('page')) || 1;
   const limit = Number(url.searchParams.get('limit')) || 3;
+
+  const session = await auth();
+  if ((session?.user?.email !== process.env.OWNERS_EMAIL && process.env.OWNERS_EMAIL !== "" && process.env.OWNERS_EMAIL !== undefined) && published === false) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Not Authorized',
+      },
+      { status: 401 }
+    );
+  }
 
   try {
     const sql = neon(`${process.env.DATABASE_URL}`);
@@ -43,7 +56,7 @@ export async function GET(request: NextRequest) {
 
     if (!result[0]) {
       return new Response(JSON.stringify({ message: 'Blog not found' }), {
-        status: 400,
+        status: 200,
         headers: { 'Content-Type': 'application/json' },
       });
     }
