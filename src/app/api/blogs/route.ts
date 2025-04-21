@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     console.log(title);
     const sql = neon(`${process.env.DATABASE_URL}`);
 
-    const result = await sql`
+    await sql`
     WITH new_blog AS (
     INSERT INTO Blog (published)
     VALUES (false)

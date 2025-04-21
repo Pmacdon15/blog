@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { UpdateButton } from "../../buttons/update-button";
-import { PhotoSectionProps } from "@/types/types";
 import Image from "next/image";
 import { throttle } from '@/lib/utils';
 
@@ -11,12 +10,10 @@ export function ImageSection({ isPending, isError }: {
     const containerRef = useRef<HTMLDivElement>(null);
     const { width, setWidth } = useThrottledWidth(containerRef, 150);
     const [imageSrc, setImageSrc] = useState("");
-    const [selectedFile, setSelectedFile] = useState<File | null>(null)
-
+   
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
-            setSelectedFile(file);
+            const file = e.target.files[0];            
             setImageSrc(URL.createObjectURL(file));
         }
     };

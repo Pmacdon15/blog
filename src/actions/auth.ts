@@ -1,6 +1,5 @@
 'use server'
 import { signIn, signOut } from '@/auth';
-import { redirect } from 'next/navigation';
 
 // export const loginGoogle = async () => {
 //     await signIn('google', { redirectTo: '/' });  

@@ -67,3 +67,9 @@ export interface PaginationProps {
     setPage: React.Dispatch<React.SetStateAction<number>>;
     hasMoreBlogs: boolean | undefined;
 }
+
+export interface BlogPublishedResponse {
+  success: boolean;
+  message: string;
+  published: boolean;
+}

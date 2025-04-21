@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { ResponseData, Section } from '@/types/types';
+import { BlogPublishedResponse, ResponseData, Section } from '@/types/types';
 
 const fetchBlogSections = async (blogId: number): Promise<Section[]> => {
   const response = await fetch(`/api/sections/${blogId}`)
@@ -32,7 +32,8 @@ export const useGetBlogs = (page: number, published: boolean) => {
   })
 }
 
-const fetchIsBlogPublished = async (blogId: number): Promise<any> => {
+
+const fetchIsBlogPublished = async (blogId: number): Promise<BlogPublishedResponse> => {
   const response = await fetch(`/api/blog/${blogId}`)
   if (!response.ok) {
     throw new Error(response.statusText);
