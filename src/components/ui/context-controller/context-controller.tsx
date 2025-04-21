@@ -9,7 +9,7 @@ export default function ContextController({ blogId, isAdmin }: { blogId: number,
   const [editBlog, setEditBlog] = useState(true);
   const { data, isLoading, error } = useGetSections(blogId);
 
-  if (isLoading) return <p className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border  rounded-sm shadow-xl gap-4 p-4 justify-center items-center w-5/6  lg:w-4/6 sm:w-5/6">Loading...</p>;
+  if (isLoading) return <p className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border  rounded-sm shadow-xl gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6">Loading...</p>;
   if (error) return <p className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]  border rounded-sm shadow-xl gap-4 p-4 justify-center items-center w-5/6 lg:w-4/6 sm:w-5/6">Error: {error.message}</p>;
 
   return (
@@ -17,10 +17,8 @@ export default function ContextController({ blogId, isAdmin }: { blogId: number,
       {isAdmin &&
         <Button onClick={() => setEditBlog(!editBlog)} text={`${editBlog ? 'Show Blog' : 'Edit Blog'}`} />
       }
-      {editBlog && isAdmin && data &&
-        <EditBlogComponent blogId={blogId} data={data} />
-      }
-      {!isAdmin &&
+      {editBlog && isAdmin && data ?
+        <EditBlogComponent blogId={blogId} data={data} /> :
         <BlogComponent data={data} />
       }
       {isAdmin &&
