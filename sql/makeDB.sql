@@ -235,4 +235,4 @@ const result = await sql`
 
 -- SELECT * FROM blog;
 
-SELECT * FROM imageSection
+-- SELECT * FROM imageSection
