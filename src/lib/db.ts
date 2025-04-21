@@ -8,15 +8,15 @@ type UpdateImageSection = z.infer<typeof schemaUpdateImageSection>;
 type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
 type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
 
-export async function togglePublishBlog(blogId: number){
-  const sql = neon(`${process.env.DATABASE_URL}`);
-  const results = await sql`
+export async function togglePublishBlog(blogId: number) {
+    const sql = neon(`${process.env.DATABASE_URL}`);
+    const results = await sql`
     UPDATE Blog
     SET published = NOT published
     WHERE id = ${blogId}
     RETURNING published;
   `;
-  return results[0].published;
+    return results[0].published;
 }
 
 export async function isBlogPublished(blogId: number) {
@@ -27,8 +27,7 @@ export async function isBlogPublished(blogId: number) {
       FROM Blog
       WHERE id = ${blogId} AND published = TRUE
     ) AS is_published;
-  `;
-
+  `;    
     return results[0].is_published;
 }
 
