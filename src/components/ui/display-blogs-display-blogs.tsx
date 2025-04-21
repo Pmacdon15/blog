@@ -27,26 +27,25 @@ export function DisplayBlogs({ published, title, isAdmin }: { published: boolean
 
 function BlogCard({ blog, published, isAdmin }: { blog: BlogData, published: boolean, isAdmin: boolean }) {
     return (
-        <>
-            <Link
-                className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]  rounded-sm shadow-xl gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6"
-                href={`/${published ? 'blog' : 'edit-blog'}/${blog.id}`}>
-                <h1 className="text-4xl">{blog.title}</h1>
-                {blog.image_src &&
-                    <Image
-                        src={blog.image_src || ""}
-                        alt={"Blog Image"}
-                        width={800}
-                        height={800}
-                        className="object-contain w-36 h-auto"
-                    />
-                }
+        <div className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]  rounded-sm shadow-xl gap-4 pt-2 justify-center items-center w-full  lg:w-4/6 sm:w-5/6" >
+            <h1 className="text-4xl">{blog.title}</h1>
+            {blog.image_src &&
+                <Image
+                    src={blog.image_src || ""}
+                    alt={"Blog Image"}
+                    width={800}
+                    height={800}
+                    className="object-contain w-36 h-auto"
+                />
+            }
+            <Link href={`/${published ? 'blog' : 'edit-blog'}/${blog.id}`} >
                 {published ? 'Go to This Blog' : 'Edit This Blog'}
-            </Link>
+            </Link >
             {isAdmin && published &&
                 <Link href={`/edit-blog/${blog.id}`}>Edit This Blog</Link>
             }
-        </>
+            <div />
+        </div>
     )
 }
 
