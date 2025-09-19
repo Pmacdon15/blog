@@ -1,24 +1,17 @@
-import { auth } from "@/auth";
 import AddBlogForm from "@/components/ui/add-blog-form/add-blog-form";
-import { LogoutButton } from "@/components/ui/buttons/logout-button";
 import { DisplayBlogs } from "@/components/ui/display-blogs/display-blogs";
+import { getBlogs } from "@/lib/blogs-dal";
+import { Suspense } from "react";
 
 export default async function Home() {
-  const session = await auth();
-  const isAdmin = session?.user?.email === process.env.OWNERS_EMAIL && process.env.OWNERS_EMAIL !== "" && process.env.OWNERS_EMAIL !== undefined
+  const blogsPromise = getBlogs();
 
   return (
     <div className="flex flex-col gap-8 justify-start min-h-screen items-center mt-8 p-2 pb-20 font-[family-name:var(--font-geist-sans)]">
-      <DisplayBlogs published={true} title="Published Blogs" isAdmin={isAdmin} />
-      {isAdmin &&
-        <>
-          <DisplayBlogs published={false} title="Draft Blogs" isAdmin={isAdmin} />
-          <AddBlogForm />
-          <LogoutButton />
-        </>
-      }
+      <Suspense fallback={<div className="text-2xl">Loading blogs...</div>}>
+        <DisplayBlogs blogsPromise={blogsPromise} />
+      </Suspense>
+      {/* <AddBlogForm /> */}
     </div>
   );
 }
-
-
