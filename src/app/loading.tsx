@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { LogoutButton } from "@/components/ui/buttons/logout-button";
 import PageContainer from "@/components/ui/containters/page-container";
 
-export default async function Home() {
+export default function Home() {
   const blogsPromise = getBlogs();
 
   return (

@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { BlogPublishedResponse, Section } from '@/types/types';
 import { isAdmin } from '../actions/auth';
 

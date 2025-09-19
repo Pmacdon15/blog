@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/ui/header/Header";
 import Providers from "@/components/Providers";
 
+export const experimental_ppr = true
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

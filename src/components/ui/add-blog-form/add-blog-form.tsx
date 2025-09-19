@@ -3,9 +3,10 @@ import { useIsAdmin } from "@/lib/hooks/hooks";
 import { useAddBlog } from "@/lib/mutations/mutations";
 
 export default function AddBlogForm() {
-
-    const { mutate, isPending, isError } = useAddBlog();
+    
     const { data } = useIsAdmin();
+    const { mutate, isPending, isError } = useAddBlog();
+
     return (
         <>
             {data &&
