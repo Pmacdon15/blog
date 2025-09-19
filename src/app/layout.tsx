@@ -5,7 +5,6 @@ import Header from "@/components/ui/header/Header";
 import Providers from "@/components/Providers";
 
 export const experimental_ppr = true
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -27,16 +26,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <Providers>
+    <Providers>
+      <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <Header />
           {children}
         </body>
-      </Providers>
-    </html>
+      </html>
+    </Providers>
   );
 }
 

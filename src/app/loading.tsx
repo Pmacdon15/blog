@@ -5,14 +5,11 @@ import { Suspense } from "react";
 import { LogoutButton } from "@/components/ui/buttons/logout-button";
 import PageContainer from "@/components/ui/containers/page-container";
 
-export default function Home() {
+export default function Loading() {
   const blogsPromise = getBlogs();
 
   return (
     <PageContainer>
-      <Suspense fallback={<div className="text-2xl">Loading blogs...</div>}>
-        <DisplayBlogs blogsPromise={blogsPromise} />
-      </Suspense>
       <AddBlogForm />
       <LogoutButton />
     </PageContainer>
