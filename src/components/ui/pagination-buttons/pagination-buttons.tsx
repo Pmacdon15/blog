@@ -1,24 +1,19 @@
 import { PaginationProps } from "@/types/types"
+import Link from "next/link"
 
-export function PaginationButtons({ page, setPage, hasMoreBlogs }: PaginationProps) {
+export function PaginationButtons({ page, path, hasMoreBlogs }: PaginationProps) {
   return (
     <div className="flex gap-4">
-      {page > 1 && <button
-        onClick={() => setPage((old) => Math.max(old - 1, 0))}
-        disabled={page === 0}
-      >
+      {page > 1 && <Link href={path + "?page=" + (page - 1)}>
         Previous
-      </button>}
-      {hasMoreBlogs && <button
-        onClick={() => {
-          if (hasMoreBlogs) {
-            setPage((old) => old + 1)
-          }
-        }}
-        disabled={!hasMoreBlogs}
-      >
-        Next
-      </button>}
-    </div>
+      </Link>}
+      {
+        hasMoreBlogs && <Link href={path + "?page=" + (page + 1)}>
+          disabled={!hasMoreBlogs}
+
+          Next
+        </Link>
+      }
+    </div >
   )
 }
