@@ -16,21 +16,6 @@ export const useGetSections = (blogId: number) => {
   })
 }
 
-// const fetchBlogs = async (page: number, published: boolean): Promise<ResponseData> => {
-//   const response = await fetch(`/api/blogs?published=${published}&page=${page}&limit=3`)
-//   if (!response.ok) {
-//     throw new Error(response.statusText);
-//   }
-//   return await response.json();
-// }
-
-// export const useGetBlogs = (page: number, published: boolean) => {
-//   return useQuery({
-//     queryKey: ['blogs', published, page],
-//     queryFn: () => fetchBlogs(page, published),
-//     placeholderData: keepPreviousData,
-//   })
-// }
 
 
 const fetchIsBlogPublished = async (blogId: number): Promise<BlogPublishedResponse> => {
