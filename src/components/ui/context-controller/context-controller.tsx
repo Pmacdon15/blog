@@ -6,7 +6,6 @@ import { Button } from "../buttons/button";
 import { Section } from "@/types/types";
 import { NoticeDisplay } from "../text-display/notice";
 import { useIsAdmin } from "@/lib/hooks/hooks";
-import PageContainer from "../containers/page-container";
 import BackHomeLink from "../links/back-home-link";
 
 
@@ -23,7 +22,7 @@ export default function ContextController({ sectionsPromise, defaultState = fals
 
 
   return (
-    <PageContainer>
+    <>
       {isAdmin &&
         <Button onClick={() => setEditBlog(!editBlog)} text={`${editBlog ? 'Show Blog' : 'Edit Blog'}`} />
       }
@@ -37,6 +36,6 @@ export default function ContextController({ sectionsPromise, defaultState = fals
           onClick={() => { setEditBlog(!editBlog) }}>{`${editBlog ? 'Show Blog' : 'Edit Blog'} `}</button>
       }
       <BackHomeLink />
-    </PageContainer>
+    </>
   );
 };

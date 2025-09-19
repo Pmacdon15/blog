@@ -52,6 +52,17 @@ export async function getBlogs({ page = 1, limit = 10 }: { page?: number, limit?
     }
 }
 
+export async function getAllBlogIds(): Promise<{ blogId: string }[] | { error: string }> {
+    try {
+        const sql = neon(`${process.env.DATABASE_URL}`);
+        const result = await sql.query(`SELECT id FROM Blog WHERE published = true`);
+        return (result as { id: number }[]).map(blog => ({ blogId: String(blog.id) }));
+    } catch (error) {
+        console.error('Error fetching all blog IDs:', error);
+        return { error: 'Failed to fetch all blog IDs' };
+    }
+}
+
 export async function getSections(blogId: string): Promise<Section[] | { error: string }> {
     try {
         const sql = neon(`${process.env.DATABASE_URL}`);
