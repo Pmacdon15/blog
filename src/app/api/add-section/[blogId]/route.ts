@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const sectionTypeName = formData.get('section-type') as string ?? '';
 
-    console.log(formData)
+    // console.log(formData)
 
 
     let validatedFields;
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         });
         if (validatedFields.success && validatedFields.data.new_file) {
             newPhotoUrl = await addNewPhoto(validatedFields.data);
-            console.log(newPhotoUrl)
+            // console.log(newPhotoUrl)
         }
 
     } else if (sectionTypeName === 'Paragraph') {

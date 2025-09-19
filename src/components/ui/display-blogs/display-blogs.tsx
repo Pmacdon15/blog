@@ -5,6 +5,7 @@ import Image from "next/image";
 import { BlogData, ResponseData } from "@/types/types";
 import { use } from "react";
 import { PaginationButtons } from "@/components/ui/pagination-buttons/pagination-buttons";
+import { NoticeDisplay } from "../text-display/notice";
 
 
 export function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<ResponseData | { error: string }> }) {
@@ -64,11 +65,5 @@ function BlogCard({ blog }: { blog: BlogData }) {
                 {blog.published ? 'View Blog' : 'Edit Draft'}
             </Link >
         </div>
-    )
-}
-
-function NoticeDisplay({ children }: { children: React.ReactNode }) {
-    return (
-        <p className="flex flex-col justify-center items-center gap-4 p-4 w-full lg:w-4/6 sm:w-5/6"><>{children}</></p>
     )
 }

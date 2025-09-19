@@ -27,7 +27,6 @@ const renderTextWithLinks = (text: string) => {
 };
 
 export default function BlogComponent({ data }: { data: Section[] | undefined }) {
-    console.log("Blog sections : ", data)
     return (
         <div className="flex flex-col gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6">
             {data?.map((section) => {
@@ -36,7 +35,7 @@ export default function BlogComponent({ data }: { data: Section[] | undefined })
                         return (
                             <div key={section.id}>
                                 <h1 className="text-5xl text-center">{section.title_section_title}</h1>
-                                <p className='text-center md:text-start'>Published on {section.publish_date ? new Date(section.publish_date).toLocaleDateString() : 'N/A'}</p>
+                                <p className='text-center md:text-start'>Published on {section.publish_date ? new Date(section.publish_date).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'N/A'}</p>
                             </div>
                         );
                     case 2:

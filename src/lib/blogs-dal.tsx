@@ -1,5 +1,5 @@
 import { neon } from '@neondatabase/serverless';
-import { ResponseData, BlogData } from '@/types/types';
+import { ResponseData, BlogData, Section } from '@/types/types';
 import { auth } from '@/auth';
 
 export async function getBlogs({ page = 1, limit = 10 }: { page?: number, limit?: number } = {}): Promise<ResponseData | { error: string }> {
@@ -49,5 +49,46 @@ export async function getBlogs({ page = 1, limit = 10 }: { page?: number, limit?
     } catch (error) {
         console.error('Error:', error);
         return { error: 'Failed to fetch blogs' };
+    }
+}
+
+export async function getSections(blogId: string): Promise<Section[] | { error: string }> {
+    try {
+        const sql = neon(`${process.env.DATABASE_URL}`);
+        
+        const sectionsQuery = `
+            SELECT 
+                S.id,
+                S.blog_id,
+                S.type as section_type_id,
+                CASE S.type
+                    WHEN 1 THEN 'title'
+                    WHEN 2 THEN 'image'
+                    WHEN 3 THEN 'paragraph'
+                    WHEN 4 THEN 'code'
+                END as section_type,
+                TS.title as title_section_title,
+                TS.publish_date,
+                I.src,
+                I.alt,
+                I.width,
+                P.title as paragraph_title,
+                P.text,
+                C.language,
+                C.code
+            FROM Section S
+            LEFT JOIN TitleSection TS ON S.id = TS.id AND S.type = 1
+            LEFT JOIN ImageSection I ON S.id = I.id AND S.type = 2
+            LEFT JOIN ParagraphSection P ON S.id = P.id AND S.type = 3
+            LEFT JOIN CodeSection C ON S.id = C.id AND S.type = 4
+            WHERE S.blog_id = ${blogId}
+            ORDER BY S.id ASC
+        `;
+        const result = await sql.query(sectionsQuery);
+        return result as Section[];
+
+    } catch (error) {
+        console.error('Error:', error);
+        return { error: 'Failed to fetch sections' };
     }
 }
