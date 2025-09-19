@@ -6,18 +6,19 @@ import { Button } from "../buttons/button";
 import { Section } from "@/types/types";
 import { NoticeDisplay } from "../text-display/notice";
 import { useIsAdmin } from "@/lib/hooks/hooks";
-import PageContainer from "../containters/page-container";
+import PageContainer from "../containers/page-container";
 
-export default function ContextController({ sectionsPromise, blogId }: { sectionsPromise: Promise<Section[] | { error: string }>, blogId: number }) {
 
-  const [editBlog, setEditBlog] = useState(true);
+export default function ContextController({ sectionsPromise, defaultState = false }: { sectionsPromise: Promise<Section[] | { error: string }>, defaultState?: boolean }) {
+
+  const [editBlog, setEditBlog] = useState(defaultState);
   const data = use(sectionsPromise);
 
   const { data: isAdmin } = useIsAdmin()
 
-  if ('error' in data) return <PageContainer><NoticeDisplay>Error: {data.error}</NoticeDisplay></PageContainer>;
+  if ('error' in data) return <NoticeDisplay>Error: {data.error}</NoticeDisplay>;
 
-  if (!data) return <PageContainer><NoticeDisplay>Loading...</NoticeDisplay></PageContainer>;
+  if (!data) return <NoticeDisplay>Loading...</NoticeDisplay>;
 
 
   return (
@@ -26,7 +27,7 @@ export default function ContextController({ sectionsPromise, blogId }: { section
         <Button onClick={() => setEditBlog(!editBlog)} text={`${editBlog ? 'Show Blog' : 'Edit Blog'}`} />
       }
       {editBlog && isAdmin ?
-        <EditBlogComponent blogId={blogId} data={data} /> :
+        <EditBlogComponent blogId={data[0].blog_id} data={data} /> :
         <BlogComponent data={data} />
       }
       {isAdmin &&
