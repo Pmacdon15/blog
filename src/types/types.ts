@@ -64,12 +64,12 @@ export type ResponseData = {
 
 export interface PaginationProps {
     page: number;
-    setPage: React.Dispatch<React.SetStateAction<number>>;
+    path: string;
     hasMoreBlogs: boolean | undefined;
 }
 
 export interface BlogPublishedResponse {
-  success: boolean;
-  message: string;
-  published: boolean;
+    success: boolean;
+    message: string;
+    published: boolean;
 }

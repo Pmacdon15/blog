@@ -1,35 +1,56 @@
 'use client'
-import { useGetBlogs } from "@/hooks/hooks";
+
 import Link from "next/link";
 import Image from "next/image";
-import { BlogData } from "@/types/types";
-import { useState } from "react";
+import { BlogData, ResponseData } from "@/types/types";
+import { use } from "react";
 import { PaginationButtons } from "@/components/ui/pagination-buttons/pagination-buttons";
 
-export function DisplayBlogs({ published, title, isAdmin }: { published: boolean, title: string, isAdmin: boolean }) {
-    const [page, setPage] = useState(1);
-    const { data, isLoading, isError } = useGetBlogs(page, published)
 
-    if (isLoading) return <p className="flex flex-col justify-center items-center gap-4  p-4 w-full lg:w-4/6 sm:w-5/6">Loading {title}...</p>;
-    if (isError) return <p className="flex flex-col justify-center text-red-500 items-center gap-4 p-4 w-full lg:w-4/6 sm:w-5/6">Error loading {title}</p>;
-    if (!data || !data.blogs && !isError) return <p className="flex flex-col justify-center items-center gap-4   p-4 w-full lg:w-4/6 sm:w-5/6">No {title} found</p>;
+export function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<ResponseData | { error: string }> }) {
 
-    console.log("isError: ", isError)
+    const result = use(blogsPromise);
+
+    if ('error' in result) return < NoticeDisplay>Error: {result.error}</ NoticeDisplay>;
+
+    const { blogs, hasMore } = result;
+
+    if (!blogs || blogs.length === 0) return < NoticeDisplay>No blogs found</ NoticeDisplay>;
+
+    const publishedBlogs = blogs.filter(b => b.published);
+    const unpublishedBlogs = blogs.filter(b => !b.published);
+
     return (
         <div className="flex flex-col justify-center items-center gap-4  p-4 w-full lg:w-4/6 sm:w-5/6">
-            <h2 className="text-2xl">{title}</h2>
-            {data.blogs.map((blog: BlogData) => (
-                <BlogCard key={blog.id} blog={blog} published={published} isAdmin={isAdmin} />
-            ))}
-            <PaginationButtons page={page} setPage={setPage} hasMoreBlogs={data.hasMore} />
+            {unpublishedBlogs.length > 0 && (
+                <>
+                    <h2 className="text-2xl">Unpublished Drafts</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+                        {unpublishedBlogs.map((blog: BlogData) => (
+                            <BlogCard key={blog.id} blog={blog} />
+                        ))}
+                    </div>
+                </>
+            )}
+            {publishedBlogs.length > 0 && (
+                <>
+                    <h2 className="text-2xl">Published Blogs</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+                        {publishedBlogs.map((blog: BlogData) => (
+                            <BlogCard key={blog.id} blog={blog} />
+                        ))}
+                    </div>
+                </>
+            )}
+            <PaginationButtons page={1} path={"/"} hasMoreBlogs={hasMore} />
         </div>
     )
 }
 
-function BlogCard({ blog, published, isAdmin }: { blog: BlogData, published: boolean, isAdmin: boolean }) {
+function BlogCard({ blog }: { blog: BlogData }) {
     return (
-        <div className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]  rounded-sm shadow-xl gap-4 pt-2 justify-center items-center w-full  lg:w-4/6 sm:w-5/6" >
-            <h1 className="text-4xl text-center">{blog.title}</h1>
+        <div className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] rounded-sm shadow-xl gap-4 pt-2 justify-center items-center w-full" >
+            <h1 className="text-2xl text-center p-2">{blog.title}</h1>
             {blog.image_src &&
                 <Image
                     src={blog.image_src || ""}
@@ -39,14 +60,15 @@ function BlogCard({ blog, published, isAdmin }: { blog: BlogData, published: boo
                     className="object-contain w-36 h-auto"
                 />
             }
-            <Link href={`/${published ? 'blog' : 'edit-blog'}/${blog.id}`} >
-                {published ? 'Go to This Blog' : 'Edit This Blog'}
+            <Link href={`/${blog.published ? 'blog' : 'edit-blog'}/${blog.id}`} className="p-2">
+                {blog.published ? 'View Blog' : 'Edit Draft'}
             </Link >
-            {isAdmin && published &&
-                <Link href={`/edit-blog/${blog.id}`}>Edit This Blog</Link>
-            }
-            <div />
         </div>
     )
 }
 
+function NoticeDisplay({ children }: { children: React.ReactNode }) {
+    return (
+        <p className="flex flex-col justify-center items-center gap-4 p-4 w-full lg:w-4/6 sm:w-5/6"><>{children}</></p>
+    )
+}
