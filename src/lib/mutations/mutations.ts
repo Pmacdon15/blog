@@ -47,7 +47,7 @@ const addBlog = async (formData: FormData) => {
 export const useAddBlog = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ formData, }: { formData: FormData; }) => {
+        mutationFn: async (formData: FormData) => {
             return await addBlog(formData);
         },
         onSuccess: () => {

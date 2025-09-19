@@ -17,7 +17,6 @@ export const useGetSections = (blogId: number) => {
 }
 
 
-
 const fetchIsBlogPublished = async (blogId: number): Promise<BlogPublishedResponse> => {
   const response = await fetch(`/api/blog/${blogId}`)
   if (!response.ok) {

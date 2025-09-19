@@ -1,5 +1,5 @@
 'use client';
-import { useDeleteSection, useTogglePublishBlog, useUpdateSection } from "@/mutations/mutations";
+import { useDeleteSection, useTogglePublishBlog, useUpdateSection } from "@/lib/mutations/mutations";
 import { Section } from "@/types/types";
 import { useState, ChangeEvent } from "react";
 import { Code } from "../code-section";
@@ -7,7 +7,7 @@ import { TitleSection } from "../title-section";
 import { Paragraph } from "../paragraph-section";
 import { ImageSection } from "../image-section";
 import { AddSectionForm } from "../../add-section-components/add-section-form/add-section-form";
-import { useGetIsBlogPublished } from "@/hooks/hooks";
+import { useGetIsBlogPublished } from "@/lib/hooks/hooks";
 import { Button } from "@/components/ui/buttons/button";
 
 // Define the type for sectionState

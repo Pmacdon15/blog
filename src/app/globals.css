@@ -34,3 +34,7 @@ body {
 input[type="date"]::-webkit-calendar-picker-indicator {
   @apply invert;
 }
+
+.background-gradient {
+  background: var(--background);
+}

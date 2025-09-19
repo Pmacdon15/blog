@@ -11,7 +11,7 @@ export default async function Home() {
       <Suspense fallback={<div className="text-2xl">Loading blogs...</div>}>
         <DisplayBlogs blogsPromise={blogsPromise} />
       </Suspense>
-      {/* <AddBlogForm /> */}
+      <AddBlogForm />
     </div>
   );
 }
