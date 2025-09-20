@@ -10,6 +10,31 @@ export async function togglePublishBlog(blogId: number) {
         await togglePublishBlogDB(blogId)
     }
 }
+
+export async function createBlog(formData: FormData) {
+    if (await isAdmin() !== true) {
+        throw new Error('Unauthorized');
+    }
+    const title = formData.get('title');
+    const sql = neon(`${process.env.DATABASE_URL}`);
+
+    await sql`
+    WITH new_blog AS (
+    INSERT INTO Blog (published)
+    VALUES (false)
+    RETURNING id
+  ),
+  new_section AS (
+    INSERT INTO Section (blog_id, type)
+    SELECT id, 1 FROM new_blog
+    RETURNING id
+  )
+  INSERT INTO TitleSection (id, title, publish_date)
+  SELECT id, ${title}, CURRENT_DATE
+  FROM new_section;
+  `;
+}
+
 export async function updateSection(blogId: number, sectionTypeId: number, sectionId: number, formData: FormData) {
     if (await isAdmin() !== true) {
         throw new Error('Unauthorized');

@@ -1,6 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
-import { deleteBlogSection, togglePublishBlog, updateSection } from "../actions/blog-action";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createBlog, deleteBlogSection, togglePublishBlog, updateSection } from "../actions/blog-action";
 import { revalidatePathAction } from "../actions/revalidatePath-action";
 
 export const useTogglePublishBlog = (blogId: number) => {
@@ -22,28 +21,15 @@ export const useTogglePublishBlog = (blogId: number) => {
 };
 
 
-const addBlog = async (formData: FormData) => {
-    const response = await fetch(`/api/blogs`, {
-        method: 'POST',
-        body: formData,
-    });
-
-    if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(JSON.stringify(errorResponse));
-    }
-
-    return await response.json();
-};
-
-export const useAddBlog = () => {
-    const queryClient = useQueryClient();
+export const useAddBlog = () => {    
     return useMutation({
         mutationFn: (formData: FormData) => {
-            return addBlog(formData);
+            return createBlog(formData);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['blogs', false, 1], });
+            revalidatePathAction("/")
+            revalidatePathAction("/blog")
+            revalidatePathAction("/edit-blog")
         },
         onError: (error) => {
             console.error('Mutation error:', error);
@@ -52,34 +38,6 @@ export const useAddBlog = () => {
 };
 
 
-const addSection = async (formData: FormData, blogId: number) => {
-    const response = await fetch(`/api/add-section/${blogId}`, {
-        method: 'POST',
-        body: formData,
-    });
-
-    if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(JSON.stringify(errorResponse));
-    }
-
-    return await response.json();
-};
-
-export const useAddSection = (blogId: number) => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: async ({ formData, blogId }: { formData: FormData, blogId: number }) => {
-            return await addSection(formData, blogId);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['blog-sections', blogId], });
-        },
-        onError: (error) => {
-            console.error('Mutation error:', error);
-        }
-    });
-};
 
 
 export const useUpdateSection = (blogId: number) => {
@@ -94,7 +52,6 @@ export const useUpdateSection = (blogId: number) => {
             revalidatePathAction("/edit-blog")
             revalidatePathAction(`/blog/${blogId}`)
             revalidatePathAction(`/edit-blog${blogId}`)
-
         },
         onError: (error) => {
             console.error('Mutation error:', error);

@@ -3,7 +3,6 @@ import { addSection } from '@/lib/db';
 import { schemaUpdateCodeSection, schemaUpdateImageSection, schemaUpdateParagraphSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { NextRequest, NextResponse } from 'next/server';
 
-
 export async function POST(request: NextRequest) {
     const url = request.nextUrl;
     const pathSegments = url.pathname.split('/');
@@ -11,10 +10,7 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData();
     const sectionTypeName = formData.get('section-type') as string ?? '';
-
-    // console.log(formData)
-
-
+    
     let validatedFields;
     let newPhotoUrl;
 
