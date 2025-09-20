@@ -1,22 +1,27 @@
 import ContextController from "@/components/ui/context-controller/context-controller";
-import Link from "next/link";
+import { getAllBlogIds, getSections } from "@/lib/DAL/blogs-dal";
+import { Suspense } from "react";
 
-export default async function Page({
+export async function generateStaticParams() {
+    const blogIds = await getAllBlogIds();
+    if ('error' in blogIds) {
+        console.error("Error generating static params:", blogIds.error);
+        return [];
+    }
+    return blogIds;
+}
+
+export default async function BlogPage({
     params,
 }: {
-    params: Promise<{ blogId: number }>
+    params: Promise<{ blogId: string }>
 }) {
-
     const { blogId } = await params;
-   
+    const sectionsPromise = getSections(blogId);
+
     return (
-        <div className="flex flex-col justify-start min-h-screen items-center mt-4 gap-4 pb-20 font-[family-name:var(--font-geist-sans)]">
-            <ContextController blogId={blogId} isAdmin={true} />
-            <Link
-                href="/"
-                className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
-            >Back Home
-            </Link>
-        </div>
+        <Suspense fallback={<div>Loading sections...</div>}>
+            <ContextController sectionsPromise={sectionsPromise} defaultState />
+        </Suspense>
     );
 }

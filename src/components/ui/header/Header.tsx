@@ -1,5 +1,5 @@
 'use client'
-import { loginDiscord } from "@/actions/auth";
+import { loginDiscord } from "@/lib/actions/auth";
 
 export default function Header() {
   return (

@@ -1,8 +1,7 @@
-import { Key, JSX, ChangeEvent } from "react";
+import {  ChangeEvent } from "react";
 
 // src/types/types.ts
 export interface Section {
-    map(arg0: (section: Section, index: Key | null | undefined) => JSX.Element | undefined): import("react").ReactNode;
     id: number;
     blog_id: number;
     section_type_id: number;
@@ -16,21 +15,11 @@ export interface Section {
     text: string | null;
     language: string | null;
     code: string | null;
-}
-
-export interface FormActionInputUpdate {
-    formData: FormData;
-    sectionId: number;
-    sectionTypeId: number;
+    published: boolean | null;
 }
 
 export interface FormActionInputDelete {
     sectionId: number;
-}
-
-export interface FormActionProps {
-    formActionUpdate: (input: FormActionInputUpdate) => void;
-    formActionDelete: (input: FormActionInputDelete) => void;
 }
 
 
@@ -40,7 +29,7 @@ export type SectionState = {
 };
 
 // Define the props for the PhotoSection component
-export interface PhotoSectionProps extends FormActionProps {
+export interface PhotoSectionProps {
     section: Section; // Ensure this matches the specific type if you've refined it (e.g., ImageSection)
     sectionState: SectionState;
     handleImageChange: (event: ChangeEvent<HTMLInputElement>, sectionId: number) => void;

@@ -8,7 +8,7 @@ type UpdateImageSection = z.infer<typeof schemaUpdateImageSection>;
 type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
 type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
 
-export async function togglePublishBlog(blogId: number) {
+export async function togglePublishBlogDB(blogId: number) {
     const sql = neon(`${process.env.DATABASE_URL}`);
     const results = await sql`
     UPDATE Blog
@@ -27,7 +27,7 @@ export async function isBlogPublished(blogId: number) {
       FROM Blog
       WHERE id = ${blogId} AND published = TRUE
     ) AS is_published;
-  `;    
+  `;
     return results[0].is_published;
 }
 
@@ -93,10 +93,10 @@ export async function addSection(
     }
 }
 
-export async function updateSection(
+export async function updateSectionDb(
+    data: UpdateTitleSection | UpdateImageSection | UpdateParagraphSection | UpdateCodeSection,
     sectionTypeId: number,
     sectionId: number,
-    data: UpdateTitleSection | UpdateImageSection | UpdateParagraphSection | UpdateCodeSection,
     newPhotoUrl?: string
 ) {
     try {
@@ -110,7 +110,7 @@ export async function updateSection(
             `;
         } else if (sectionTypeId === 2) {
             const photoData = data as UpdateImageSection;
-            if (newPhotoUrl !== "") {
+            if (newPhotoUrl) {
                 const result = await sql`
                 SELECT src FROM ImageSection WHERE id = ${sectionId}
             `;

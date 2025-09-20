@@ -1,3 +1,4 @@
+-- Active: 1758343744287@@ep-long-sun-a6ypub65-pooler.us-west-2.aws.neon.tech@5432@neondb
 DROP TABLE IF EXISTS CodeSection;
 
 DROP TABLE IF EXISTS ParagraphSection;
@@ -85,7 +86,7 @@ INSERT INTO
     ImageSection (id, src, alt, width)
 VALUES (
         2,
-        'https://yiteg94znhby2sle.public.blob.vercel-storage.com/tanstack-tTDLn3wLKj7OlaWvL9BicFgre6g6oJ.png',
+        'https://tanstack.com/images/logos/logo-color-600.png',
         'Tanstack Logo',
         136
     );
@@ -97,8 +98,8 @@ VALUES (
         3,
         'Introduction',
         '
-        I was dealing with paganation and useQuery. It seemed really simple at first, but then I ran in to some issues. 
-        I had my code set up exactly as shown in the examples. I was missing one key thing, that didn''t come to mind at first...... 
+        I was dealing with pagination and useQuery. It seemed really simple at first, but then I ran in to some issues. 
+        I had my code set up exactly as shown in the examples. I was missing one key thing, that didnt come to mind at first...... 
         what does the sever side code look like and act? I simply used the code for the hook, using page and limit in the search query param of the API route.
     '
     ),
@@ -106,9 +107,9 @@ VALUES (
         4,
         NULL,
         '
-        So I did the one thing developers hate doing lol RTFM(Reading the manual). It was very useful there was a lot of good info in there, what I learned is .... 
-        ''[Rendering paginated data is a very common UI pattern and in TanStack Query, it "just works" by including the page information in the query key](https://tanstack.com/query/latest/docs/framework/react/guides/paginated-queries)''.
-    '
+    So I did the one thing developers hate doing lol RTFM(Reading the manual). It was very useful there was a lot of good info in there, what I learned is .... 
+    Rendering paginated data is a very common UI pattern and in TanStack Query, it "just works" by including the page information in the query key.
+'
     ),
     (
         6,
@@ -142,7 +143,7 @@ VALUES (
         '
         At this point it was 11:00pm and I needed to get ready for bed, and as I was brushing my teeth it hit me like a brick wall. How could I not have seen it, what 
         did everyone on youtube have in common that wasnt mentioned? The their backend must have been set up to handle the information in the search params, lol it''s 
-        not some magic, I just missed it becuase it was so obvious no one had mentioned it. I forgot for a moment, in programing you have the tell the computer what to do, it doesnt just happen.
+        not some magic, I just missed it because it was so obvious no one had mentioned it. I forgot for a moment, in programming you have the tell the computer what to do, it doesnt just happen.
     '
     ),
     (

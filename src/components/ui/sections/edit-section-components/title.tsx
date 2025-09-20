@@ -1,8 +1,8 @@
-import { FormActionInputDelete, Section } from "@/types/types";
+import { Section } from "@/types/types";
 
-export function Title({ section, formActionDelete }: { section: Section; formActionDelete: (input: FormActionInputDelete) => void }) {
+export function Title({ section, formActionDelete }: { section: Section; formActionDelete: () => void }) {
     const handleDelete = () => {
-        formActionDelete({ sectionId: section.id });
+        formActionDelete();
     };
 
     return (

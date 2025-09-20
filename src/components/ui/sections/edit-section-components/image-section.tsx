@@ -1,12 +1,11 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, ChangeEvent } from "react";
 import { UpdateButton } from "../../buttons/update-button";
-import { PhotoSectionProps } from "@/types/types";
+import { Section, SectionState } from "@/types/types";
 import { Title } from "./title";
 import Image from "next/image";
-import { handleSubmit } from "@/lib/utils";
 import { throttle } from '@/lib/utils';
 
-export function ImageSection({ section, formActionUpdate, formActionDelete, sectionState, handleImageChange, isPending }: PhotoSectionProps) {
+export function ImageSection({ section, formAction, formActionDelete, sectionState, handleImageChange, isPending }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, sectionState: SectionState, handleImageChange: (event: ChangeEvent<HTMLInputElement>, sectionId: number) => void, isPending: boolean }) {
     const [showOldPhoto, setShowOldPhoto] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const { width, setWidth } = useThrottledWidth(containerRef, section.width || 150);
@@ -21,7 +20,6 @@ export function ImageSection({ section, formActionUpdate, formActionDelete, sect
         >
             <form
                 className="w-full flex flex-col gap-4 justify-center items-center"
-                onSubmit={(event) => handleSubmit(event, section, formActionUpdate)}
             >
                 <Title section={section} formActionDelete={formActionDelete} />
 
@@ -70,7 +68,7 @@ export function ImageSection({ section, formActionUpdate, formActionDelete, sect
                     min="0"
                     hidden
                 />
-                <UpdateButton actionString="Update Section" disabled={isPending} />
+                <UpdateButton formAction={formAction} actionString="Update Section" disabled={isPending} />
             </form>
             {sectionState[section.id] && (
                 <button

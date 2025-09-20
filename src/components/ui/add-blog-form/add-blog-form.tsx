@@ -1,27 +1,32 @@
 'use client'
-import { useAddBlog } from "@/mutations/mutations";
+import { useIsAdmin } from "@/lib/hooks/hooks";
+import { useAddBlog } from "@/lib/mutations/mutations";
 
 export default function AddBlogForm() {
+    
+    const { data } = useIsAdmin();
+    const { mutate, isPending, isError } = useAddBlog();
 
-    const { mutate } = useAddBlog();
     return (
-        <form
-            className="flex flex-col justify-center items-center gap-4 rounded-sm shadow-xl border p-4 w-full lg:w-4/6 sm:w-5/6"
-            onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-                event.preventDefault();
-                const formData = new FormData(event.currentTarget);
-                mutate({ formData });
-                event.currentTarget.reset();
-            }}
-        >
-            <input
-                type='text'
-                name='title'
-                placeholder="Title"
-                className="text-5xl text-center w-full md:w-5/6 border rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]"
-                required
-            />
-            <button>Add Blog</button>
-        </form>
+        <>
+            {data &&
+                <form
+                    className=" rounded-sm shadow-xl border p-1 w-full lg:w-4/6 sm:w-5/6 bg-white/60"
+                    action={mutate}
+                >
+                    <div className="flex flex-col gap-4  items-center bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] p-2 shadow-lg">
+                        <input
+                            type='text'
+                            name='title'
+                            placeholder="Title"
+                            className="text-5xl text-center w-full md:w-5/6 border rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]"
+                            required
+                        />
+                        <button className="hover:cursor-pointer border p-2 rounded-sm " disabled={isPending}>Add Blog</button>
+                        {isError && <h1 className="bold text-red-600"> There was an error creating a blog</h1>}
+                    </div>
+                </form>
+            }
+        </>
     );
 };

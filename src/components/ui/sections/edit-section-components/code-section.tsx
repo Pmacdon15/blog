@@ -1,14 +1,12 @@
-import { handleSubmit } from "@/lib/utils";
-import { FormActionProps, Section } from "@/types/types";
+import { Section } from "@/types/types";
 import { UpdateButton } from "../../buttons/update-button";
 import { Title } from "./title";
 
-export function Code({ section, formActionUpdate, formActionDelete, isPending }: { section: Section, isPending: boolean } & FormActionProps) {
+export function Code({ section, formAction, formActionDelete, isPending }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, isPending: boolean }) {
 
     return (
         <form
-            onSubmit={(event) => handleSubmit(event, section, formActionUpdate)}
-            className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
+            className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]" >
             <Title section={section} formActionDelete={formActionDelete} />
             <input
                 type='text'
@@ -24,7 +22,7 @@ export function Code({ section, formActionUpdate, formActionDelete, isPending }:
                 defaultValue={section.code || ""}
                 required
             />
-            <UpdateButton actionString="Update Section" disabled={isPending} />
+            <UpdateButton formAction={formAction} actionString="Update Section" disabled={isPending} />
         </form>
     );
 }
