@@ -180,15 +180,12 @@ export async function updateBlogOrder({ blogId, newOrder }: { blogId: number, ne
     const sql = neon(`${process.env.DATABASE_URL}`);
 
     try {
-        await sql.transaction(async (tx) => {
-            for (const section of newOrder) {
-                await tx`
-                    UPDATE Section
-                    SET order_index = ${section.order_index}
-                    WHERE id = ${section.id} AND blog_id = ${blogId};
-                `;
-            }
-        });
+        const queries = newOrder.map(section => sql`
+            UPDATE Section
+            SET order_index = ${section.order_index}
+            WHERE id = ${section.id} AND blog_id = ${blogId};
+        `);
+        await sql.transaction(queries);
     } catch (error) {
         console.error('Failed to update blog order:', error);
         throw new Error('Failed to update blog order');

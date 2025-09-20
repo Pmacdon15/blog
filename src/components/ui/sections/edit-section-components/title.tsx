@@ -1,7 +1,7 @@
 import { Section } from "@/types/types";
 import { Grip } from "lucide-react";
 
-export function Title({ section, formActionDelete, attributes, listeners }: { section: Section; formActionDelete: () => void, attributes: any, listeners: any }) {
+export function Title({ section, formActionDelete, attributes, listeners }: { section: Section; formActionDelete: () => void, attributes?: any, listeners?: any }) {
     const handleDelete = () => {
         formActionDelete();
     };

@@ -5,7 +5,7 @@ import { Title } from "./title";
 import Image from "next/image";
 import { throttle } from '@/lib/utils';
 
-export function ImageSection({ section, formAction, formActionDelete, sectionState, handleImageChange, isPending, attributes, listeners }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, sectionState: SectionState, handleImageChange: (event: ChangeEvent<HTMLInputElement>, sectionId: number) => void, isPending: boolean, attributes: any, listeners: any }) {
+export function ImageSection({ section, formAction, formActionDelete, sectionState, handleImageChange, isPending, attributes, listeners }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, sectionState: SectionState, handleImageChange: (event: ChangeEvent<HTMLInputElement>, sectionId: number) => void, isPending: boolean, attributes?: any, listeners?: any }) {
     const [showOldPhoto, setShowOldPhoto] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const { width, setWidth } = useThrottledWidth(containerRef, section.width || 150);
