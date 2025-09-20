@@ -1,16 +1,12 @@
-'use client'
-
 import Link from "next/link";
 import Image from "next/image";
 import { BlogData, ResponseData } from "@/types/types";
-import { use } from "react";
 import { PaginationButtons } from "@/components/ui/pagination-buttons/pagination-buttons";
 import { NoticeDisplay } from "../text-display/notice";
 
+export async function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<ResponseData | { error: string }> }) {
 
-export function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<ResponseData | { error: string }> }) {
-
-    const result = use(blogsPromise);
+    const result = await blogsPromise;
 
     if ('error' in result) return <NoticeDisplay>Error: {result.error}</NoticeDisplay>;
 
@@ -36,7 +32,7 @@ export function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<ResponseD
             {unpublishedBlogs.length > 0 && (
                 <div className="flex flex-col items-center w-full gap-4">
                     <h2 className="text-2xl">Unpublished Drafts</h2>
-                     <div className={`flex flex-wrap gap-4 w-full ${unpublishedBlogs.length === 1 ? 'justify-center' : 'justify-start'}`}>
+                    <div className={`flex flex-wrap gap-4 w-full ${unpublishedBlogs.length === 1 ? 'justify-center' : 'justify-start'}`}>
                         {unpublishedBlogs.map((blog: BlogData) => (
                             <BlogCard key={blog.id} blog={blog} />
                         ))}
