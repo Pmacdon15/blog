@@ -21,7 +21,7 @@ export function ImageSection({ section, formAction, formActionDelete, sectionSta
             <form
                 className="w-full flex flex-col gap-4 justify-center items-center"
             >
-                <Title section={section} formActionDelete={formActionDelete} attributes={attributes} listeners={listeners} />
+                <Title section={section} formActionDelete={formActionDelete} />
 
                 <div
                     ref={containerRef}

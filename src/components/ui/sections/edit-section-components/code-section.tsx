@@ -7,7 +7,7 @@ export function Code({ section, formAction, formActionDelete, isPending }: { sec
     return (
         <form
             className="flex flex-col w-full text-center md:text-left  gap-4 p-4 " >
-            <Title section={section} formActionDelete={formActionDelete} attributes={attributes} listeners={listeners} />
+            <Title section={section} formActionDelete={formActionDelete} />
             <input
                 type='text'
                 name='language'
