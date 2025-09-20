@@ -9,12 +9,12 @@ export default async function Home() {
   const blogsPromise = getBlogs();
 
   return (
-    <PageContainer>
+    <>
       <Suspense fallback={<div className="text-2xl">Loading blogs...</div>}>
         <DisplayBlogs blogsPromise={blogsPromise} />
       </Suspense>
       <AddBlogForm />
       <LogoutButton />
-    </PageContainer>
+    </>
   );
 }

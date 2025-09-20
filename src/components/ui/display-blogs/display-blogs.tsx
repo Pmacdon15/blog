@@ -18,7 +18,7 @@ export async function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<Res
     const unpublishedBlogs = blogs.filter(b => !b.published);
 
     return (
-        <div className="flex flex-col justify-center items-center gap-4  w-full">
+        <div className="flex flex-col justify-center items-center w-full">
             {publishedBlogs.length > 0 && (
                 <div className="flex flex-col items-center w-full gap-4">
                     <h2 className="text-2xl">Published Blogs</h2>
