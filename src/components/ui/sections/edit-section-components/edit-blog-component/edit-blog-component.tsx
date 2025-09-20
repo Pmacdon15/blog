@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useMemo } from "react";
+import React, { useState, ChangeEvent, useMemo, useCallback, useRef, useEffect } from "react";
 import { Section } from "@/types/types";
 import { useDeleteSection, useTogglePublishBlog, useUpdateSection, useUpdateBlogOrder } from "@/lib/mutations/mutations";
 import { Code } from "../code-section";
@@ -53,25 +53,44 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
         })
     );
 
+    const debouncedSaveRef = useRef<NodeJS.Timeout>();
+
+    const saveOrder = useCallback((currentSections: Section[]) => {
+        const newOrder = currentSections.map((section, index) => ({
+            id: section.id,
+            order_index: index,
+        }));
+        mutateUpdateBlogOrder({ blogId: data[0].blog_id, newOrder: newOrder });
+    }, [mutateUpdateBlogOrder, data]);
+
+    useEffect(() => {
+        return () => {
+            if (debouncedSaveRef.current) {
+                clearTimeout(debouncedSaveRef.current);
+            }
+        };
+    }, []);
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         if (over && active.id !== over.id) {
             setSections((items) => {
                 const oldIndex = items.findIndex((item) => item.id === active.id);
                 const newIndex = items.findIndex((item) => item.id === over.id);
-                return arrayMove(items, oldIndex, newIndex);
+                const newSections = arrayMove(items, oldIndex, newIndex);
+
+                if (debouncedSaveRef.current) {
+                    clearTimeout(debouncedSaveRef.current);
+                }
+                debouncedSaveRef.current = setTimeout(() => {
+                    saveOrder(newSections);
+                }, 500); // Debounce for 500ms
+
+                return newSections;
             });
         }
     };
     
-    const handleSaveOrder = () => {
-        const newOrder = sections.map((section, index) => ({
-            id: section.id,
-            order_index: index,
-        }));
-        mutateUpdateBlogOrder({ blogId: data[0].blog_id, newOrder: newOrder });
-    };
-
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>, sectionId: number) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -98,7 +117,6 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
             {data && (
                 <div className="flex gap-4">
                     <Button onClick={() => mutateTogglePublished({ blogId: data[0].blog_id })} text={data[0].published ? 'Unpublish this Blog' : 'Publish This Blog'} />
-                    <Button onClick={handleSaveOrder} text="Save Order" isPending={isPendingUpdateOrder} />
                 </div>
             )}
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
