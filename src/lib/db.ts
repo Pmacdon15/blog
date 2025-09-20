@@ -2,14 +2,13 @@ import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdateImag
 import { neon } from '@neondatabase/serverless';
 import { z } from 'zod';
 import { deleteBlob } from './blobs';
-import { auth } from '@/auth';
 
 type UpdateTitleSection = z.infer<typeof schemaUpdateTitleSection>;
 type UpdateImageSection = z.infer<typeof schemaUpdateImageSection>;
 type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
 type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
 
-export async function togglePublishBlogDB(blogId: number) {    
+export async function togglePublishBlogDB(blogId: number) {
     const sql = neon(`${process.env.DATABASE_URL}`);
     const results = await sql`
     UPDATE Blog
@@ -28,7 +27,7 @@ export async function isBlogPublished(blogId: number) {
       FROM Blog
       WHERE id = ${blogId} AND published = TRUE
     ) AS is_published;
-  `;    
+  `;
     return results[0].is_published;
 }
 
@@ -94,10 +93,10 @@ export async function addSection(
     }
 }
 
-export async function updateSection(
+export async function updateSectionDb(
+    data: UpdateTitleSection | UpdateImageSection | UpdateParagraphSection | UpdateCodeSection,
     sectionTypeId: number,
     sectionId: number,
-    data: UpdateTitleSection | UpdateImageSection | UpdateParagraphSection | UpdateCodeSection,
     newPhotoUrl?: string
 ) {
     try {

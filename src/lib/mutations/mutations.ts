@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { togglePublishBlog } from "../actions/blog-action";
 import { revalidatePathAction } from "../actions/revalidatePath-action";
+import { updateSectionDb } from "../db";
 
 export const useTogglePublishBlog = () => {
     return useMutation({
@@ -79,28 +80,27 @@ export const useAddSection = (blogId: number) => {
     });
 };
 
-const updateSection = async (blogId: number, sectionId: number, sectionTypeId: number, formData: FormData) => {
-    const response = await fetch(`/api/update-section/${blogId}/${sectionId}/${sectionTypeId}`, {
-        method: 'PUT',
-        body: formData,
-    });
+// const updateSection = async (blogId: number, sectionId: number, sectionTypeId: number, formData: FormData) => {
+//     const response = await fetch(`/api/update-section/${blogId}/${sectionId}/${sectionTypeId}`, {
+//         method: 'PUT',
+//         body: formData,
+//     });
 
-    if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(JSON.stringify(errorResponse));
-    }
+//     if (!response.ok) {
+//         const errorResponse = await response.json();
+//         throw new Error(JSON.stringify(errorResponse));
+//     }
 
-    return await response.json();
-};
+//     return await response.json();
+// };
 
-export const useUpdateSection = (blogId: number) => {
-    const queryClient = useQueryClient();
+export const useUpdateSection = () => {
     return useMutation({
-        mutationFn: async ({ formData, sectionId, sectionTypeId }: { formData: FormData; sectionId: number, sectionTypeId: number }) => {
-            return await updateSection(blogId, sectionId, sectionTypeId, formData);
+        mutationFn: (formData: FormData, sectionId: number, sectionTypeId: number) => {
+            return updateSectionDb(formData, sectionTypeId, sectionId,);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['blog-sections', blogId], });
+
         },
         onError: (error) => {
             console.error('Mutation error:', error);
