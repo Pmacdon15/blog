@@ -1,3 +1,4 @@
+'use server'
 import { dealWithNewPhoto } from '../blobs';
 import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdateImageSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { togglePublishBlogDB, updateSectionDb } from "../db"
@@ -8,8 +9,7 @@ export async function togglePublishBlog(blogId: number) {
         await togglePublishBlogDB(blogId)
     }
 }
-export async function updateSection(blogId: number, sectionTypeId: number, sectionId: number, formData: FormData) {
-    console.log('DATABASE_URL in server action:', process.env.DATABASE_URL);
+export async function updateSection(blogId: number, sectionTypeId: number, sectionId: number, formData: FormData) {    
     if (await isAdmin() !== true) {
         throw new Error('Unauthorized');
     }

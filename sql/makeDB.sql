@@ -1,3 +1,4 @@
+-- Active: 1758343744287@@ep-long-sun-a6ypub65-pooler.us-west-2.aws.neon.tech@5432@neondb
 DROP TABLE IF EXISTS CodeSection;
 
 DROP TABLE IF EXISTS ParagraphSection;
@@ -85,7 +86,7 @@ INSERT INTO
     ImageSection (id, src, alt, width)
 VALUES (
         2,
-        'https://tanstack.com/images/logos/logo-color-100.png',
+        'https://tanstack.com/images/logos/logo-color-600.png',
         'Tanstack Logo',
         136
     );
@@ -106,9 +107,9 @@ VALUES (
         4,
         NULL,
         '
-        So I did the one thing developers hate doing lol RTFM(Reading the manual). It was very useful there was a lot of good info in there, what I learned is ....' 
-        [Rendering paginated data is a very common UI pattern and in TanStack Query, it "just works" by including the page information in the query key](https://tanstack.com/query/latest/docs/framework/react/guides/paginated-queries)''.
-    '
+    So I did the one thing developers hate doing lol RTFM(Reading the manual). It was very useful there was a lot of good info in there, what I learned is .... 
+    Rendering paginated data is a very common UI pattern and in TanStack Query, it "just works" by including the page information in the query key.
+'
     ),
     (
         6,
