@@ -7,7 +7,6 @@ import { TitleSection } from "../title-section";
 import { Paragraph } from "../paragraph-section";
 import { ImageSection } from "../image-section";
 import { AddSectionForm } from "../../add-section-components/add-section-form/add-section-form";
-import { useGetIsBlogPublished } from "@/lib/hooks/hooks";
 import { Button } from "@/components/ui/buttons/button";
 
 // Define the type for sectionState
@@ -19,10 +18,7 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
 
     const [sectionState, setSectionState] = useState<SectionState>({});
 
-    const { data: dataIsPublished } = useGetIsBlogPublished(blogId);
     const { mutate: mutateTogglePublished } = useTogglePublishBlog(blogId);
-
-    console.log("data", dataIsPublished);
 
     const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection(blogId);
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(blogId);
@@ -48,8 +44,8 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
 
     return (
         <div className="flex flex-col w-full lg:w-4/6 sm:w-5/6 gap-4 justify-start min-h-screen items-center mt-4 px-4 pb-4 font-[family-name:var(--font-geist-sans)]">
-            {dataIsPublished &&
-                <Button onClick={() => mutateTogglePublished({ blogId })} text={dataIsPublished.published ? 'Unpublish this Blog' : 'Publish This Blog'} />
+            {data[0].published &&
+                <Button onClick={() => mutateTogglePublished({ blogId })} text={data[0].published ? 'Unpublish this Blog' : 'Publish This Blog'} />
             }
             {data?.map((section: Section) => {
                 switch (section.section_type_id) {

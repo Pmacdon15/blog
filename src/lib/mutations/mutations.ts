@@ -47,8 +47,8 @@ const addBlog = async (formData: FormData) => {
 export const useAddBlog = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (formData: FormData) => {
-            return await addBlog(formData);
+        mutationFn:  (formData: FormData) => {
+            return  addBlog(formData);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['blogs', false, 1], });

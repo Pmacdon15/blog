@@ -2,7 +2,6 @@ import { Key, JSX, ChangeEvent } from "react";
 
 // src/types/types.ts
 export interface Section {
-    map(arg0: (section: Section, index: Key | null | undefined) => JSX.Element | undefined): import("react").ReactNode;
     id: number;
     blog_id: number;
     section_type_id: number;
@@ -16,6 +15,7 @@ export interface Section {
     text: string | null;
     language: string | null;
     code: string | null;
+    published: boolean | null;
 }
 
 export interface FormActionInputUpdate {

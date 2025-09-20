@@ -86,12 +86,14 @@ export async function getSections(blogId: string): Promise<Section[] | { error: 
                 P.title as paragraph_title,
                 P.text,
                 C.language,
-                C.code
+                C.code,
+                B.published
             FROM Section S
             LEFT JOIN TitleSection TS ON S.id = TS.id AND S.type = 1
             LEFT JOIN ImageSection I ON S.id = I.id AND S.type = 2
             LEFT JOIN ParagraphSection P ON S.id = P.id AND S.type = 3
             LEFT JOIN CodeSection C ON S.id = C.id AND S.type = 4
+            JOIN Blog B ON S.blog_id = B.id
             WHERE S.blog_id = ${blogId}
             ORDER BY S.id ASC
         `;

@@ -3,7 +3,7 @@ import { DisplayBlogs } from "@/components/ui/display-blogs/display-blogs";
 import { getBlogs } from "@/lib/blogs-dal";
 import { Suspense } from "react";
 import { LogoutButton } from "@/components/ui/buttons/logout-button";
-import PageContainer from "@/components/ui/containers/page-container";
+import PageContainer from "@/components/ui/containters/page-container";
 
 export default async function Home() {
   const blogsPromise = getBlogs();

@@ -1,4 +1,4 @@
-import PageContainer from "@/components/ui/containers/page-container";
+import PageContainer from "@/components/ui/containters/page-container";
 import ContextController from "@/components/ui/context-controller/context-controller";
 import { getAllBlogIds, getSections } from "@/lib/blogs-dal";
 import { Suspense } from "react";

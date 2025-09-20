@@ -97,8 +97,8 @@ VALUES (
         3,
         'Introduction',
         '
-        I was dealing with paganation and useQuery. It seemed really simple at first, but then I ran in to some issues. 
-        I had my code set up exactly as shown in the examples. I was missing one key thing, that didn''t come to mind at first...... 
+        I was dealing with pagination and useQuery. It seemed really simple at first, but then I ran in to some issues. 
+        I had my code set up exactly as shown in the examples. I was missing one key thing, that didnt come to mind at first...... 
         what does the sever side code look like and act? I simply used the code for the hook, using page and limit in the search query param of the API route.
     '
     ),
@@ -106,8 +106,7 @@ VALUES (
         4,
         NULL,
         '
-        So I did the one thing developers hate doing lol RTFM(Reading the manual). It was very useful there was a lot of good info in there, what I learned is .... 
-        ''[Rendering paginated data is a very common UI pattern and in TanStack Query, it "just works" by including the page information in the query key](https://tanstack.com/query/latest/docs/framework/react/guides/paginated-queries)''.
+        So I did the one thing developers hate doing lol RTFM(Reading the manual). It was very useful there was a lot of good info in there, what I learned is ....' '[Rendering paginated data is a very common UI pattern and in TanStack Query, it "just works" by including the page information in the query key](https://tanstack.com/query/latest/docs/framework/react/guides/paginated-queries)''.
     '
     ),
     (
