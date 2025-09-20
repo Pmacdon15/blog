@@ -1,7 +1,6 @@
-'use client';
-import { useDeleteSection, useTogglePublishBlog, useUpdateSection, useUpdateBlogOrder } from "@/lib/mutations/mutations";
+import React, { useState, ChangeEvent, useMemo } from "react";
 import { Section } from "@/types/types";
-import { useState, ChangeEvent, useMemo } from "react";
+import { useDeleteSection, useTogglePublishBlog, useUpdateSection, useUpdateBlogOrder } from "@/lib/mutations/mutations";
 import { Code } from "../code-section";
 import { TitleSection } from "../title-section";
 import { Paragraph } from "../paragraph-section";
@@ -11,23 +10,29 @@ import { Button } from "@/components/ui/buttons/button";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import React from 'react';
+import { Grip } from 'lucide-react';
 
 type SectionState = {
     [key: number]: string | null | undefined;
 };
 
-function SortableItem({ id, children }: { id: number, children: React.ReactElement }) {
+function SortableItem({ id, children }: { id: number, children: React.ReactNode }) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
+        touchAction: 'none'
     };
 
     return (
-        <div ref={setNodeRef} style={style} className="w-full">
-            {React.cloneElement(children, { attributes, listeners })}
+        <div ref={setNodeRef} style={style} className="flex flex-col w-full">
+            <div {...attributes} {...listeners} className="cursor-grab p-2 self-start">
+                <Grip />
+            </div>
+            <div className="w-full">
+                {children}
+            </div>
         </div>
     );
 }

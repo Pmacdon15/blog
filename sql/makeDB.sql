@@ -78,7 +78,7 @@ INSERT INTO
     TitleSection (id, title, publish_date)
 VALUES (
         1,
-        'Tankstack useQuery paganation',
+        'Tankstack useQuery pagination',
         '2025-04-08'
     );
 

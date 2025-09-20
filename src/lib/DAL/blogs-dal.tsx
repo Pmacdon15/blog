@@ -95,7 +95,7 @@ export async function getSections(blogId: string): Promise<Section[] | { error: 
             LEFT JOIN CodeSection C ON S.id = C.id AND S.type = 4
             JOIN Blog B ON S.blog_id = B.id
             WHERE S.blog_id = ${blogId}
-            ORDER BY S.id ASC
+            ORDER BY S.order_index ASC
         `;
         const result = await sql.query(sectionsQuery);
         return result as Section[];
