@@ -71,7 +71,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
                         return null;
                 }
             })}
-            {/* <AddSectionForm blogId={data[0].blog_id} /> */}
+            <AddSectionForm blogId={data[0].blog_id} />
         </div>
     );
 }

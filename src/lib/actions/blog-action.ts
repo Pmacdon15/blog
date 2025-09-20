@@ -1,7 +1,7 @@
 'use server'
 import { dealWithNewPhoto, deleteBlob } from '../blobs';
 import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdateImageSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
-import { togglePublishBlogDB, updateSectionDb } from "../db"
+import { addSection as addSectionDB, togglePublishBlogDB, updateSectionDb } from "../db"
 import { isAdmin } from "./auth"
 import { neon } from '@neondatabase/serverless';
 
@@ -33,6 +33,71 @@ export async function createBlog(formData: FormData) {
   SELECT id, ${title}, CURRENT_DATE
   FROM new_section;
   `;
+}
+
+export async function addSection(blogId: number, formData: FormData) {
+    if (await isAdmin() !== true) {
+        throw new Error('Unauthorized');
+    }
+    const sectionTypeName = formData.get('section-type') as string ?? '';
+
+    let validatedFields;
+    let newPhotoUrl;
+
+    if (sectionTypeName === 'Title') {
+        validatedFields = schemaUpdateTitleSection.safeParse({
+            blog_id: blogId,
+            title: formData.get('title'),
+            publish_date: new Date(formData.get('publish_date') as string),
+        });
+    } else if (sectionTypeName === 'Image') {
+        const file = formData.get('new-file') as File;
+        validatedFields = schemaUpdateImageSection.safeParse({
+            blog_id: blogId,
+            new_file: file.size > 0 ? file : undefined,
+            alt: formData.get('alt'),
+            width: Number(formData.get("width"))
+        });
+        if (validatedFields.success && validatedFields.data.new_file) {
+            const blob = await dealWithNewPhoto(validatedFields.data);
+            newPhotoUrl = blob.url;
+        }
+
+    } else if (sectionTypeName === 'Paragraph') {
+        validatedFields = schemaUpdateParagraphSection.safeParse({
+            blog_id: blogId,
+            title: formData.get('title'),
+            text: formData.get('text'),
+        });
+    } else if (sectionTypeName === 'Code') {
+        validatedFields = schemaUpdateCodeSection.safeParse({
+            blog_id: blogId,
+            language: formData.get('language'),
+            code: formData.get('code'),
+        });
+    } else {
+        return { error: 'Unsupported section type' };
+    }
+
+
+    if (!validatedFields?.success) {
+        return {
+            error: {
+                message: 'Validation failed',
+                details: validatedFields?.error.flatten().fieldErrors,
+            },
+        };
+    }
+    try {
+        await addSectionDB(sectionTypeName, validatedFields.data, newPhotoUrl || "");
+    } catch (error) {
+        return { error: `Error: ${error}` };
+    }
+
+    return {
+        success: true,
+        message: 'Blog updated successfully',
+    };
 }
 
 export async function updateSection(blogId: number, sectionTypeId: number, sectionId: number, formData: FormData) {

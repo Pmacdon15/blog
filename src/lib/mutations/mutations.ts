@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
-import { createBlog, deleteBlogSection, togglePublishBlog, updateSection } from "../actions/blog-action";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addSection, createBlog, deleteBlogSection, togglePublishBlog, updateSection } from "../actions/blog-action";
 import { revalidatePathAction } from "../actions/revalidatePath-action";
 
 export const useTogglePublishBlog = (blogId: number) => {
@@ -22,11 +22,13 @@ export const useTogglePublishBlog = (blogId: number) => {
 
 
 export const useAddBlog = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (formData: FormData) => {
             return createBlog(formData);
         },
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['blogs', false, 1], });
             revalidatePathAction("/")
             revalidatePathAction("/blog")
             revalidatePathAction("/edit-blog")
@@ -37,7 +39,23 @@ export const useAddBlog = () => {
     });
 };
 
-
+export const useAddSection = (blogId: number) => {
+    return useMutation({
+        mutationFn: ({ formData, blogId }: { formData: FormData, blogId: number }) => {
+            return addSection(blogId, formData);
+        },
+        onSuccess: () => {
+            revalidatePathAction("/")
+            revalidatePathAction("/blog")
+            revalidatePathAction("/edit-blog")
+            revalidatePathAction(`/blog/${blogId}`)
+            revalidatePathAction(`/edit-blog${blogId}`)
+        },
+        onError: (error) => {
+            console.error('Mutation error:', error);
+        }
+    });
+};
 
 
 export const useUpdateSection = (blogId: number) => {
