@@ -19,7 +19,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     const [sectionState, setSectionState] = useState<SectionState>({});
 
     const { mutate: mutateTogglePublished } = useTogglePublishBlog();
-    const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection(data[0].blog_id);
+    const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection();
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(data[0].blog_id);
 
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>, sectionId: number) => {
@@ -49,13 +49,13 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
             {data?.map((section: Section) => {
                 switch (section.section_type_id) {
                     case 1:
-                        return <TitleSection key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
+                        return <TitleSection key={section.id} section={section} formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     case 2:
                         return (
                             <ImageSection
                                 key={section.id}
                                 section={section}
-                                formActionUpdate={mutateUpdate}
+                                formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })}
                                 formActionDelete={mutateDelete}
                                 sectionState={sectionState}
                                 handleImageChange={handleImageChange}
@@ -63,9 +63,9 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
                             />
                         );
                     case 3:
-                        return <Paragraph key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
+                        return <Paragraph key={section.id} section={section} formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     case 4:
-                        return <Code key={section.id} section={section} formActionUpdate={mutateUpdate} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
+                        return <Code key={section.id} section={section} formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     default:
                         return null;
                 }

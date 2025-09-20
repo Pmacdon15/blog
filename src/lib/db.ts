@@ -110,7 +110,7 @@ export async function updateSectionDb(
             `;
         } else if (sectionTypeId === 2) {
             const photoData = data as UpdateImageSection;
-            if (newPhotoUrl !== "") {
+            if (newPhotoUrl) {
                 const result = await sql`
                 SELECT src FROM ImageSection WHERE id = ${sectionId}
             `;

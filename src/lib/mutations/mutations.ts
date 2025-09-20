@@ -1,8 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
-import { togglePublishBlog } from "../actions/blog-action";
+import { togglePublishBlog, updateSection } from "../actions/blog-action";
 import { revalidatePathAction } from "../actions/revalidatePath-action";
-import { updateSectionDb } from "../db";
 
 export const useTogglePublishBlog = () => {
     return useMutation({
@@ -96,11 +95,14 @@ export const useAddSection = (blogId: number) => {
 
 export const useUpdateSection = () => {
     return useMutation({
-        mutationFn: (formData: FormData, sectionId: number, sectionTypeId: number) => {
-            return updateSectionDb(formData, sectionTypeId, sectionId,);
-        },
+        mutationFn: async ({ blogId, sectionId, sectionTypeId, formData }: { blogId: number, sectionId: number, sectionTypeId: number, formData: FormData }) => {
+            await updateSection(blogId, sectionTypeId, sectionId, formData);
+            return { blogId }; // Return blogId for use in onSuccess
+        },        
         onSuccess: () => {
-
+            revalidatePathAction("/")
+            revalidatePathAction("/blog")
+            revalidatePathAction("/edit-blog")
         },
         onError: (error) => {
             console.error('Mutation error:', error);
@@ -122,14 +124,15 @@ const deleteSection = async (blogId: number, sectionId: number) => {
     return await response.json();
 };
 
-export const useDeleteSection = (blogId: number) => {
-    const queryClient = useQueryClient();
+export const useDeleteSection = (blogId: number) => {    
     return useMutation({
-        mutationFn: async ({ sectionId }: { sectionId: number }) => {
-            return await deleteSection(blogId, sectionId);
+        mutationFn: ({ sectionId }: { sectionId: number }) => {
+            return deleteSection(blogId, sectionId);
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['blog-sections', blogId], });
+        onSuccess: () => {            
+            revalidatePathAction("/")
+            revalidatePathAction("/blog")
+            revalidatePathAction("/edit-blog")
         },
         onError: (error) => {
             console.error('Mutation error:', error);
