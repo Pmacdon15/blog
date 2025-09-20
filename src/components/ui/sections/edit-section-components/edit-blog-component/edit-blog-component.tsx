@@ -47,25 +47,26 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
                 <Button onClick={() => mutateTogglePublished({ blogId: data[0].blog_id })} text={data[0].published ? 'Unpublish this Blog' : 'Publish This Blog'} />
             }
             {data?.map((section: Section) => {
+                const formActionDelete = () => mutateDelete({ sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id });
                 switch (section.section_type_id) {
                     case 1:
-                        return <TitleSection key={section.id} section={section} formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
+                        return <TitleSection key={section.id} section={section} formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })} formActionDelete={formActionDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     case 2:
                         return (
                             <ImageSection
                                 key={section.id}
                                 section={section}
                                 formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })}
-                                formActionDelete={mutateDelete}
+                                formActionDelete={formActionDelete}
                                 sectionState={sectionState}
                                 handleImageChange={handleImageChange}
                                 isPending={isPendingUpdate || isPendingDelete}
                             />
                         );
                     case 3:
-                        return <Paragraph key={section.id} section={section} formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
+                        return <Paragraph key={section.id} section={section} formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })} formActionDelete={formActionDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     case 4:
-                        return <Code key={section.id} section={section} formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })} formActionDelete={mutateDelete} isPending={isPendingUpdate || isPendingDelete} />;
+                        return <Code key={section.id} section={section} formAction={(formData: FormData) => mutateUpdate({ formData, sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id })} formActionDelete={formActionDelete} isPending={isPendingUpdate || isPendingDelete} />;
                     default:
                         return null;
                 }

@@ -2,7 +2,7 @@ import { Section } from "@/types/types";
 import { UpdateButton } from "../../buttons/update-button";
 import { Title } from "./title";
 
-export function Code({ section, formAction, formActionDelete, isPending }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: (input: { sectionId: number; }) => void, isPending: boolean }) {
+export function Code({ section, formAction, formActionDelete, isPending }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, isPending: boolean }) {
 
     return (
         <form
