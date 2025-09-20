@@ -7,7 +7,7 @@ export function Paragraph({ section, formAction, formActionDelete, isPending }: 
     return (
         <form
             className="flex flex-col w-full text-center md:text-left  gap-4  p-4">
-            <Title section={section} formActionDelete={formActionDelete} />
+            <Title formActionDelete={formActionDelete} />
             <input
                 type='text'
                 name='title'

@@ -26,7 +26,6 @@ const renderTextWithLinks = (text: string) => {
 };
 
 export default function BlogComponent({ data }: { data: Section[] | undefined }) {
-    console.log("Data (from DAL, should be sorted): ", data)
     return (
         <div className="flex flex-col gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6">
             {data?.map((section) => {

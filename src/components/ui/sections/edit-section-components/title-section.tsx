@@ -6,7 +6,7 @@ export function TitleSection({ section, formAction, formActionDelete, isPending 
     return (
         <form
             className="flex flex-col gap-4  p-4 w-full " >
-            <Title section={section} formActionDelete={formActionDelete} />
+            <Title formActionDelete={formActionDelete} />
             <input
                 type='text'
                 name='title'

@@ -44,7 +44,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     const { mutate: mutateTogglePublished } = useTogglePublishBlog(data[0].blog_id);
     const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection(data[0].blog_id);
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(data[0].blog_id);
-    const { mutate: mutateUpdateBlogOrder, isPending: isPendingUpdateOrder } = useUpdateBlogOrder(data[0].blog_id);
+    const { mutate: mutateUpdateBlogOrder } = useUpdateBlogOrder(data[0].blog_id);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -90,7 +90,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
             });
         }
     };
-    
+
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>, sectionId: number) => {
         const file = event.target.files?.[0];
         if (file) {
