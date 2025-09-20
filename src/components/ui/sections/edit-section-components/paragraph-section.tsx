@@ -1,4 +1,4 @@
-import {  Section } from "@/types/types";
+import { Section } from "@/types/types";
 import { Title } from "./title";
 import { UpdateButton } from "../../buttons/update-button";
 
@@ -6,17 +6,17 @@ export function Paragraph({ section, formAction, formActionDelete, isPending }: 
 
     return (
         <form
-            className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
+            className="flex flex-col w-full text-center md:text-left  gap-4  p-4">
             <Title section={section} formActionDelete={formActionDelete} />
             <input
                 type='text'
                 name='title'
                 placeholder="Title"
                 defaultValue={section.paragraph_title || ""}
-                className="text-4xl border rounded-sm p-2">
-            </input>
+                className="text-4xl rounded-sm p-2 focus:border-2 focus:border-blue-500 focus:outline-none"
+            />
             <textarea
-                className="indent-8 min-h-36 border p-4 rounded-sm "
+                className="indent-8 min-h-36 p-4 rounded-sm focus:border-2 focus:border-blue-500 focus:outline-none"
                 name="text"
                 defaultValue={section.text || ""}
             />
