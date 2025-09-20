@@ -22,7 +22,7 @@ export function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<ResponseD
     const unpublishedBlogs = blogs.filter(b => !b.published);
 
     return (
-        <div className="flex flex-col justify-center items-center gap-4 p-4 w-full">
+        <div className="flex flex-col justify-center items-center gap-4  w-full">
             {publishedBlogs.length > 0 && (
                 <div className="flex flex-col items-center w-full gap-4">
                     <h2 className="text-2xl">Published Blogs</h2>
@@ -36,7 +36,7 @@ export function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<ResponseD
             {unpublishedBlogs.length > 0 && (
                 <div className="flex flex-col items-center w-full gap-4">
                     <h2 className="text-2xl">Unpublished Drafts</h2>
-                    <div className="flex flex-wrap gap-4 w-full justify-start">
+                     <div className={`flex flex-wrap gap-4 w-full ${unpublishedBlogs.length === 1 ? 'justify-center' : 'justify-start'}`}>
                         {unpublishedBlogs.map((blog: BlogData) => (
                             <BlogCard key={blog.id} blog={blog} />
                         ))}
@@ -50,7 +50,7 @@ export function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<ResponseD
 
 function BlogCard({ blog }: { blog: BlogData }) {
     return (
-        <div className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] rounded-sm shadow-xl gap-4 pt-2 justify-center items-center flex-grow flex-shrink-0 basis-80 max-w-sm" >
+        <div className="flex flex-col bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] rounded-sm shadow-xl gap-4 justify-center items-center flex-grow flex-shrink-0 basis-80 max-w-sm" >
             <h1 className="text-2xl text-center p-2">{blog.title}</h1>
             {blog.image_src &&
                 <Image
