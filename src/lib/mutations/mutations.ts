@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { createBlog, deleteBlogSection, togglePublishBlog, updateSection } from "../actions/blog-action";
 import { revalidatePathAction } from "../actions/revalidatePath-action";
 
@@ -21,7 +21,7 @@ export const useTogglePublishBlog = (blogId: number) => {
 };
 
 
-export const useAddBlog = () => {    
+export const useAddBlog = () => {
     return useMutation({
         mutationFn: (formData: FormData) => {
             return createBlog(formData);
