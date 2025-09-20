@@ -53,7 +53,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
         })
     );
 
-    const debouncedSaveRef = useRef<NodeJS.Timeout>();
+    const debouncedSaveRef = useRef<NodeJS.Timeout | null>(null);
 
     const saveOrder = useCallback((currentSections: Section[]) => {
         const newOrder = currentSections.map((section, index) => ({
