@@ -10,12 +10,9 @@ import BackHomeLink from "../links/back-home-link";
 
 
 export default function ContextController({ sectionsPromise, defaultState = false }: { sectionsPromise: Promise<Section[] | { error: string }>, defaultState?: boolean }) {
-
   const [editBlog, setEditBlog] = useState(defaultState);
-  const data = use(sectionsPromise);
-
   const { data: isAdmin } = useIsAdmin()
-
+  const data = use(sectionsPromise);
   if ('error' in data) return <NoticeDisplay>Error: {data.error}</NoticeDisplay>;
 
   if (!data) return <NoticeDisplay>Loading...</NoticeDisplay>;
@@ -23,11 +20,12 @@ export default function ContextController({ sectionsPromise, defaultState = fals
 
   return (
     <>
+      <BackHomeLink />
       {isAdmin &&
         <Button onClick={() => setEditBlog(!editBlog)} text={`${editBlog ? 'Show Blog' : 'Edit Blog'}`} />
       }
       {editBlog && isAdmin ?
-        <EditBlogComponent blogId={data[0].blog_id} data={data} /> :
+        <EditBlogComponent data={data} /> :
         <BlogComponent data={data} />
       }
       {isAdmin &&
