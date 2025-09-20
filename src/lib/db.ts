@@ -2,13 +2,14 @@ import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdateImag
 import { neon } from '@neondatabase/serverless';
 import { z } from 'zod';
 import { deleteBlob } from './blobs';
+import { auth } from '@/auth';
 
 type UpdateTitleSection = z.infer<typeof schemaUpdateTitleSection>;
 type UpdateImageSection = z.infer<typeof schemaUpdateImageSection>;
 type UpdateParagraphSection = z.infer<typeof schemaUpdateParagraphSection>;
 type UpdateCodeSection = z.infer<typeof schemaUpdateCodeSection>;
 
-export async function togglePublishBlog(blogId: number) {
+export async function togglePublishBlogDB(blogId: number) {    
     const sql = neon(`${process.env.DATABASE_URL}`);
     const results = await sql`
     UPDATE Blog

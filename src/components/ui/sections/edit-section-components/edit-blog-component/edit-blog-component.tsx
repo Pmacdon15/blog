@@ -18,8 +18,7 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
 
     const [sectionState, setSectionState] = useState<SectionState>({});
 
-    const { mutate: mutateTogglePublished } = useTogglePublishBlog(blogId);
-
+    const { mutate: mutateTogglePublished } = useTogglePublishBlog();
     const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection(blogId);
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(blogId);
 
@@ -44,7 +43,7 @@ export default function EditBlogComponent({ blogId, data }: { blogId: number, da
 
     return (
         <div className="flex flex-col w-full lg:w-4/6 sm:w-5/6 gap-4 justify-start min-h-screen items-center mt-4 px-4 pb-4 font-[family-name:var(--font-geist-sans)]">
-            {data[0].published &&
+            {data&&
                 <Button onClick={() => mutateTogglePublished({ blogId })} text={data[0].published ? 'Unpublish this Blog' : 'Publish This Blog'} />
             }
             {data?.map((section: Section) => {

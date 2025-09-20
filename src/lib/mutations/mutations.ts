@@ -1,27 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
+import { togglePublishBlog } from "../actions/blog-action";
+import { revalidatePathAction } from "../actions/revalidatePath-action";
 
-const togglePublishBlog = async (blogId: number) => {
-    const response = await fetch(`/api/blog/${blogId}`, {
-        method: 'PUT',
-    });
-
-    if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(JSON.stringify(errorResponse));
-    }
-
-    return await response.json();
-}
-
-export const useTogglePublishBlog = (blogId: number) => {
-    const queryClient = useQueryClient();
+export const useTogglePublishBlog = () => {
     return useMutation({
-        mutationFn: async ({ blogId }: { blogId: number }) => {
-            return await togglePublishBlog(blogId);
+        mutationFn: ({ blogId }: { blogId: number }) => {
+            return togglePublishBlog(blogId);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['blog', blogId] });
+            revalidatePathAction("/")
+            revalidatePathAction("/blog")
+            revalidatePathAction("/edit-blog")
         },
         onError: (error) => {
             console.error('Mutation error:', error);
@@ -47,8 +37,8 @@ const addBlog = async (formData: FormData) => {
 export const useAddBlog = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn:  (formData: FormData) => {
-            return  addBlog(formData);
+        mutationFn: (formData: FormData) => {
+            return addBlog(formData);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['blogs', false, 1], });

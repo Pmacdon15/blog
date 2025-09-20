@@ -9,7 +9,7 @@ export async function getBlogs({ page = 1, limit = 10 }: { page?: number, limit?
     try {
         const sql = neon(`${process.env.DATABASE_URL}`);
         const offset = (page - 1) * limit;
-        
+
         const query = `
             SELECT 
               B.id, 
@@ -41,7 +41,7 @@ export async function getBlogs({ page = 1, limit = 10 }: { page?: number, limit?
             sql.query(countQuery)
         ]);
 
-        const totalBlogs = Number((countResult as {count: string}[])[0]?.count) || 0;
+        const totalBlogs = Number((countResult as { count: string }[])[0]?.count) || 0;
         const hasMore = totalBlogs > (page * limit);
 
         return { blogs: result as BlogData[], hasMore };
@@ -66,7 +66,7 @@ export async function getAllBlogIds(): Promise<{ blogId: string }[] | { error: s
 export async function getSections(blogId: string): Promise<Section[] | { error: string }> {
     try {
         const sql = neon(`${process.env.DATABASE_URL}`);
-        
+
         const sectionsQuery = `
             SELECT 
                 S.id,
@@ -97,6 +97,36 @@ export async function getSections(blogId: string): Promise<Section[] | { error: 
             WHERE S.blog_id = ${blogId}
             ORDER BY S.id ASC
         `;
+        const result = await sql.query(sectionsQuery);
+        return result as Section[];
+
+    } catch (error) {
+        console.error('Error:', error);
+        return { error: 'Failed to fetch sections' };
+    }
+}
+
+
+export async function togglePublished(blogId: string): Promise<Section[] | { error: string }> {
+    try {
+        const sql = neon(`${process.env.DATABASE_URL}`);
+
+        await sql`
+            WITH new_blog AS (
+            INSERT INTO Blog (published)
+            VALUES (false)
+            RETURNING id
+        ),
+        new_section AS (
+            INSERT INTO Section (blog_id, type)
+            SELECT id, 1 FROM new_blog
+            RETURNING id
+        )
+        INSERT INTO TitleSection (id, title, publish_date)
+        SELECT id, ${title}, CURRENT_DATE
+        FROM new_section;
+        `;
+
         const result = await sql.query(sectionsQuery);
         return result as Section[];
 
