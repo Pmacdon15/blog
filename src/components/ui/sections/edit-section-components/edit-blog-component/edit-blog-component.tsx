@@ -7,7 +7,7 @@ import { Paragraph } from "../paragraph-section";
 import { ImageSection } from "../image-section";
 import { AddSectionForm } from "../../add-section-components/add-section-form/add-section-form";
 import { Button } from "@/components/ui/buttons/button";
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, TouchSensor } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Grip } from 'lucide-react';
@@ -22,7 +22,7 @@ function SortableItem({ id, children }: { id: number, children: React.ReactNode 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        touchAction: 'none'
+
     };
 
     return (
@@ -48,6 +48,13 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
 
     const sensors = useSensors(
         useSensor(PointerSensor),
+        useSensor(TouchSensor, {
+            activationConstraint: {
+                delay: 250,
+                distance: 10,
+                handler: true,
+            },
+        }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
