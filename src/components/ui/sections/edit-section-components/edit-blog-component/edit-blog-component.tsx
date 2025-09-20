@@ -18,8 +18,8 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
 
     const [sectionState, setSectionState] = useState<SectionState>({});
 
-    const { mutate: mutateTogglePublished } = useTogglePublishBlog();
-    const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection();
+    const { mutate: mutateTogglePublished } = useTogglePublishBlog(data[0].blog_id);
+    const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection(data[0].blog_id);
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(data[0].blog_id);
 
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>, sectionId: number) => {
