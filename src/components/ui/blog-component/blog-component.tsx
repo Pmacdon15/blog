@@ -26,13 +26,14 @@ const renderTextWithLinks = (text: string) => {
 };
 
 export default function BlogComponent({ data }: { data: Section[] | undefined }) {
+    console.log("Data (from DAL, should be sorted): ", data)
     return (
         <div className="flex flex-col gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6">
             {data?.map((section) => {
                 switch (section.section_type_id) {
                     case 1:
                         return (
-                            <div key={section.id}>
+                            <div key={section.order_index}>
                                 <h1 className="text-5xl text-center break-words">{section.title_section_title}</h1>
                                 <p className='text-center md:text-start break-words'>Published on {section.publish_date ? new Date(section.publish_date).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'N/A'}</p>
                             </div>
@@ -44,7 +45,7 @@ export default function BlogComponent({ data }: { data: Section[] | undefined })
                                     width: `${section.width}px`,
                                 }}
                                 className={`h-auto`}
-                                key={section.id}
+                                key={section.order_index}
                                 src={section.src || ''}
                                 alt={section.alt || ''}
                                 width={600}
@@ -52,10 +53,10 @@ export default function BlogComponent({ data }: { data: Section[] | undefined })
                             />
                         );
                     case 3:
-                        return <Paragraph key={section.id} section={section} />;
+                        return <Paragraph key={section.order_index} section={section} />;
                     case 4:
                         return (
-                            <div key={section.id} className="w-full">
+                            <div key={section.order_index} className="w-full">
                                 <SyntaxHighlighter
                                     className="min-w-3/6 max-w-fit"
                                     language={section.language || 'text'}

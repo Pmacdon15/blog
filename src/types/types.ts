@@ -1,4 +1,4 @@
-import {  ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 
 // src/types/types.ts
 export interface Section {
@@ -16,6 +16,7 @@ export interface Section {
     language: string | null;
     code: string | null;
     published: boolean | null;
+    order_index: number
 }
 
 export interface FormActionInputDelete {

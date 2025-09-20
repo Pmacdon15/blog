@@ -1,7 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { ResponseData, BlogData, Section } from '@/types/types';
 import { auth } from '@/auth';
-
 export async function getBlogs({ page = 1, limit = 10 }: { page?: number, limit?: number } = {}): Promise<ResponseData | { error: string }> {
     const session = await auth();
     const isAdmin = session?.user?.email === process.env.OWNERS_EMAIL && process.env.OWNERS_EMAIL !== "" && process.env.OWNERS_EMAIL !== undefined;
@@ -64,7 +63,7 @@ export async function getAllBlogIds(): Promise<{ blogId: string }[] | { error: s
 }
 
 export async function getSections(blogId: string): Promise<Section[] | { error: string }> {
-    try {
+        try {
         const sql = neon(`${process.env.DATABASE_URL}`);
 
         const sectionsQuery = `
@@ -72,6 +71,7 @@ export async function getSections(blogId: string): Promise<Section[] | { error: 
                 S.id,
                 S.blog_id,
                 S.type as section_type_id,
+                S.order_index,
                 CASE S.type
                     WHEN 1 THEN 'title'
                     WHEN 2 THEN 'image'
