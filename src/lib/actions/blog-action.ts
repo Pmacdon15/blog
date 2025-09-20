@@ -172,3 +172,25 @@ export async function deleteBlogSection(blogId: number, sectionId: number, secti
         await deleteBlob(result[0].src)
     }
 }
+
+export async function updateBlogOrder({ blogId, newOrder }: { blogId: number, newOrder: { id: number, order_index: number }[] }) {
+    if (await isAdmin() !== true) {
+        throw new Error('Unauthorized');
+    }
+    const sql = neon(`${process.env.DATABASE_URL}`);
+
+    try {
+        await sql.transaction(async (tx) => {
+            for (const section of newOrder) {
+                await tx`
+                    UPDATE Section
+                    SET order_index = ${section.order_index}
+                    WHERE id = ${section.id} AND blog_id = ${blogId};
+                `;
+            }
+        });
+    } catch (error) {
+        console.error('Failed to update blog order:', error);
+        throw new Error('Failed to update blog order');
+    }
+}

@@ -20,6 +20,7 @@ CREATE TABLE Section (
     id SERIAL PRIMARY KEY,
     blog_id INTEGER NOT NULL,
     type INTEGER NOT NULL,
+    order_index INTEGER,
     FOREIGN KEY (blog_id) REFERENCES Blog (id) ON DELETE CASCADE
 );
 
@@ -53,24 +54,24 @@ INSERT INTO Blog (published) VALUES (true);
 
 -- Insert into Section table
 INSERT INTO
-    Section (blog_id, type)
-VALUES (1, 1),
-    (1, 2),
-    (1, 3),
-    (1, 3),
-    (1, 4),
-    (1, 3),
-    (1, 4),
-    (1, 3),
-    (1, 4),
-    (1, 3),
-    (1, 3),
-    (1, 3),
-    (1, 3),
-    (1, 4),
-    (1, 3),
-    (1, 4),
-    (1, 3);
+    Section (blog_id, type, order_index)
+VALUES (1, 1, 0),
+    (1, 2, 1),
+    (1, 3, 2),
+    (1, 3, 3),
+    (1, 4, 4),
+    (1, 3, 5),
+    (1, 4, 6),
+    (1, 3, 7),
+    (1, 4, 8),
+    (1, 3, 9),
+    (1, 3, 10),
+    (1, 3, 11),
+    (1, 3, 12),
+    (1, 4, 13),
+    (1, 3, 14),
+    (1, 4, 15),
+    (1, 3, 16);
 
 -- Insert into TitleSection table
 INSERT INTO

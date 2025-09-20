@@ -5,7 +5,7 @@ import { Title } from "./title";
 import Image from "next/image";
 import { throttle } from '@/lib/utils';
 
-export function ImageSection({ section, formAction, formActionDelete, sectionState, handleImageChange, isPending }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, sectionState: SectionState, handleImageChange: (event: ChangeEvent<HTMLInputElement>, sectionId: number) => void, isPending: boolean }) {
+export function ImageSection({ section, formAction, formActionDelete, sectionState, handleImageChange, isPending, attributes, listeners }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, sectionState: SectionState, handleImageChange: (event: ChangeEvent<HTMLInputElement>, sectionId: number) => void, isPending: boolean, attributes: any, listeners: any }) {
     const [showOldPhoto, setShowOldPhoto] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const { width, setWidth } = useThrottledWidth(containerRef, section.width || 150);
@@ -21,7 +21,7 @@ export function ImageSection({ section, formAction, formActionDelete, sectionSta
             <form
                 className="w-full flex flex-col gap-4 justify-center items-center"
             >
-                <Title section={section} formActionDelete={formActionDelete} />
+                <Title section={section} formActionDelete={formActionDelete} attributes={attributes} listeners={listeners} />
 
                 <div
                     ref={containerRef}

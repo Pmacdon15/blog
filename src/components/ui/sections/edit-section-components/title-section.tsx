@@ -2,11 +2,11 @@ import { Section } from "@/types/types";
 import { Title } from "./title";
 import { UpdateButton } from "../../buttons/update-button";
 
-export function TitleSection({ section, formAction, formActionDelete, isPending }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, isPending: boolean }) {
+export function TitleSection({ section, formAction, formActionDelete, isPending, attributes, listeners }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, isPending: boolean, attributes: any, listeners: any }) {
     return (
         <form
             className="flex flex-col gap-4  p-4 w-full " >
-            <Title section={section} formActionDelete={formActionDelete} />
+            <Title section={section} formActionDelete={formActionDelete} attributes={attributes} listeners={listeners} />
             <input
                 type='text'
                 name='title'
