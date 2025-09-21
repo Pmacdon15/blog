@@ -49,9 +49,8 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(TouchSensor, {
-            activationConstraint: {
-                delay: 250,
-                distance: 20,
+            activationConstraint: {            
+                distance: 100,
                 handler: true,
             },
         }),
