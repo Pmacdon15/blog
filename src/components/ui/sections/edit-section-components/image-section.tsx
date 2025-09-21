@@ -25,7 +25,7 @@ export function ImageSection({ section, formAction, formActionDelete, sectionSta
 
                 <div
                     ref={containerRef}
-                    className="overflow-hidden border rounded-sm p-2 h-auto min-w-36 max-w-[810px] max-h-[810px]"
+                    className="overflow-hidden border rounded-sm p-2 h-auto max-w-[810px] max-h-[810px]"
                     style={{
                         width: `${width}px`, // Controlled by state
                         aspectRatio: "1 / 1",
@@ -37,7 +37,7 @@ export function ImageSection({ section, formAction, formActionDelete, sectionSta
                         alt={section.alt || ""}
                         width={800}
                         height={800}
-                        className="object-contain w-full h-full"
+                        className="object-contain w-5/6 md:w-4/6 h-full"
                     />
                 </div>
                 <input
