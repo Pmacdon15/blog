@@ -10,7 +10,7 @@ import { useAddSection } from "@/lib/mutations/mutations";
 
 export function AddSectionForm({ blogId }: { blogId: number }) {
 
-    const { mutate, isPending, isError } = useAddSection(blogId);
+    const { mutate, isPending, isError } = useAddSection();
 
     const sections = ['Title', 'Image', 'Paragraph', 'Code']
     const [currentSection, setCurrentSection] = useState("Title")

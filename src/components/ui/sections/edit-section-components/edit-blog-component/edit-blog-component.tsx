@@ -46,6 +46,10 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection();
     const { mutate: mutateUpdateBlogOrder } = useUpdateBlogOrder();
 
+    useEffect(() => {
+        setSections(data);
+    }, [data]);
+
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(TouchSensor, {
@@ -118,7 +122,9 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     };
 
     const sectionIds = useMemo(() => sections.map((section) => section.id), [sections]);
-    console.log("sectionIds: ", sectionIds)
+    // console.log("sectionIds: ", sectionIds)
+    console.log("section 0: ", sections[0])
+    console.log(`Published value at render time: ${data[0].published}`);
     if (isError) console.log("Error: ", error?.message)
 
     return (
