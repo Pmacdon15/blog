@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, useMemo, useCallback, useRef, useEffect } from "react";
 import { Section } from "@/types/types";
 import { useDeleteSection, useTogglePublishBlog, useUpdateSection, useUpdateBlogOrder } from "@/lib/mutations/mutations";
+import { useSyncedSections } from "@/lib/hooks/hooks";
 import { Code } from "../code-section";
 import { TitleSection } from "../title-section";
 import { Paragraph } from "../paragraph-section";
@@ -38,11 +39,11 @@ function SortableItem({ id, children }: { id: number, children: React.ReactNode 
 }
 
 export default function EditBlogComponent({ data }: { data: Section[] }) {
-    const [sections, setSections] = useState<Section[]>(data);
+    const [sections, setSections] = useSyncedSections(data);
     const [sectionState, setSectionState] = useState<SectionState>({});
 
     const { mutate: mutateTogglePublished } = useTogglePublishBlog(data[0].blog_id);
-    const { mutate: mutateUpdate, isPending: isPendingUpdate } = useUpdateSection(data[0].blog_id);
+    const { mutate: mutateUpdate, isPending: isPendingUpdate, isError, error } = useUpdateSection(data[0].blog_id);
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(data[0].blog_id);
     const { mutate: mutateUpdateBlogOrder } = useUpdateBlogOrder(data[0].blog_id);
 
@@ -118,7 +119,10 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     };
 
     const sectionIds = useMemo(() => sections.map((section) => section.id), [sections]);
-    console.log("sectionIds: ", sectionIds)
+    // console.log("sectionIds: ", sectionIds)
+    // console.log("section 0: ", sections[0])
+    // console.log(`Published value at render time: ${data[0].published}`);
+    if (isError) console.log("Error: ", error?.message)
 
     return (
         <div className="flex flex-col w-full lg:w-4/6 sm:w-5/6 gap-4 justify-start min-h-screen items-center pb-4 font-[family-name:var(--font-geist-sans)]">
@@ -165,6 +169,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
                     })}
                 </SortableContext>
             </DndContext>
+            {isError && <p className="text-red-600">Error:{error.message}</p>}
             <AddSectionForm blogId={data[0].blog_id} />
         </div>
     );

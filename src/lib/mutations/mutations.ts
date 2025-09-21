@@ -12,7 +12,7 @@ export const useTogglePublishBlog = (blogId: number) => {
             revalidatePathAction("/blog")
             revalidatePathAction("/edit-blog")
             revalidatePathAction(`/blog/${blogId}`)
-            revalidatePathAction(`/edit-blog${blogId}`)
+            revalidatePathAction(`/edit-blog/${blogId}`)
         },
         onError: (error) => {
             console.error('Mutation error:', error);
@@ -47,7 +47,7 @@ export const useAddSection = (blogId: number) => {
             revalidatePathAction("/blog")
             revalidatePathAction("/edit-blog")
             revalidatePathAction(`/blog/${blogId}`)
-            revalidatePathAction(`/edit-blog${blogId}`)
+            revalidatePathAction(`/edit-blog/${blogId}`)
         },
         onError: (error) => {
             console.error('Mutation error:', error);
@@ -58,16 +58,16 @@ export const useAddSection = (blogId: number) => {
 
 export const useUpdateSection = (blogId: number) => {
     return useMutation({
-        mutationFn: async ({ blogId, sectionId, sectionTypeId, formData }: { blogId: number, sectionId: number, sectionTypeId: number, formData: FormData }) => {
-            await updateSection(blogId, sectionTypeId, sectionId, formData);
-            return { blogId }; // Return blogId for use in onSuccess
+        mutationFn: ({ blogId, sectionId, sectionTypeId, formData }: { blogId: number, sectionId: number, sectionTypeId: number, formData: FormData }) => {
+            return updateSection(blogId, sectionTypeId, sectionId, formData);
+
         },
         onSuccess: () => {
             revalidatePathAction("/")
             revalidatePathAction("/blog")
             revalidatePathAction("/edit-blog")
             revalidatePathAction(`/blog/${blogId}`)
-            revalidatePathAction(`/edit-blog${blogId}`)
+            revalidatePathAction(`/edit-blog/${blogId}`)
         },
         onError: (error) => {
             console.error('Mutation error:', error);
@@ -87,7 +87,7 @@ export const useDeleteSection = (blogId: number) => {
             revalidatePathAction("/blog")
             revalidatePathAction("/edit-blog")
             revalidatePathAction(`/blog/${blogId}`)
-            revalidatePathAction(`/edit-blog${blogId}`)
+            revalidatePathAction(`/edit-blog/${blogId}`)
         },
         onError: (error) => {
             console.error('Mutation error:', error);
@@ -113,4 +113,3 @@ export const useUpdateBlogOrder = (blogId: number) => {
         }
     });
 };
-

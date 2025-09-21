@@ -18,7 +18,7 @@ export function AddSectionForm({ blogId }: { blogId: number }) {
     const handleSectionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setCurrentSection(event.target.value);
     };
-   
+
     return (
         <form
             action={(formData: FormData) => mutate({ formData, blogId })}

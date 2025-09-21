@@ -1,5 +1,5 @@
 import ContextController from "@/components/ui/context-controller/context-controller";
-import { getAllBlogIds, getSections } from "@/lib/DAL/blogs-dal";
+import {  getAllBlogIds, getSections } from "@/lib/DAL/blogs-dal";
 import { Suspense } from "react";
 
 export async function generateStaticParams() {
