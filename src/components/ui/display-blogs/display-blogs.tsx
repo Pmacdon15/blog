@@ -22,7 +22,7 @@ export async function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<Res
             {publishedBlogs.length > 0 && (
                 <div className="flex flex-col items-center w-full gap-4">
                     <h2 className="text-2xl">Published Blogs</h2>
-                    <div className={`flex flex-wrap gap-4 w-full ${publishedBlogs.length === 1 ? 'justify-center' : 'justify-start'}`}>
+                    <div className={`flex flex-wrap gap-4 w-full justify-center `}>
                         {publishedBlogs.map((blog: BlogData) => (
                             <BlogCard key={blog.id} blog={blog} />
                         ))}
@@ -32,7 +32,7 @@ export async function DisplayBlogs({ blogsPromise }: { blogsPromise: Promise<Res
             {unpublishedBlogs.length > 0 && (
                 <div className="flex flex-col items-center w-full gap-4">
                     <h2 className="text-2xl">Unpublished Drafts</h2>
-                    <div className={`flex flex-wrap gap-4 w-full ${unpublishedBlogs.length === 1 ? 'justify-center' : 'justify-start'}`}>
+                    <div className={`flex flex-wrap gap-4 w-full justify-center`}>
                         {unpublishedBlogs.map((blog: BlogData) => (
                             <BlogCard key={blog.id} blog={blog} />
                         ))}
