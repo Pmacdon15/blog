@@ -162,14 +162,22 @@ export async function updateSection(blogId: number, sectionTypeId: number, secti
 
 export async function deleteBlogSection(blogId: number, sectionId: number, sectionTypeId: number) {
     const sql = neon(`${process.env.DATABASE_URL}`);
+    let srcToDelete: string | null = null;
+
+    if (sectionTypeId === 2) {
+        const result = await sql`SELECT src FROM ImageSection WHERE id = ${sectionId}`;
+        if (result.length > 0 && result[0].src) {
+            srcToDelete = result[0].src;
+        }
+    }
+
     await sql`
        DELETE FROM Section
        WHERE blog_id = ${blogId} AND id = ${sectionId};
         `;
-    if (sectionTypeId === 2) {
-        const result = await sql`SELECT src FROM ImageSection WHERE id = ${sectionId}
-        `;
-        await deleteBlob(result[0].src)
+
+    if (srcToDelete) {
+        await deleteBlob(srcToDelete);
     }
 }
 
