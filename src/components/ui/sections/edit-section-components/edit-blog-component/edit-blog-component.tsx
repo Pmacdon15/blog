@@ -51,7 +51,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
         useSensor(TouchSensor, {
             activationConstraint: {
                 delay: 250,
-                distance: 10,
+                distance: 20,
                 handler: true,
             },
         }),
