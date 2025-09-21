@@ -49,8 +49,8 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(TouchSensor, {
-            activationConstraint: {            
-                
+            activationConstraint: {
+
                 distance: 100,
                 handler: true,
             },
@@ -118,6 +118,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     };
 
     const sectionIds = useMemo(() => sections.map((section) => section.id), [sections]);
+    console.log("sectionIds: ", sectionIds)
 
     return (
         <div className="flex flex-col w-full lg:w-4/6 sm:w-5/6 gap-4 justify-start min-h-screen items-center pb-4 font-[family-name:var(--font-geist-sans)]">

@@ -5,7 +5,7 @@ import { UpdateButton } from "../../buttons/update-button";
 export function Paragraph({ section, formAction, formActionDelete, isPending }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, isPending: boolean }) {
 
     return (
-        <form
+        <form           
             className="flex flex-col w-full text-center md:text-left  gap-4  p-4">
             <Title formActionDelete={formActionDelete} />
             <input

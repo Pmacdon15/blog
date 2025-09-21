@@ -16,7 +16,7 @@ export default function ContextController({ sectionsPromise, defaultState = fals
   if ('error' in data) return <NoticeDisplay>Error: {data.error}</NoticeDisplay>;
 
   if (!data) return <NoticeDisplay>Loading...</NoticeDisplay>;
-
+  console.log("Data: ", data)
 
   return (
     <>

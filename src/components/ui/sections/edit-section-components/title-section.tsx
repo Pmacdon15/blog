@@ -4,7 +4,7 @@ import { UpdateButton } from "../../buttons/update-button";
 
 export function TitleSection({ section, formAction, formActionDelete, isPending }: { section: Section, formAction: (formData: FormData) => void, formActionDelete: () => void, isPending: boolean }) {
     return (
-        <form
+        <form            
             className="flex flex-col gap-4  p-4 w-full " >
             <Title formActionDelete={formActionDelete} />
             <input

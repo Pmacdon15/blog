@@ -41,10 +41,16 @@ export async function addSection(
         if (sectionTypeName === 'Title') {
             const titleData = data as UpdateTitleSection;
             await sql`
-                WITH new_section AS (
-                INSERT INTO Section (blog_id, type)
-                VALUES (${titleData.blog_id}, 1)
-                RETURNING id
+                WITH next_order_index AS (
+                    SELECT COALESCE(MAX(order_index), -1) + 1 AS next_index
+                    FROM Section
+                    WHERE blog_id = ${titleData.blog_id}
+                ),
+                new_section AS (
+                    INSERT INTO Section (blog_id, type, order_index)
+                    SELECT ${titleData.blog_id}, 1, next_index
+                    FROM next_order_index
+                    RETURNING id
                 )
                 INSERT INTO TitleSection (id, title, publish_date)
                 SELECT id, ${titleData.title}, ${titleData.publish_date}
@@ -53,10 +59,16 @@ export async function addSection(
         } else if (sectionTypeName === 'Image') {
             const imageData = data as UpdateImageSection;
             await sql`
-                WITH new_section AS (
-                INSERT INTO Section (blog_id, type)
-                VALUES (${imageData.blog_id}, 2)
-                RETURNING id
+                WITH next_order_index AS (
+                    SELECT COALESCE(MAX(order_index), -1) + 1 AS next_index
+                    FROM Section
+                    WHERE blog_id = ${imageData.blog_id}
+                ),
+                new_section AS (
+                    INSERT INTO Section (blog_id, type, order_index)
+                    SELECT ${imageData.blog_id}, 2, next_index
+                    FROM next_order_index
+                    RETURNING id
                 )
                 INSERT INTO ImageSection (id, src, alt, width)
                 SELECT id, ${newPhotoUrl}, ${imageData.alt}, ${imageData.width}
@@ -65,10 +77,16 @@ export async function addSection(
         } else if (sectionTypeName === 'Paragraph') {
             const paragraphData = data as UpdateParagraphSection;
             await sql`
-                WITH new_section AS (
-                INSERT INTO Section (blog_id, type)
-                VALUES (${paragraphData.blog_id}, 3)
-                RETURNING id
+                WITH next_order_index AS (
+                    SELECT COALESCE(MAX(order_index), -1) + 1 AS next_index
+                    FROM Section
+                    WHERE blog_id = ${paragraphData.blog_id}
+                ),
+                new_section AS (
+                    INSERT INTO Section (blog_id, type, order_index)
+                    SELECT ${paragraphData.blog_id}, 3, next_index
+                    FROM next_order_index
+                    RETURNING id
                 )
                 INSERT INTO ParagraphSection (id, title, text)
                 SELECT id, ${paragraphData.title}, ${paragraphData.text}
@@ -77,10 +95,16 @@ export async function addSection(
         } else if (sectionTypeName === 'Code') {
             const codeData = data as UpdateCodeSection;
             await sql`
-                WITH new_section AS (
-                INSERT INTO Section (blog_id, type)
-                VALUES (${codeData.blog_id}, 4)
-                RETURNING id
+                WITH next_order_index AS (
+                    SELECT COALESCE(MAX(order_index), -1) + 1 AS next_index
+                    FROM Section
+                    WHERE blog_id = ${codeData.blog_id}
+                ),
+                new_section AS (
+                    INSERT INTO Section (blog_id, type, order_index)
+                    SELECT ${codeData.blog_id}, 4, next_index
+                    FROM next_order_index
+                    RETURNING id
                 )
                 INSERT INTO CodeSection (id, language, code)
                 SELECT id, ${codeData.language}, ${codeData.code}
@@ -92,7 +116,6 @@ export async function addSection(
         throw error;
     }
 }
-
 export async function updateSectionDb(
     data: UpdateTitleSection | UpdateImageSection | UpdateParagraphSection | UpdateCodeSection,
     sectionTypeId: number,

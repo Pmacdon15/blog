@@ -15,8 +15,7 @@ export function ImageSection({ section, formAction, formActionDelete, sectionSta
 
     return (
         <div
-            className="flex flex-col gap-4 justify-center items-center p-4 w-full "
-            key={section.id}
+            className="flex flex-col gap-4 justify-center items-center p-4 w-full "           
         >
             <form
                 className="w-full flex flex-col gap-4 justify-center items-center"
