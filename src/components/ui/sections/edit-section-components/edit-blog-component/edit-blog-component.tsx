@@ -41,7 +41,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     const [sections, setSections] = useState<Section[]>(data);
     const [sectionState, setSectionState] = useState<SectionState>({});
 
-    const { mutate: mutateTogglePublished } = useTogglePublishBlog(data[0].blog_id);
+    const { mutate: mutateTogglePublished } = useTogglePublishBlog();
     const { mutate: mutateUpdate, isPending: isPendingUpdate, isError, error } = useUpdateSection();
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection();
     const { mutate: mutateUpdateBlogOrder } = useUpdateBlogOrder();
