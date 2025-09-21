@@ -18,17 +18,10 @@ export function AddSectionForm({ blogId }: { blogId: number }) {
     const handleSectionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setCurrentSection(event.target.value);
     };
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        mutate({ formData, blogId });
-        event.currentTarget.reset();
-    };
-//TODO : make this an action
+   
     return (
         <form
-            onSubmit={handleSubmit}
+            action={(formData: FormData) => mutate({ formData, blogId })}
             className="flex flex-col gap-4 border p-4 w-full rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] " >
             <h1>Add Section</h1>
             <select
