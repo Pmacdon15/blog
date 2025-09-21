@@ -10,7 +10,7 @@ import { useAddSection } from "@/lib/mutations/mutations";
 
 export function AddSectionForm({ blogId }: { blogId: number }) {
 
-    const { mutate, isPending, isError } = useAddSection();
+    const { mutate, isPending, isError } = useAddSection(blogId);
 
     const sections = ['Title', 'Image', 'Paragraph', 'Code']
     const [currentSection, setCurrentSection] = useState("Title")
@@ -18,7 +18,7 @@ export function AddSectionForm({ blogId }: { blogId: number }) {
     const handleSectionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setCurrentSection(event.target.value);
     };
-   
+
     return (
         <form
             action={(formData: FormData) => mutate({ formData, blogId })}

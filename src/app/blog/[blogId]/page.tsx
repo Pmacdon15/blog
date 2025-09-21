@@ -1,15 +1,15 @@
 import ContextController from "@/components/ui/context-controller/context-controller";
-import { getSections } from "@/lib/DAL/blogs-dal";
+import { getAllBlogIds, getSections } from "@/lib/DAL/blogs-dal";
 import { Suspense } from "react";
 
-// export async function generateStaticParams() {
-//     const blogIds = await getAllBlogIds();
-//     if ('error' in blogIds) {
-//         console.error("Error generating static params:", blogIds.error);
-//         return [];
-//     }
-//     return blogIds;
-// }
+export async function generateStaticParams() {
+    const blogIds = await getAllBlogIds();
+    if ('error' in blogIds) {
+        console.error("Error generating static params:", blogIds.error);
+        return [];
+    }
+    return blogIds;
+}
 
 export default async function BlogPage({
     params,

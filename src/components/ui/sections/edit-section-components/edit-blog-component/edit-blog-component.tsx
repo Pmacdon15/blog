@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, useMemo, useCallback, useRef, useEffect } from "react";
 import { Section } from "@/types/types";
 import { useDeleteSection, useTogglePublishBlog, useUpdateSection, useUpdateBlogOrder } from "@/lib/mutations/mutations";
+import { useSyncedSections } from "@/lib/hooks/hooks";
 import { Code } from "../code-section";
 import { TitleSection } from "../title-section";
 import { Paragraph } from "../paragraph-section";
@@ -38,17 +39,13 @@ function SortableItem({ id, children }: { id: number, children: React.ReactNode 
 }
 
 export default function EditBlogComponent({ data }: { data: Section[] }) {
-    const [sections, setSections] = useState<Section[]>(data);
+    const [sections, setSections] = useSyncedSections(data);
     const [sectionState, setSectionState] = useState<SectionState>({});
 
-    const { mutate: mutateTogglePublished } = useTogglePublishBlog();
-    const { mutate: mutateUpdate, isPending: isPendingUpdate, isError, error } = useUpdateSection();
-    const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection();
-    const { mutate: mutateUpdateBlogOrder } = useUpdateBlogOrder();
-
-    useEffect(() => {
-        setSections(data);
-    }, [data]);
+    const { mutate: mutateTogglePublished } = useTogglePublishBlog(data[0].blog_id);
+    const { mutate: mutateUpdate, isPending: isPendingUpdate, isError, error } = useUpdateSection(data[0].blog_id);
+    const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(data[0].blog_id);
+    const { mutate: mutateUpdateBlogOrder } = useUpdateBlogOrder(data[0].blog_id);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -123,8 +120,8 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
 
     const sectionIds = useMemo(() => sections.map((section) => section.id), [sections]);
     // console.log("sectionIds: ", sectionIds)
-    console.log("section 0: ", sections[0])
-    console.log(`Published value at render time: ${data[0].published}`);
+    // console.log("section 0: ", sections[0])
+    // console.log(`Published value at render time: ${data[0].published}`);
     if (isError) console.log("Error: ", error?.message)
 
     return (
