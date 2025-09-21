@@ -41,7 +41,7 @@ export function ImageSection({ isPending, isError }: {
                     }
                 </div>
                 <input
-                    className="border rounded-sm border-white p-2"
+                    className="border rounded-sm w-5/6 md:w-4/5 border-white p-2"
                     name="new-file"
                     type="file"
                     placeholder="Select new image"
