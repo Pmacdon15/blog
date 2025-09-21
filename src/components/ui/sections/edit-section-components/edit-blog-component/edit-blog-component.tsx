@@ -27,7 +27,7 @@ function SortableItem({ id, children }: { id: number, children: React.ReactNode 
 
     return (
         <div ref={setNodeRef} style={style} className="flex flex-col w-full">
-            <div {...attributes} {...listeners} className="cursor-grab p-2 self-start">
+            <div {...attributes} {...listeners} style={{ touchAction: 'none' }} className="cursor-grab p-2 self-start">
                 <Grip />
             </div>
             <div className="w-full">
@@ -50,6 +50,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
         useSensor(PointerSensor),
         useSensor(TouchSensor, {
             activationConstraint: {            
+                
                 distance: 100,
                 handler: true,
             },
