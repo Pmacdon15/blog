@@ -20,5 +20,17 @@ export async function addNewPhoto(validatedFields: z.infer<typeof schemaUpdateIm
 }
 
 export async function deleteBlob(blobUrl: string) {
-    await del(blobUrl);
+    try {
+        await del(blobUrl);
+    } catch (error) {
+        console.error(`Failed to delete blob: ${blobUrl}`, error);
+    }
+}
+
+export async function deleteBlobs(urls: string[]) {
+    try {
+        await del(urls);
+    } catch (error) {
+        console.error('Failed to delete blobs', error);
+    }
 }

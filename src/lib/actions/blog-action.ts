@@ -1,9 +1,10 @@
 'use server'
-import { dealWithNewPhoto, deleteBlob } from '../blobs';
+import { dealWithNewPhoto, deleteBlob, deleteBlobs } from '../blobs';
 import { schemaUpdateCodeSection, schemaUpdateParagraphSection, schemaUpdateImageSection, schemaUpdateTitleSection } from '@/zod/zod-schema';
 import { addSection as addSectionDB, togglePublishBlogDB, updateSectionDb } from "../db"
 import { isAdmin } from "./auth"
 import { neon } from '@neondatabase/serverless';
+import { revalidatePath } from 'next/cache';
 
 export async function togglePublishBlog(blogId: number) {
     if (await isAdmin() === true) {
@@ -159,7 +160,6 @@ export async function updateSection(blogId: number, sectionTypeId: number, secti
     }
 }
 
-
 export async function deleteBlogSection(blogId: number, sectionId: number, sectionTypeId: number) {
     const sql = neon(`${process.env.DATABASE_URL}`);
     let srcToDelete: string | null = null;
@@ -167,18 +167,51 @@ export async function deleteBlogSection(blogId: number, sectionId: number, secti
     if (sectionTypeId === 2) {
         const result = await sql`SELECT src FROM ImageSection WHERE id = ${sectionId}`;
         if (result.length > 0 && result[0].src) {
-            srcToDelete = result[0].src;
+            const url = result[0].src;
+            if (url.includes('blob.vercel-storage.com')) {
+                srcToDelete = url;
+            }
         }
     }
 
     await sql`
        DELETE FROM Section
        WHERE blog_id = ${blogId} AND id = ${sectionId};
-        `;
+    `;
 
     if (srcToDelete) {
         await deleteBlob(srcToDelete);
     }
+}
+
+export async function deleteBlog(blogId: number) {
+    if (await isAdmin() !== true) {
+        throw new Error('Unauthorized');
+    }
+    const sql = neon(`${process.env.DATABASE_URL}`);
+
+    const imageSections = await sql`
+        SELECT s.id, ims.src
+        FROM Section s
+        JOIN ImageSection ims ON s.id = ims.id
+        WHERE s.blog_id = ${blogId};
+    `;
+
+    if (imageSections.length > 0) {
+        const blobUrls = imageSections
+            .map(img => img.src)
+            .filter((src): src is string => !!src && src.includes('blob.vercel-storage.com'));
+
+        if (blobUrls.length > 0) {
+            await deleteBlobs(blobUrls);
+        }
+    }
+
+    await sql`DELETE FROM Blog WHERE id = ${blogId}`;
+
+    revalidatePath('/');
+    revalidatePath('/blog');
+    revalidatePath('/edit-blog');
 }
 
 export async function updateBlogOrder({ blogId, newOrder }: { blogId: number, newOrder: { id: number, order_index: number }[] }) {

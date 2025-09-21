@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { addSection, createBlog, deleteBlogSection, togglePublishBlog, updateBlogOrder, updateSection } from "../actions/blog-action";
+import { addSection, createBlog, deleteBlog, deleteBlogSection, togglePublishBlog, updateBlogOrder, updateSection } from "../actions/blog-action";
 import { revalidatePathAction } from "../actions/revalidatePath-action";
 
 export const useTogglePublishBlog = (blogId: number) => {
@@ -110,6 +110,15 @@ export const useUpdateBlogOrder = (blogId: number) => {
         },
         onError: (error) => {
             console.error('Mutation error:', error);
+        }
+    });
+};
+
+export const useDeleteBlog = () => {
+    return useMutation({
+        mutationFn: (blogId: number) => deleteBlog(blogId),        
+        onError: (error) => {
+            console.error('Delete blog error:', error);
         }
     });
 };

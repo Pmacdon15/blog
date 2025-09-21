@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, useMemo, useCallback, useRef, useEffect } from "react";
 import { Section } from "@/types/types";
-import { useDeleteSection, useTogglePublishBlog, useUpdateSection, useUpdateBlogOrder } from "@/lib/mutations/mutations";
+import { useDeleteSection, useTogglePublishBlog, useUpdateSection, useUpdateBlogOrder, useDeleteBlog } from "@/lib/mutations/mutations";
 import { useSyncedSections } from "@/lib/hooks/hooks";
 import { Code } from "../code-section";
 import { TitleSection } from "../title-section";
@@ -46,6 +46,13 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
     const { mutate: mutateUpdate, isPending: isPendingUpdate, isError, error } = useUpdateSection(data[0].blog_id);
     const { mutate: mutateDelete, isPending: isPendingDelete } = useDeleteSection(data[0].blog_id);
     const { mutate: mutateUpdateBlogOrder } = useUpdateBlogOrder(data[0].blog_id);
+    const { mutate: mutateDeleteBlog, isPending: isPendingDeleteBlog } = useDeleteBlog();
+
+    const handleDeleteBlog = () => {
+        if (window.confirm('Are you sure you want to delete this entire blog? This action cannot be undone.')) {
+            mutateDeleteBlog(data[0].blog_id);
+        }
+    };
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -129,6 +136,9 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
             {data && (
                 <div className="flex gap-4">
                     <Button onClick={() => mutateTogglePublished({ blogId: data[0].blog_id })} text={data[0].published ? 'Unpublish this Blog' : 'Publish This Blog'} />
+                    <button onClick={handleDeleteBlog} disabled={isPendingDeleteBlog} className="bg-red-600 text-white border p-2 rounded-sm mx-auto hover:bg-red-700 hover:scale-110 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        {isPendingDeleteBlog ? 'Deleting...' : 'Delete Blog'}
+                    </button>
                 </div>
             )}
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>

@@ -21,8 +21,6 @@ export function ImageSection({ section, formAction, formActionDelete, sectionSta
             <form
                 className="w-full flex flex-col gap-4 justify-center items-center"
             >
-
-
                 <div
                     ref={containerRef}
                     className="overflow-hidden border rounded-sm p-2 h-auto max-w-[810px] max-h-[810px]"
