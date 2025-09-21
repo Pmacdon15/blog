@@ -37,7 +37,7 @@ export function ImageSection({ section, formAction, formActionDelete, sectionSta
                         alt={section.alt || ""}
                         width={800}
                         height={800}
-                        className="object-contain w-5/6 md:w-4/6 h-full"
+                        className="object-contain w-full h-full"
                     />
                 </div>
                 <input
