@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useMemo, useCallback, useRef, useEffect, useOptimistic, useTransition } from "react";
+import React, { useState, ChangeEvent, useMemo, useCallback, useRef, useEffect, useOptimistic } from "react";
 import { Section } from "@/types/types";
 import { useDeleteSection, useTogglePublishBlog, useUpdateSection, useUpdateBlogOrder, useDeleteBlog } from "@/lib/mutations/mutations";
 import { useSyncedSections } from "@/lib/hooks/hooks";
@@ -41,7 +41,7 @@ function SortableItem({ id, children }: { id: number, children: React.ReactNode 
 export default function EditBlogComponent({ data }: { data: Section[] }) {
     const [sections, setSections] = useSyncedSections(data);
     const [sectionState, setSectionState] = useState<SectionState>({});
-    const [isPending, startTransition] = useTransition();
+    
     const [optimisticSections, addOptimisticSection] = useOptimistic(
         sections,
         (state: Section[], newSection: Section) => [...state, newSection]

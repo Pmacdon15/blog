@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { addSection, createBlog, deleteBlog, deleteBlogSection, togglePublishBlog, updateBlogOrder, updateSection } from "../actions/blog-action";
 import { revalidatePathAction } from "../actions/revalidatePath-action";
-import { Section } from "@/types/types";
 
 export const useTogglePublishBlog = (blogId: number) => {
     return useMutation({

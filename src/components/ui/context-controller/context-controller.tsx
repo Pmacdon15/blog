@@ -9,14 +9,15 @@ import { useIsAdmin } from "@/lib/hooks/hooks";
 import BackHomeLink from "../links/back-home-link";
 
 
-export default function ContextController({ sections, defaultState = false }: { sections: Section[] | { error: string }, defaultState?: boolean }) {
+export default function ContextController({ sectionsPromise, defaultState = false }: { sectionsPromise: Promise<Section[] | { error: string }>, defaultState?: boolean }) {
   const [editBlog, setEditBlog] = useState(defaultState);
   const { data: isAdmin } = useIsAdmin()
-  const data = sections;
+  const data = use(sectionsPromise);
   if ('error' in data) return <NoticeDisplay>Error: {data.error}</NoticeDisplay>;
 
   if (!data) return <NoticeDisplay>Loading...</NoticeDisplay>;
   
+
   return (
     <>
       <BackHomeLink />
