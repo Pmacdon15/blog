@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { addSection, createBlog, deleteBlog, deleteBlogSection, togglePublishBlog, updateBlogOrder, updateSection } from "../actions/blog-action";
 import { revalidatePathAction } from "../actions/revalidatePath-action";
+import { Section } from "@/types/types";
 
 export const useTogglePublishBlog = (blogId: number) => {
     return useMutation({
@@ -38,11 +39,37 @@ export const useAddBlog = () => {
 };
 
 export const useAddSection = (blogId: number) => {
+    let tempIdCounter = -1;
     return useMutation({
-        mutationFn: ({ formData, blogId }: { formData: FormData, blogId: number }) => {
+        mutationFn: ({ formData, blogId }: { formData: FormData, blogId: number, addOptimisticSection: (action: Section) => void }) => {
             return addSection(blogId, formData);
         },
-        onSuccess: () => {
+        onMutate: async ({ formData, addOptimisticSection }) => {
+            const sectionType = formData.get('section-type') as string;
+            const newSection: Partial<Section> = {
+                id: tempIdCounter--,
+                blog_id: blogId,
+                order_index: 0, // This will be updated on the server
+            };
+
+            if (sectionType === 'Title') {
+                newSection.section_type_id = 1;
+                newSection.content = formData.get('title') as string;
+            } else if (sectionType === 'Image') {
+                newSection.section_type_id = 2;
+                newSection.image_url = '' // Placeholder, will be updated on the server
+            } else if (sectionType === 'Paragraph') {
+                newSection.section_type_id = 3;
+                newSection.content = formData.get('paragraph') as string;
+            } else if (sectionType === 'Code') {
+                newSection.section_type_id = 4;
+                newSection.content = formData.get('code') as string;
+            }
+
+            addOptimisticSection(newSection as Section);
+        },
+        onSuccess: (newRealSection: Section, { addOptimisticSection, blogId }) => {
+            // This revalidation will fetch the latest data from the server
             revalidatePathAction("/")
             revalidatePathAction("/blog")
             revalidatePathAction("/edit-blog")

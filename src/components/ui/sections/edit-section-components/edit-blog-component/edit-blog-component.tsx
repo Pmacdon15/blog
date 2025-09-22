@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useMemo, useCallback, useRef, useEffect } from "react";
+import React, { useState, ChangeEvent, useMemo, useCallback, useRef, useEffect, useOptimistic, useTransition } from "react";
 import { Section } from "@/types/types";
 import { useDeleteSection, useTogglePublishBlog, useUpdateSection, useUpdateBlogOrder, useDeleteBlog } from "@/lib/mutations/mutations";
 import { useSyncedSections } from "@/lib/hooks/hooks";
@@ -41,6 +41,11 @@ function SortableItem({ id, children }: { id: number, children: React.ReactNode 
 export default function EditBlogComponent({ data }: { data: Section[] }) {
     const [sections, setSections] = useSyncedSections(data);
     const [sectionState, setSectionState] = useState<SectionState>({});
+    const [isPending, startTransition] = useTransition();
+    const [optimisticSections, addOptimisticSection] = useOptimistic(
+        sections,
+        (state: Section[], newSection: Section) => [...state, newSection]
+    );
 
     const { mutate: mutateTogglePublished } = useTogglePublishBlog(data[0].blog_id);
     const { mutate: mutateUpdate, isPending: isPendingUpdate, isError, error } = useUpdateSection(data[0].blog_id);
@@ -125,7 +130,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
         }
     };
 
-    const sectionIds = useMemo(() => sections.map((section) => section.id), [sections]);
+    const sectionIds = useMemo(() => optimisticSections.map((section) => section.id), [optimisticSections]);
     // console.log("sectionIds: ", sectionIds)
     // console.log("section 0: ", sections[0])
     // console.log(`Published value at render time: ${data[0].published}`);
@@ -143,7 +148,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
             )}
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                 <SortableContext items={sectionIds}>
-                    {sections.map((section: Section) => {
+                    {optimisticSections.map((section: Section) => {
                         const formActionDelete = () => mutateDelete({ sectionId: section.id, sectionTypeId: section.section_type_id, blogId: data[0].blog_id });
                         let sectionComponent;
                         switch (section.section_type_id) {
@@ -180,7 +185,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
                 </SortableContext>
             </DndContext>
             {isError && <p className="text-red-600">Error:{error.message}</p>}
-            <AddSectionForm blogId={data[0].blog_id} />
+            <AddSectionForm blogId={data[0].blog_id} addOptimisticSection={addOptimisticSection} setSections={setSections} />
         </div>
     );
 }
