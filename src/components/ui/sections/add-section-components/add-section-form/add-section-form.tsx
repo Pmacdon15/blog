@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react"
+import { useState } from "react"
 import { TitleSection } from "../title-section"
 import ParagraphSection from "../paragraph-section";
 import CodeSection from "../code-section";
@@ -6,12 +6,12 @@ import { ImageSection } from "../image-section";
 import { useAddSection } from "@/lib/mutations/mutations";
 import { Section } from "@/types/types";
 
-export function AddSectionForm({ blogId, addOptimisticSection, setSections }: { blogId: number, addOptimisticSection: (action: Section) => void, setSections: Dispatch<SetStateAction<Section[]>> }) {
+export function AddSectionForm({ blogId, addOptimisticSection, hasTitleSection = true }: { blogId: number, addOptimisticSection: (action: Section) => void, hasTitleSection?: boolean }) {
 
     const { mutate, isPending, isError } = useAddSection(blogId);
 
     const sections = ['Title', 'Image', 'Paragraph', 'Code']
-    const [currentSection, setCurrentSection] = useState("Title")
+    const [currentSection, setCurrentSection] = useState("")
 
     const handleSectionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setCurrentSection(event.target.value);
@@ -33,9 +33,9 @@ export function AddSectionForm({ blogId, addOptimisticSection, setSections }: { 
             newSection.title_section_title = formData.get('title') as string;
         } else if (sectionType === 'Image') {
             newSection.section_type_id = 2;
-            newSection.src = '' // Placeholder, will be updated on the server
+            newSection.src = formData.get('src') as string; // Get actual src from form
             newSection.alt = formData.get('alt') as string;
-            newSection.width = 0; // Placeholder, will be updated on the server
+            newSection.width = parseInt(formData.get('width') as string); // Get actual width from form
         } else if (sectionType === 'Paragraph') {
             newSection.section_type_id = 3;
             newSection.text = formData.get('paragraph') as string;
@@ -58,11 +58,11 @@ export function AddSectionForm({ blogId, addOptimisticSection, setSections }: { 
                 name="section-type"
                 className="text-center border rounded-sm bg-[var(--secondary)] text-white p-2"
                 value={currentSection}
-                onChange={handleSectionChange}
+                onChange={handleSectionChange }
             >
                 <option value="">Select an option</option>
                 {sections.map((section, index) => (
-                    <option key={index} value={section}>{section}</option>
+                    <option key={index} value={section} disabled={section === 'Title' && hasTitleSection}>{section}</option>
                 ))}
             </select>
             {currentSection === "Title" &&

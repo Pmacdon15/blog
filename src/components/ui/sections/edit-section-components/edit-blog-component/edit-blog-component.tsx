@@ -185,7 +185,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
                 </SortableContext>
             </DndContext>
             {isError && <p className="text-red-600">Error:{error.message}</p>}
-            <AddSectionForm blogId={data[0].blog_id} addOptimisticSection={addOptimisticSection} setSections={setSections} />
+            <AddSectionForm blogId={data[0].blog_id} addOptimisticSection={addOptimisticSection}  />
         </div>
     );
 }
