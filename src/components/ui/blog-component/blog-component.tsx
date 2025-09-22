@@ -16,7 +16,7 @@ const renderTextWithLinks = (text: string) => {
             const linkText = part;
             const linkUrl = parts[index + 1];
             return (
-                <Link key={index} href={linkUrl} className="underline">
+                <Link key={index} href={linkUrl as __next_route_internal_types__.RouteImpl<string>} className="underline">
                     {linkText}
                 </Link>
             );
