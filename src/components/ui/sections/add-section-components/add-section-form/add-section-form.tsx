@@ -23,24 +23,30 @@ export function AddSectionForm({ blogId, addOptimisticSection, setSections }: { 
             id: Date.now(), // Temporary ID
             blog_id: blogId,
             order_index: 0, // This will be updated on the server
+            section_type: sectionType.toLowerCase() as 'title' | 'image' | 'paragraph' | 'code',
+            publish_date: null,
+            published: false,
         };
 
         if (sectionType === 'Title') {
             newSection.section_type_id = 1;
-            newSection.content = formData.get('title') as string;
+            newSection.title_section_title = formData.get('title') as string;
         } else if (sectionType === 'Image') {
             newSection.section_type_id = 2;
-            newSection.image_url = '' // Placeholder, will be updated on the server
+            newSection.src = '' // Placeholder, will be updated on the server
+            newSection.alt = formData.get('alt') as string;
+            newSection.width = 0; // Placeholder, will be updated on the server
         } else if (sectionType === 'Paragraph') {
             newSection.section_type_id = 3;
-            newSection.content = formData.get('paragraph') as string;
+            newSection.text = formData.get('paragraph') as string;
         } else if (sectionType === 'Code') {
             newSection.section_type_id = 4;
-            newSection.content = formData.get('code') as string;
+            newSection.code = formData.get('code') as string;
+            newSection.language = formData.get('language') as string;
         }
 
         addOptimisticSection(newSection as Section);
-        mutate({ formData, blogId, addOptimisticSection, setSections });
+        mutate({ formData, blogId });
     }
 
     return (

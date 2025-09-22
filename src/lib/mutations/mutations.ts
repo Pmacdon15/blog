@@ -39,37 +39,11 @@ export const useAddBlog = () => {
 };
 
 export const useAddSection = (blogId: number) => {
-    let tempIdCounter = -1;
     return useMutation({
-        mutationFn: ({ formData, blogId }: { formData: FormData, blogId: number, addOptimisticSection: (action: Section) => void }) => {
+        mutationFn: ({ formData, blogId }: { formData: FormData, blogId: number }) => {
             return addSection(blogId, formData);
         },
-        onMutate: async ({ formData, addOptimisticSection }) => {
-            const sectionType = formData.get('section-type') as string;
-            const newSection: Partial<Section> = {
-                id: tempIdCounter--,
-                blog_id: blogId,
-                order_index: 0, // This will be updated on the server
-            };
-
-            if (sectionType === 'Title') {
-                newSection.section_type_id = 1;
-                newSection.content = formData.get('title') as string;
-            } else if (sectionType === 'Image') {
-                newSection.section_type_id = 2;
-                newSection.image_url = '' // Placeholder, will be updated on the server
-            } else if (sectionType === 'Paragraph') {
-                newSection.section_type_id = 3;
-                newSection.content = formData.get('paragraph') as string;
-            } else if (sectionType === 'Code') {
-                newSection.section_type_id = 4;
-                newSection.content = formData.get('code') as string;
-            }
-
-            addOptimisticSection(newSection as Section);
-        },
-        onSuccess: (newRealSection: Section, { addOptimisticSection, blogId }) => {
-            // This revalidation will fetch the latest data from the server
+        onSuccess: () => {
             revalidatePathAction("/")
             revalidatePathAction("/blog")
             revalidatePathAction("/edit-blog")
