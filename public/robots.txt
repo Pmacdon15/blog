@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.blog.patmac.ca
+
+# Sitemaps
+Sitemap: https://www.blog.patmac.ca/sitemap.xml
