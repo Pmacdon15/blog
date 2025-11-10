@@ -1,87 +1,119 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Section } from '@/types/types';
+import Image from 'next/image'
+import Link from 'next/link'
+import React from 'react'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import type { Section } from '@/types/types'
 
 const renderTextWithLinks = (text: string) => {
-    const linkRegex = /\[(.*?)\]\((.*?)\)/g;
-    const parts = text.split(linkRegex);
+	const linkRegex = /\[(.*?)\]\((.*?)\)/g
+	const parts = text.split(linkRegex)
 
-    return parts.map((part, index) => {
-        if (index % 3 === 0) {
-            return <React.Fragment key={index}>{part}</React.Fragment>;
-        } else if (index % 3 === 1) {
-            const linkText = part;
-            const linkUrl = parts[index + 1];
-            return (
-                <Link key={index} href={linkUrl as __next_route_internal_types__.RouteImpl<string>} className="underline">
-                    {linkText}
-                </Link>
-            );
-        }
-        return null;
-    });
-};
+	return parts.map((part, index) => {
+		if (index % 3 === 0) {
+			return <React.Fragment key={index}>{part}</React.Fragment>
+		} else if (index % 3 === 1) {
+			const linkText = part
+			const linkUrl = parts[index + 1]
+			return (
+				<Link
+					className="underline"
+					href={
+						linkUrl as __next_route_internal_types__.RouteImpl<string>
+					}
+					key={index}
+				>
+					{linkText}
+				</Link>
+			)
+		}
+		return null
+	})
+}
 
-export default function BlogComponent({ data }: { data: Section[] | undefined }) {
-    return (
-        <div className="flex flex-col gap-4 p-4 justify-center items-center w-full  lg:w-4/6 sm:w-5/6">
-            {data?.map((section) => {
-                switch (section.section_type_id) {
-                    case 1:
-                        return (
-                            <div key={section.order_index}>
-                                <h1 className="text-5xl text-center break-words">{section.title_section_title}</h1>
-                                <p className='text-center md:text-start break-words'>Published on {section.publish_date ? new Date(section.publish_date).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'N/A'}</p>
-                            </div>
-                        );
-                    case 2:
-                        return (
-                            <Image
-                                style={{
-                                    width: `${section.width}px`,
-                                }}
-                                className={`h-auto`}
-                                key={section.order_index}
-                                src={section.src || ''}
-                                alt={section.alt || ''}
-                                width={600}
-                                height={600}
-                            />
-                        );
-                    case 3:
-                        return <Paragraph key={section.order_index} section={section} />;
-                    case 4:
-                        return (
-                            <div key={section.order_index} className="w-full">
-                                <SyntaxHighlighter
-                                    className="min-w-3/6 max-w-fit"
-                                    language={section.language || 'text'}
-                                    style={nightOwl}
-                                    showLineNumbers
-                                >
-                                    {section.code || ''}
-                                </SyntaxHighlighter>
-                            </div>
-                        );
-                    default:
-                        return null;
-                }
-            })}
-        </div>
-    );
+export default function BlogComponent({
+	data,
+}: {
+	data: Section[] | undefined
+}) {
+	return (
+		<div className="flex w-full flex-col items-center justify-center gap-4 p-4 sm:w-5/6 lg:w-4/6">
+			{data?.map((section) => {
+				switch (section.section_type_id) {
+					case 1:
+						return (
+							<div key={section.order_index}>
+								<h1 className="break-words text-center text-5xl">
+									{section.title_section_title}
+								</h1>
+								<p className="break-words text-center md:text-start">
+									Published on{' '}
+									{section.publish_date
+										? new Date(
+												section.publish_date,
+											).toLocaleDateString('en-US', {
+												year: 'numeric',
+												month: '2-digit',
+												day: '2-digit',
+											})
+										: 'N/A'}
+								</p>
+							</div>
+						)
+					case 2:
+						return (
+							<Image
+								alt={section.alt || ''}
+								className={`h-auto`}
+								height={600}
+								key={section.order_index}
+								src={section.src || ''}
+								style={{
+									width: `${section.width}px`,
+								}}
+								width={600}
+							/>
+						)
+					case 3:
+						return (
+							<Paragraph
+								key={section.order_index}
+								section={section}
+							/>
+						)
+					case 4:
+						return (
+							<div className="w-full" key={section.order_index}>
+								<SyntaxHighlighter
+									className="min-w-3/6 max-w-fit"
+									language={section.language || 'text'}
+									showLineNumbers
+									style={nightOwl}
+								>
+									{section.code || ''}
+								</SyntaxHighlighter>
+							</div>
+						)
+					default:
+						return null
+				}
+			})}
+		</div>
+	)
 }
 
 function Paragraph({ section }: { section: Section }) {
-    if (section.section_type_id === 3) {
-        return (
-            <div className="w-full text-center md:text-left">
-                {section.paragraph_title && <h1 className="text-4xl my-4">{section.paragraph_title}</h1>}
-                <p className="indent-8 break-words">{renderTextWithLinks(section.text || '')}</p>
-            </div>
-        );
-    }
-    return null;
+	if (section.section_type_id === 3) {
+		return (
+			<div className="w-full text-center md:text-left">
+				{section.paragraph_title && (
+					<h1 className="my-4 text-4xl">{section.paragraph_title}</h1>
+				)}
+				<p className="break-words indent-8">
+					{renderTextWithLinks(section.text || '')}
+				</p>
+			</div>
+		)
+	}
+	return null
 }

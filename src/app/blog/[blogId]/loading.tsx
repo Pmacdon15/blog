@@ -1,5 +1,3 @@
 export default function Loading() {
-  return (
-    <></>
-  );
+	return null
 }

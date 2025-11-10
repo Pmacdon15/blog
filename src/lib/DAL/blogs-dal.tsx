@@ -1,15 +1,24 @@
-import { neon } from '@neondatabase/serverless';
-import { ResponseData, BlogData, Section } from '@/types/types';
-import { auth } from '@/auth';
-export async function getBlogs({ page = 1, limit = 10 }: { page?: number, limit?: number }): Promise<ResponseData | { error: string }> {
-    const session = await auth();
-    const isAdmin = session?.user?.email === process.env.OWNERS_EMAIL && process.env.OWNERS_EMAIL !== "" && process.env.OWNERS_EMAIL !== undefined;
+import { neon } from '@neondatabase/serverless'
+import { auth } from '@/auth'
+import type { BlogData, ResponseData, Section } from '@/types/types'
+export async function getBlogs({
+	page = 1,
+	limit = 10,
+}: {
+	page?: number
+	limit?: number
+}): Promise<ResponseData | { error: string }> {
+	const session = await auth()
+	const isAdmin =
+		session?.user?.email === process.env.OWNERS_EMAIL &&
+		process.env.OWNERS_EMAIL !== '' &&
+		process.env.OWNERS_EMAIL !== undefined
 
-    try {
-        const sql = neon(`${process.env.DATABASE_URL}`);
-        const offset = (page - 1) * limit;
+	try {
+		const sql = neon(`${process.env.DATABASE_URL}`)
+		const offset = (page - 1) * limit
 
-        const query = `
+		const query = `
             SELECT 
               B.id, 
               B.published, 
@@ -27,46 +36,54 @@ export async function getBlogs({ page = 1, limit = 10 }: { page?: number, limit?
             ORDER BY B.published DESC, TS.publish_date DESC
             LIMIT ${limit}
             OFFSET ${offset}
-        `;
+        `
 
-        const countQuery = `
+		const countQuery = `
             SELECT COUNT(*) as count
             FROM Blog B
             ${isAdmin ? '' : 'WHERE B.published = true'}
-        `;
+        `
 
-        const [result, countResult] = await Promise.all([
-            sql.query(query),
-            sql.query(countQuery)
-        ]);
+		const [result, countResult] = await Promise.all([
+			sql.query(query),
+			sql.query(countQuery),
+		])
 
-        const totalBlogs = Number((countResult as { count: string }[])[0]?.count) || 0;
-        const hasMore = totalBlogs > (page * limit);
+		const totalBlogs =
+			Number((countResult as { count: string }[])[0]?.count) || 0
+		const hasMore = totalBlogs > page * limit
 
-        return { blogs: result as BlogData[], hasMore };
-
-    } catch (error) {
-        console.error('Error:', error);
-        return { error: 'Failed to fetch blogs' };
-    }
+		return { blogs: result as BlogData[], hasMore }
+	} catch (error) {
+		console.error('Error:', error)
+		return { error: 'Failed to fetch blogs' }
+	}
 }
 
-export async function getAllBlogIds(): Promise<{ blogId: string }[] | { error: string }> {
-    try {
-        const sql = neon(`${process.env.DATABASE_URL}`);
-        const result = await sql.query(`SELECT id FROM Blog WHERE published = true`);
-        return (result as { id: number }[]).map(blog => ({ blogId: String(blog.id) }));
-    } catch (error) {
-        console.error('Error fetching all blog IDs:', error);
-        return { error: 'Failed to fetch all blog IDs' };
-    }
+export async function getAllBlogIds(): Promise<
+	{ blogId: string }[] | { error: string }
+> {
+	try {
+		const sql = neon(`${process.env.DATABASE_URL}`)
+		const result = await sql.query(
+			`SELECT id FROM Blog WHERE published = true`,
+		)
+		return (result as { id: number }[]).map((blog) => ({
+			blogId: String(blog.id),
+		}))
+	} catch (error) {
+		console.error('Error fetching all blog IDs:', error)
+		return { error: 'Failed to fetch all blog IDs' }
+	}
 }
 
-export async function getSections(blogId: string): Promise<Section[] | { error: string }> {
-        try {
-        const sql = neon(`${process.env.DATABASE_URL}`);
+export async function getSections(
+	blogId: string,
+): Promise<Section[] | { error: string }> {
+	try {
+		const sql = neon(`${process.env.DATABASE_URL}`)
 
-        const sectionsQuery = `
+		const sectionsQuery = `
             SELECT 
                 S.id,
                 S.blog_id,
@@ -96,13 +113,11 @@ export async function getSections(blogId: string): Promise<Section[] | { error: 
             JOIN Blog B ON S.blog_id = B.id
             WHERE S.blog_id = ${blogId}
             ORDER BY S.order_index ASC
-        `;
-        const result = await sql.query(sectionsQuery);
-        return result as Section[];
-
-    } catch (error) {
-        console.error('Error:', error);
-        return { error: 'Failed to fetch sections' };
-    }
+        `
+		const result = await sql.query(sectionsQuery)
+		return result as Section[]
+	} catch (error) {
+		console.error('Error:', error)
+		return { error: 'Failed to fetch sections' }
+	}
 }
-

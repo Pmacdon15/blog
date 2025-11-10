@@ -1,25 +1,28 @@
-import { UpdateButton } from "../../buttons/update-button";
+import { UpdateButton } from '../../buttons/update-button'
 
-export default function ParagraphSection({ isPending, isError }: {
-    isPending: boolean,
-    isError: boolean
+export default function ParagraphSection({
+	isPending,
+	isError,
+}: {
+	isPending: boolean
+	isError: boolean
 }) {
-    return (
-        <div className="flex flex-col w-full text-center md:text-left  gap-4 border p-4 rounded-sm bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))]">
-            <input
-                type='text'
-                name='title'
-                placeholder="Title"
-                className="text-4xl border rounded-sm p-2">
-            </input>
-            <textarea
-                className="indent-8 min-h-36 border p-4 rounded-sm "
-                name="text"
-                required
-            />
-            <UpdateButton actionString="Add Section" disabled={isPending} />
-            {isPending && <p>Loading...</p>}
-            {isError && <p className="text-red-600">Error adding section </p>}
-        </div>
-    );
-};
+	return (
+		<div className="flex w-full flex-col gap-4 rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] p-4 text-center md:text-left">
+			<input
+				className="rounded-sm border p-2 text-4xl"
+				name="title"
+				placeholder="Title"
+				type="text"
+			/>
+			<textarea
+				className="min-h-36 rounded-sm border p-4 indent-8"
+				name="text"
+				required
+			/>
+			<UpdateButton actionString="Add Section" disabled={isPending} />
+			{isPending && <p>Loading...</p>}
+			{isError && <p className="text-red-600">Error adding section </p>}
+		</div>
+	)
+}

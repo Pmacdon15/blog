@@ -1,11 +1,12 @@
-import Link from "next/link";
+import Link from 'next/link'
 
 export default function BackHomeLink() {
-    return (
-        <Link
-            href="/"
-            className="bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] border p-2 rounded-sm mx-auto hover:bg-black hover:scale-110 transition-transform duration-300"
-        >Back Home
-        </Link>
-    );
+	return (
+		<Link
+			className="mx-auto rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] p-2 transition-transform duration-300 hover:scale-110 hover:bg-black"
+			href="/"
+		>
+			Back Home
+		</Link>
+	)
 }

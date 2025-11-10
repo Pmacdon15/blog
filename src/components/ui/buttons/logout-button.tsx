@@ -1,20 +1,14 @@
-'use client';
+'use client'
 
-import { Button } from "@/components/ui/buttons/button";
-import { useIsAdmin } from "@/lib/hooks/hooks";
-import { signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react'
+import { Button } from '@/components/ui/buttons/button'
+import { useIsAdmin } from '@/lib/hooks/hooks'
 
 export function LogoutButton() {
-  const handleLogout = async () => {
-    await signOut({ redirectTo: '/' });
-  };
+	const handleLogout = async () => {
+		await signOut({ redirectTo: '/' })
+	}
 
-  const { data } = useIsAdmin();
-  return (
-    <>
-      {data &&
-        <Button onClick={handleLogout} text={"Logout"} />
-      }
-    </>
-  );
+	const { data } = useIsAdmin()
+	return <>{data && <Button onClick={handleLogout} text={'Logout'} />}</>
 }
