@@ -5,7 +5,6 @@ import Providers from '@/components/Providers'
 import PageContainer from '@/components/ui/containters/page-container'
 import Header from '@/components/ui/header/Header'
 
-export const experimental_ppr = true
 const geistSans = Geist({
 	variable: '--font-geist-sans',
 	subsets: ['latin'],

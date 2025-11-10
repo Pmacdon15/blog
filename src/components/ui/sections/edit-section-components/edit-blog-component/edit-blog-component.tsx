@@ -239,7 +239,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
 								sectionTypeId: section.section_type_id,
 								blogId: data[0].blog_id,
 							})
-						let sectionComponent: JSX.Element | null = null
+						let sectionComponent: React.ReactNode| null = null
 						switch (section.section_type_id) {
 							case 1:
 								sectionComponent = (

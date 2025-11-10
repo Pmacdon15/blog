@@ -65,9 +65,8 @@ export async function getAllBlogIds(): Promise<
 > {
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
-		const result = await sql.query(
-			`SELECT id FROM Blog WHERE published = true`,
-		)
+		const result = await sql`SELECT id FROM Blog WHERE published = true`
+
 		return (result as { id: number }[]).map((blog) => ({
 			blogId: String(blog.id),
 		}))
@@ -80,10 +79,42 @@ export async function getAllBlogIds(): Promise<
 export async function getSections(
 	blogId: string,
 ): Promise<Section[] | { error: string }> {
+  'use cache'
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
 
-		const sectionsQuery = `
+		// const sectionsQuery = `
+    //         SELECT 
+    //             S.id,
+    //             S.blog_id,
+    //             S.type as section_type_id,
+    //             S.order_index,
+    //             CASE S.type
+    //                 WHEN 1 THEN 'title'
+    //                 WHEN 2 THEN 'image'
+    //                 WHEN 3 THEN 'paragraph'
+    //                 WHEN 4 THEN 'code'
+    //             END as section_type,
+    //             TS.title as title_section_title,
+    //             TS.publish_date,
+    //             I.src,
+    //             I.alt,
+    //             I.width,
+    //             P.title as paragraph_title,
+    //             P.text,
+    //             C.language,
+    //             C.code,
+    //             B.published
+    //         FROM Section S
+    //         LEFT JOIN TitleSection TS ON S.id = TS.id AND S.type = 1
+    //         LEFT JOIN ImageSection I ON S.id = I.id AND S.type = 2
+    //         LEFT JOIN ParagraphSection P ON S.id = P.id AND S.type = 3
+    //         LEFT JOIN CodeSection C ON S.id = C.id AND S.type = 4
+    //         JOIN Blog B ON S.blog_id = B.id
+    //         WHERE S.blog_id = ${blogId}
+    //         ORDER BY S.order_index ASC
+    //     `
+		const result = await sql`
             SELECT 
                 S.id,
                 S.blog_id,
@@ -114,7 +145,6 @@ export async function getSections(
             WHERE S.blog_id = ${blogId}
             ORDER BY S.order_index ASC
         `
-		const result = await sql.query(sectionsQuery)
 		return result as Section[]
 	} catch (error) {
 		console.error('Error:', error)

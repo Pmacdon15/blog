@@ -5,7 +5,7 @@ import PageContainer from '@/components/ui/containters/page-container'
 import GoHomeLink from '@/components/ui/links/go-home-link'
 
 export default function ErrorPage({
-	error: errorProp,
+	errorProp,
 	reset,
 }: {
 	errorProp: Error & { digest?: string }
@@ -21,7 +21,8 @@ export default function ErrorPage({
 			<div className="flex flex-col items-center justify-center gap-4 text-center">
 				<h2 className="font-bold text-4xl">Something went wrong!</h2>
 				<p className="text-lg">
-					We apologize, but an unexpected error occurred.
+					We apologize, but an unexpected error occurred while loading
+					this blog.
 				</p>
 				<button
 					className="mx-auto rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] p-2 transition-transform duration-300 hover:scale-110 hover:bg-black"

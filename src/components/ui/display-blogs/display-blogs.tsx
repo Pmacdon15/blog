@@ -1,15 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { PaginationButtons } from '@/components/ui/pagination-buttons/pagination-buttons'
-import type { BlogData, ResponseData } from '@/types/types'
+import { getBlogs } from '@/lib/DAL/blogs-dal'
+import type { BlogData } from '@/types/types'
 import { NoticeDisplay } from '../text-display/notice'
 
-export async function DisplayBlogs({
-	blogsPromise,
-}: {
-	blogsPromise: Promise<ResponseData | { error: string }>
-}) {
-	const result = await blogsPromise
+export async function DisplayBlogs({ props }: { props: PageProps<'/'> }) {
+	const searchParams = await props.searchParams
+	const page = Number(searchParams.page || 1)
+	
+	const result = await getBlogs({ page })
 
 	if ('error' in result)
 		return <NoticeDisplay>Error: {result.error}</NoticeDisplay>
