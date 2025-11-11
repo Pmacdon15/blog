@@ -8,7 +8,7 @@ import { NoticeDisplay } from '../text-display/notice'
 export async function DisplayBlogs({ props }: { props: PageProps<'/'> }) {
 	const searchParams = await props.searchParams
 	const page = Number(searchParams.page || 1)
-	
+
 	const result = await getBlogs({ page })
 
 	if ('error' in result)

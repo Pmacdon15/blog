@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { use } from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { nightOwl } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import type { Section } from '@/types/types'
@@ -32,10 +32,11 @@ const renderTextWithLinks = (text: string) => {
 }
 
 export default function BlogComponent({
-	data,
+	dataPromise,
 }: {
-	data: Section[] | undefined
+	dataPromise: Promise<Section[]>
 }) {
+	const data = use(dataPromise)
 	return (
 		<div className="flex w-full flex-col items-center justify-center gap-4 p-4 sm:w-5/6 lg:w-4/6">
 			{data?.map((section) => {

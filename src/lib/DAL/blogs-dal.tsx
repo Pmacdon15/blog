@@ -1,7 +1,6 @@
 import { neon } from '@neondatabase/serverless'
 import { auth } from '@/auth'
 import type { BlogData, ResponseData, Section } from '@/types/types'
-import { cacheTag } from 'next/cache'
 export async function getBlogs({
 	page = 1,
 	limit = 10,
@@ -77,14 +76,12 @@ export async function getAllBlogIds(): Promise<
 	}
 }
 
-export async function getSections(
-	blogId: string,
-): Promise<Section[] | { error: string }> {
-  'use cache'
-  // cacheTag('sections')
+export async function getSections(blogId: string): Promise<Section[]> {
+	'use cache'
+	// cacheTag('sections')
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
-// TODO: Make sure cache is invalidated maybe add a tag
+		// TODO: Make sure cache is invalidated maybe add a tag
 		const result = await sql`
             SELECT 
                 S.id,
@@ -119,6 +116,6 @@ export async function getSections(
 		return result as Section[]
 	} catch (error) {
 		console.error('Error:', error)
-		return { error: 'Failed to fetch sections' }
+		throw new Error('Error fetching sections')
 	}
 }
