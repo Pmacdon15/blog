@@ -1,4 +1,6 @@
+'use client'
 import { Activity, useState } from 'react'
+import { Button } from '@/components/ui/buttons/button'
 import { useAddSection } from '@/lib/mutations/mutations'
 import type { Section } from '@/types/types'
 import CodeSection from '../code-section'
@@ -86,17 +88,20 @@ export function AddSectionForm({
 				))}
 			</select>
 			<Activity mode={currentSection === 'Title' ? 'visible' : 'hidden'}>
-				<TitleSection blogId={blogId}isError={isError} isPending={isPending} />
+				<TitleSection isError={isError} isPending={isPending} />
 			</Activity>
 			<Activity mode={currentSection === 'Image' ? 'visible' : 'hidden'}>
-				<ImageSection blogId={blogId} isError={isError} isPending={isPending} />
+				<ImageSection isError={isError} isPending={isPending} />
 			</Activity>
-			<Activity mode={currentSection === 'Paragraph' ? 'visible' : 'hidden'}>
-				<ParagraphSection  blogId={blogId} isError={isError} isPending={isPending} />
+			<Activity
+				mode={currentSection === 'Paragraph' ? 'visible' : 'hidden'}
+			>
+				<ParagraphSection isError={isError} isPending={isPending} />
 			</Activity>
 			<Activity mode={currentSection === 'Code' ? 'visible' : 'hidden'}>
-				<CodeSection blogId={blogId} isError={isError} isPending={isPending} />
-			</Activity>		
+				<CodeSection isError={isError} isPending={isPending} />
+			</Activity>
+			<Button isPending={isPending} text="Submit" type={'submit'} />
 		</form>
 	)
 }

@@ -55,6 +55,7 @@ export async function addSection(blogId: number, formData: FormData) {
 	if ((await isAdmin()) !== true) {
 		throw new Error('Unauthorized')
 	}
+	console.log("test")
 	const sectionTypeName = (formData.get('section-type') as string) ?? ''
 
 	let validatedFields: SafeParseResult

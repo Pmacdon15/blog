@@ -1,11 +1,10 @@
+'use client'
 import { UpdateButton } from '../../buttons/update-button'
 
-export default function CodeSection({
-	blogId,
+export default function CodeSection({	
 	isPending,
 	isError,
-}: {
-	blogId: number
+}: {	
 	isPending: boolean
 	isError: boolean
 }) {
@@ -14,16 +13,13 @@ export default function CodeSection({
 			<input
 				className="rounded-sm border p-2 text-4xl"
 				name="language"
-				placeholder="Language"
-				required
+				placeholder="Language"				
 				type="text"
 			/>
 			<textarea
 				className="min-h-36 rounded-sm border p-4"
-				name="code"
-				required
-			/>
-			<UpdateButton blogId={blogId} sectionId={0} sectionTypeId={4} />
+				name="code"				
+			/>			
 			{isPending && <p>Loading...</p>}
 			{isError && <p className="text-red-600">Error adding section </p>}
 		</div>
