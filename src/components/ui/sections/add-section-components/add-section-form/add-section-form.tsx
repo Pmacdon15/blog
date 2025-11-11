@@ -1,4 +1,6 @@
-import { useState } from 'react'
+'use client'
+import { Activity, useState } from 'react'
+import { Button } from '@/components/ui/buttons/button'
 import { useAddSection } from '@/lib/mutations/mutations'
 import type { Section } from '@/types/types'
 import CodeSection from '../code-section'
@@ -85,19 +87,21 @@ export function AddSectionForm({
 					</option>
 				))}
 			</select>
-			{currentSection === 'Title' && (
+			<Activity mode={currentSection === 'Title' ? 'visible' : 'hidden'}>
 				<TitleSection isError={isError} isPending={isPending} />
-			)}
-			{/* Add other sections here */}
-			{currentSection === 'Image' && (
+			</Activity>
+			<Activity mode={currentSection === 'Image' ? 'visible' : 'hidden'}>
 				<ImageSection isError={isError} isPending={isPending} />
-			)}
-			{currentSection === 'Paragraph' && (
+			</Activity>
+			<Activity
+				mode={currentSection === 'Paragraph' ? 'visible' : 'hidden'}
+			>
 				<ParagraphSection isError={isError} isPending={isPending} />
-			)}
-			{currentSection === 'Code' && (
+			</Activity>
+			<Activity mode={currentSection === 'Code' ? 'visible' : 'hidden'}>
 				<CodeSection isError={isError} isPending={isPending} />
-			)}
+			</Activity>
+			<Button isPending={isPending} text="Submit" type={'submit'} />
 		</form>
 	)
 }

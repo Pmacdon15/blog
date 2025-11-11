@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import {
 	type ChangeEvent,
@@ -13,21 +14,12 @@ import { Title } from './title'
 
 export function ImageSection({
 	section,
-	formAction,
-	formActionDelete,
 	sectionState,
-	handleImageChange,
-	isPending,
+	setSectionState,
 }: {
 	section: Section
-	formAction: (formData: FormData) => void
-	formActionDelete: () => void
 	sectionState: SectionState
-	handleImageChange: (
-		event: ChangeEvent<HTMLInputElement>,
-		sectionId: number,
-	) => void
-	isPending: boolean
+	setSectionState: React.Dispatch<React.SetStateAction<SectionState>>
 }) {
 	const [showOldPhoto, setShowOldPhoto] = useState(true)
 	const containerRef = useRef<HTMLDivElement>(null)
@@ -42,9 +34,32 @@ export function ImageSection({
 			? sectionState[section.id]
 			: section.src || '/placeholder.jpg'
 
+	const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0]
+		if (file) {
+			const reader = new FileReader()
+			reader.onloadend = () => {
+				setSectionState((prevState: SectionState) => ({
+					...prevState,
+					[section.id]: reader.result as string,
+				}))
+			}
+			reader.readAsDataURL(file)
+		} else {
+			setSectionState((prevState: SectionState) => ({
+				...prevState,
+				[section.id]: null,
+			}))
+		}
+	}
+
 	return (
 		<div className="flex w-full flex-col items-center justify-center gap-4 p-4">
-			<Title formActionDelete={formActionDelete} />
+			<Title
+				blogId={section.blog_id}
+				sectionId={section.id}
+				sectionTypeId={section.section_type_id}
+			/>
 			<form className="flex w-full flex-col items-center justify-center gap-4">
 				<div
 					className="h-auto max-h-[810px] max-w-[810px] overflow-hidden rounded-sm border p-2"
@@ -67,7 +82,7 @@ export function ImageSection({
 					className="w-5/6 rounded-sm border border-white p-2 md:w-4/6"
 					name="new-file"
 					onChange={(e) => {
-						handleImageChange(e, section.id)
+						handleImageChange(e)
 						setShowOldPhoto(false) // Show new photo after upload
 					}}
 					placeholder="Select new image"
@@ -94,9 +109,9 @@ export function ImageSection({
 					value={width}
 				/>
 				<UpdateButton
-					actionString="Update Section"
-					disabled={isPending}
-					formAction={formAction}
+					blogId={section.blog_id}
+					sectionId={section.id}
+					sectionTypeId={section.section_type_id}
 				/>
 			</form>
 			{sectionState[section.id] && (

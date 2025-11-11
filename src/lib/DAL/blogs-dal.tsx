@@ -65,7 +65,7 @@ export async function getAllBlogIds(): Promise<
 > {
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
-		const result = await sql`SELECT id FROM Blog WHERE published = true`
+		const result = await sql`SELECT id FROM Blog`
 
 		return (result as { id: number }[]).map((blog) => ({
 			blogId: String(blog.id),
@@ -81,8 +81,7 @@ export async function getSections(blogId: string): Promise<Section[]> {
 	// cacheTag('sections')
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
-		// TODO: Make sure cache is invalidated maybe add a tag
-		const result = await sql`
+				const result = await sql`
             SELECT 
                 S.id,
                 S.blog_id,

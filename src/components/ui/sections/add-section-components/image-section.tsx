@@ -1,12 +1,11 @@
 import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { throttle } from '@/lib/utils'
-import { UpdateButton } from '../../buttons/update-button'
 
 export function ImageSection({
 	isPending,
 	isError,
-}: {
+}: {	
 	isPending: boolean
 	isError: boolean
 }) {
@@ -54,7 +53,6 @@ export function ImageSection({
 					className="rounded-sm border border-white p-2"
 					name="alt"
 					placeholder="Description"
-					required
 					type="text"
 				/>
 				<input
@@ -69,7 +67,6 @@ export function ImageSection({
 					type="number"
 					value={width}
 				/>
-				<UpdateButton actionString="Add Section" disabled={isPending} />
 				{isPending && <p>Loading...</p>}
 				{isError && (
 					<p className="text-red-600">Error adding section </p>

@@ -1,9 +1,7 @@
-import { UpdateButton } from '../../buttons/update-button'
-
-export function TitleSection({
+export function TitleSection({	
 	isPending,
 	isError,
-}: {
+}: {	
 	isPending: boolean
 	isError: boolean
 }) {
@@ -15,7 +13,7 @@ export function TitleSection({
 				placeholder="Title"
 				type="text"
 			/>
-			<UpdateButton actionString="Add Section" disabled={isPending} />
+
 			{isPending && <p>Loading...</p>}
 			{isError && <p className="text-red-600">Error adding section </p>}
 		</div>

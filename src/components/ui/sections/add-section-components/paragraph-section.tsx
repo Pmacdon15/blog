@@ -1,5 +1,3 @@
-import { UpdateButton } from '../../buttons/update-button'
-
 export default function ParagraphSection({
 	isPending,
 	isError,
@@ -18,9 +16,7 @@ export default function ParagraphSection({
 			<textarea
 				className="min-h-36 rounded-sm border p-4 indent-8"
 				name="text"
-				required
 			/>
-			<UpdateButton actionString="Add Section" disabled={isPending} />
 			{isPending && <p>Loading...</p>}
 			{isError && <p className="text-red-600">Error adding section </p>}
 		</div>
