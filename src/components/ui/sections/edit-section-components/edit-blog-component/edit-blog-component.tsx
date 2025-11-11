@@ -28,12 +28,11 @@ import {
 	useRef,
 	useState,
 } from 'react'
-import { Button } from '@/components/ui/buttons/button'
+import TogglePublished from '@/components/ui/buttons/toggle-published-button'
 import { useSyncedSections } from '@/lib/hooks/hooks'
 import {
 	useDeleteBlog,
 	useDeleteSection,
-	useTogglePublishBlog,
 	useUpdateBlogOrder,
 	useUpdateSection,
 } from '@/lib/mutations/mutations'
@@ -92,9 +91,9 @@ export default function EditBlogComponent({
 		(state: Section[], newSection: Section) => [...state, newSection],
 	)
 
-	const { mutate: mutateTogglePublished } = useTogglePublishBlog(
-		data[0].blog_id,
-	)
+	// const { mutate: mutateTogglePublished } = useTogglePublishBlog(
+	// 	data[0].blog_id,
+	// )
 	const {
 		mutate: mutateUpdate,
 		isPending: isPendingUpdate,
@@ -204,24 +203,16 @@ export default function EditBlogComponent({
 		() => optimisticSections.map((section) => section.id),
 		[optimisticSections],
 	)
-	// console.log("sectionIds: ", sectionIds)
-	// console.log("section 0: ", sections[0])
-	// console.log(`Published value at render time: ${data[0].published}`);
+
 	if (isError) console.log('Error: ', error?.message)
 
 	return (
 		<div className="flex min-h-screen w-full flex-col items-center justify-start gap-4 pb-4 font-[family-name:var(--font-geist-sans)] sm:w-5/6 lg:w-4/6">
 			{data && (
 				<div className="flex gap-4">
-					<Button
-						onClick={() =>
-							mutateTogglePublished({ blogId: data[0].blog_id })
-						}
-						text={
-							data[0].published
-								? 'Unpublish this Blog'
-								: 'Publish This Blog'
-						}
+					<TogglePublished
+						blogId={data[0].blog_id}
+						published={data[0].published || false}
 					/>
 					<button
 						className="mx-auto rounded-sm border bg-red-600 p-2 text-white transition-transform duration-300 hover:scale-110 hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
