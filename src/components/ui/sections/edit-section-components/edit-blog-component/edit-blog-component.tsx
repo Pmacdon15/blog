@@ -28,10 +28,10 @@ import {
 	useRef,
 	useState,
 } from 'react'
+import DeleteBlog from '@/components/ui/buttons/delete-blog-button'
 import TogglePublished from '@/components/ui/buttons/toggle-published-button'
 import { useSyncedSections } from '@/lib/hooks/hooks'
 import {
-	useDeleteBlog,
 	useDeleteSection,
 	useUpdateBlogOrder,
 	useUpdateSection,
@@ -91,9 +91,6 @@ export default function EditBlogComponent({
 		(state: Section[], newSection: Section) => [...state, newSection],
 	)
 
-	// const { mutate: mutateTogglePublished } = useTogglePublishBlog(
-	// 	data[0].blog_id,
-	// )
 	const {
 		mutate: mutateUpdate,
 		isPending: isPendingUpdate,
@@ -105,18 +102,7 @@ export default function EditBlogComponent({
 	const { mutate: mutateUpdateBlogOrder } = useUpdateBlogOrder(
 		data[0].blog_id,
 	)
-	const { mutate: mutateDeleteBlog, isPending: isPendingDeleteBlog } =
-		useDeleteBlog()
-
-	const handleDeleteBlog = () => {
-		if (
-			window.confirm(
-				'Are you sure you want to delete this entire blog? This action cannot be undone.',
-			)
-		) {
-			mutateDeleteBlog(data[0].blog_id)
-		}
-	}
+	
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -214,14 +200,7 @@ export default function EditBlogComponent({
 						blogId={data[0].blog_id}
 						published={data[0].published || false}
 					/>
-					<button
-						className="mx-auto rounded-sm border bg-red-600 p-2 text-white transition-transform duration-300 hover:scale-110 hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
-						disabled={isPendingDeleteBlog}
-						onClick={handleDeleteBlog}
-						type="button"
-					>
-						{isPendingDeleteBlog ? 'Deleting...' : 'Delete Blog'}
-					</button>
+					<DeleteBlog blogId={data[0].blog_id} />
 				</div>
 			)}
 			<DndContext
