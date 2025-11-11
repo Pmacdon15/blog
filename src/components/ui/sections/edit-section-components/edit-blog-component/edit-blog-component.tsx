@@ -1,3 +1,4 @@
+'use client'
 import {
 	closestCenter,
 	DndContext,
@@ -19,6 +20,7 @@ import { Grip } from 'lucide-react'
 import type React from 'react'
 import {
 	type ChangeEvent,
+	use,
 	useCallback,
 	useEffect,
 	useMemo,
@@ -76,7 +78,12 @@ function SortableItem({
 	)
 }
 
-export default function EditBlogComponent({ data }: { data: Section[] }) {
+export default function EditBlogComponent({
+	dataPromise,
+}: {
+	dataPromise: Promise<Section[]>
+}) {
+	const data = use(dataPromise)
 	const [sections, setSections] = useSyncedSections(data)
 	const [sectionState, setSectionState] = useState<SectionState>({})
 
@@ -239,7 +246,7 @@ export default function EditBlogComponent({ data }: { data: Section[] }) {
 								sectionTypeId: section.section_type_id,
 								blogId: data[0].blog_id,
 							})
-						let sectionComponent: React.ReactNode| null = null
+						let sectionComponent: React.ReactNode | null = null
 						switch (section.section_type_id) {
 							case 1:
 								sectionComponent = (
