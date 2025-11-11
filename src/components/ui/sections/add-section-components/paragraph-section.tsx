@@ -1,9 +1,11 @@
 import { UpdateButton } from '../../buttons/update-button'
 
 export default function ParagraphSection({
+	blogId,
 	isPending,
 	isError,
 }: {
+	blogId: number
 	isPending: boolean
 	isError: boolean
 }) {
@@ -20,7 +22,7 @@ export default function ParagraphSection({
 				name="text"
 				required
 			/>
-			<UpdateButton actionString="Add Section" disabled={isPending} />
+			<UpdateButton blogId={blogId} sectionId={0} sectionTypeId={3} />
 			{isPending && <p>Loading...</p>}
 			{isError && <p className="text-red-600">Error adding section </p>}
 		</div>

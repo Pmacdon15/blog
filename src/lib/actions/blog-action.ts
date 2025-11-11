@@ -91,7 +91,7 @@ export async function addSection(blogId: number, formData: FormData) {
 			code: formData.get('code'),
 		})
 	} else {
-		return { error: 'Unsupported section type' }
+		return { error: 'Unsupported section type: ', sectionTypeName }
 	}
 
 	if (!validatedFields?.success) {

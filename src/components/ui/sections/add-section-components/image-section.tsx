@@ -3,10 +3,13 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { throttle } from '@/lib/utils'
 import { UpdateButton } from '../../buttons/update-button'
 
+
 export function ImageSection({
+	blogId,
 	isPending,
 	isError,
 }: {
+	blogId: number
 	isPending: boolean
 	isError: boolean
 }) {
@@ -69,7 +72,7 @@ export function ImageSection({
 					type="number"
 					value={width}
 				/>
-				<UpdateButton actionString="Add Section" disabled={isPending} />
+				<UpdateButton blogId={blogId} sectionId={0} sectionTypeId={2}   />
 				{isPending && <p>Loading...</p>}
 				{isError && (
 					<p className="text-red-600">Error adding section </p>

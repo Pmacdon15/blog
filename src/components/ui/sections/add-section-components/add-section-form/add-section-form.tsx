@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Activity, useState } from 'react'
 import { useAddSection } from '@/lib/mutations/mutations'
 import type { Section } from '@/types/types'
 import CodeSection from '../code-section'
@@ -85,19 +85,18 @@ export function AddSectionForm({
 					</option>
 				))}
 			</select>
-			{currentSection === 'Title' && (
-				<TitleSection isError={isError} isPending={isPending} />
-			)}
-			{/* Add other sections here */}
-			{currentSection === 'Image' && (
-				<ImageSection isError={isError} isPending={isPending} />
-			)}
-			{currentSection === 'Paragraph' && (
-				<ParagraphSection isError={isError} isPending={isPending} />
-			)}
-			{currentSection === 'Code' && (
-				<CodeSection isError={isError} isPending={isPending} />
-			)}
+			<Activity mode={currentSection === 'Title' ? 'visible' : 'hidden'}>
+				<TitleSection blogId={blogId}isError={isError} isPending={isPending} />
+			</Activity>
+			<Activity mode={currentSection === 'Image' ? 'visible' : 'hidden'}>
+				<ImageSection blogId={blogId} isError={isError} isPending={isPending} />
+			</Activity>
+			<Activity mode={currentSection === 'Paragraph' ? 'visible' : 'hidden'}>
+				<ParagraphSection  blogId={blogId} isError={isError} isPending={isPending} />
+			</Activity>
+			<Activity mode={currentSection === 'Code' ? 'visible' : 'hidden'}>
+				<CodeSection blogId={blogId} isError={isError} isPending={isPending} />
+			</Activity>		
 		</form>
 	)
 }

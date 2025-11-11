@@ -2,20 +2,14 @@ import type { Section } from '@/types/types'
 import { UpdateButton } from '../../buttons/update-button'
 import { Title } from './title'
 
-export function Paragraph({
-	section,
-	formAction,
-	formActionDelete,
-	isPending,
-}: {
-	section: Section
-	formAction: (formData: FormData) => void
-	formActionDelete: () => void
-	isPending: boolean
-}) {
+export function Paragraph({ section }: { section: Section }) {
 	return (
 		<div className="p-4">
-			<Title formActionDelete={formActionDelete} />
+			<Title
+				blogId={section.blog_id}
+				sectionId={section.id}
+				sectionTypeId={section.section_type_id}
+			/>
 			<form className="flex w-full flex-col gap-4 text-center md:text-left">
 				<input
 					className="rounded-sm p-2 text-4xl focus:border-2 focus:border-blue-500 focus:outline-none"
@@ -30,9 +24,9 @@ export function Paragraph({
 					name="text"
 				/>
 				<UpdateButton
-					actionString="Update Section"
-					disabled={isPending}
-					formAction={formAction}
+					blogId={section.blog_id}
+					sectionId={section.id}
+					sectionTypeId={section.section_type_id}
 				/>
 			</form>
 		</div>
