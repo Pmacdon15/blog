@@ -19,7 +19,7 @@ export default function BlogPage(props: PageProps<'/blog/[blogId]'>) {
 	)
 
 	return (
-		<Suspense fallback={<div>Loading sections...</div>}>
+		<Suspense fallback={<div>Loading Blog...</div>}>
 			<ContextController
 				child1={<EditBlogComponent dataPromise={sectionsPromise} />}
 				child2={<BlogComponent dataPromise={sectionsPromise} />}
