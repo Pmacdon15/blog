@@ -1,6 +1,7 @@
 import { neon } from '@neondatabase/serverless'
 import { auth } from '@/auth'
 import type { BlogData, ResponseData, Section } from '@/types/types'
+import { cacheTag } from 'next/cache'
 export async function getBlogs({
 	page = 1,
 	limit = 10,
@@ -80,6 +81,7 @@ export async function getSections(
 	blogId: string,
 ): Promise<Section[] | { error: string }> {
   'use cache'
+  // cacheTag('sections')
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
 // TODO: Make sure cache is invalidated maybe add a tag
