@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	cacheComponents: true,
 	typedRoutes: true,
 	images: {
 		remotePatterns: [
@@ -16,9 +17,6 @@ const nextConfig = {
 				pathname: '/**',
 			},
 		],
-	},
-	experimental: {
-		ppr: 'incremental',
 	},
 }
 

@@ -5,7 +5,7 @@ import PageContainer from '@/components/ui/containters/page-container'
 import GoHomeLink from '@/components/ui/links/go-home-link'
 
 export default function ErrorPage({
-	error: errorProp,
+	errorProp,
 	reset,
 }: {
 	errorProp: Error & { digest?: string }

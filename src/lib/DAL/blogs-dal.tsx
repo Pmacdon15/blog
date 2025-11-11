@@ -1,6 +1,7 @@
 import { neon } from '@neondatabase/serverless'
 import { auth } from '@/auth'
 import type { BlogData, ResponseData, Section } from '@/types/types'
+import { cacheTag } from 'next/cache'
 export async function getBlogs({
 	page = 1,
 	limit = 10,
@@ -65,9 +66,8 @@ export async function getAllBlogIds(): Promise<
 > {
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
-		const result = await sql.query(
-			`SELECT id FROM Blog WHERE published = true`,
-		)
+		const result = await sql`SELECT id FROM Blog WHERE published = true`
+
 		return (result as { id: number }[]).map((blog) => ({
 			blogId: String(blog.id),
 		}))
@@ -80,10 +80,12 @@ export async function getAllBlogIds(): Promise<
 export async function getSections(
 	blogId: string,
 ): Promise<Section[] | { error: string }> {
+  'use cache'
+  // cacheTag('sections')
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
-
-		const sectionsQuery = `
+// TODO: Make sure cache is invalidated maybe add a tag
+		const result = await sql`
             SELECT 
                 S.id,
                 S.blog_id,
@@ -114,7 +116,6 @@ export async function getSections(
             WHERE S.blog_id = ${blogId}
             ORDER BY S.order_index ASC
         `
-		const result = await sql.query(sectionsQuery)
 		return result as Section[]
 	} catch (error) {
 		console.error('Error:', error)
