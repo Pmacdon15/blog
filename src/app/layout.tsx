@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
+import { Analytics } from '@vercel/analytics/next'
 import Providers from '@/components/Providers'
 import PageContainer from '@/components/ui/containters/page-container'
 import Header from '@/components/ui/header/Header'
@@ -33,7 +34,10 @@ export default function RootLayout({
 					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 				>
 					<Header />
-					<PageContainer>{children}</PageContainer>
+					<PageContainer>
+						{children}
+						<Analytics />
+					</PageContainer>
 				</body>
 			</html>
 		</Providers>
