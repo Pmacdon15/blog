@@ -16,13 +16,13 @@ import {
 import { isAdmin } from './auth'
 
 export async function togglePublishBlog(blogId: number) {
-	if ((await isAdmin()) === true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		await togglePublishBlogDB(blogId)
 	}
 }
 
 export async function createBlog(formData: FormData) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
 	const title = formData.get('title')
@@ -52,7 +52,7 @@ type SafeParseResult =
 	| ReturnType<(typeof schemaUpdateCodeSection)['safeParse']>
 
 export async function addSection(blogId: number, formData: FormData) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
 	console.log('test')
@@ -125,7 +125,7 @@ export async function updateSection(
 	sectionId: number,
 	formData: FormData,
 ) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
 
@@ -218,7 +218,7 @@ export async function deleteBlogSection(
 }
 
 export async function deleteBlog(blogId: number) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
 	const sql = neon(`${process.env.DATABASE_URL}`)
@@ -257,7 +257,7 @@ export async function updateBlogOrder({
 	blogId: number
 	newOrder: { id: number; order_index: number }[]
 }) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
 	const sql = neon(`${process.env.DATABASE_URL}`)

@@ -9,7 +9,25 @@ export async function getBlogs(): Promise<BlogData[] | { error: string }> {
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
 
-		// const result = await sql`
+		const result = await sql`
+		  SELECT
+		    B.id,
+		    B.published,
+		    S.id AS section_id,
+		    TS.title,
+		    TS.publish_date,
+		    (SELECT src FROM ImageSection WHERE id = (
+		      SELECT id FROM Section WHERE blog_id = B.id AND type = 2 LIMIT 1
+		    )) AS image_src
+		  FROM
+		    Blog B
+		    LEFT JOIN Section S ON B.id = S.blog_id AND S.type = 1
+		    LEFT JOIN TitleSection TS ON S.id = TS.id
+		  WHERE B.published = true
+		  ORDER BY TS.publish_date DESC
+		  LIMIT 4
+		`
+		// 		const result = await sql`
 		//   SELECT
 		//     B.id,
 		//     B.published,
@@ -25,38 +43,18 @@ export async function getBlogs(): Promise<BlogData[] | { error: string }> {
 		//     LEFT JOIN TitleSection TS ON S.id = TS.id
 		//   WHERE B.published = true
 		//   ORDER BY TS.publish_date DESC
-		//   LIMIT 4
+		//   LIMIT 1
 		// `
-		const result = await sql`
-  SELECT 
-    B.id, 
-    B.published, 
-    S.id AS section_id, 
-    TS.title, 
-    TS.publish_date,
-    (SELECT src FROM ImageSection WHERE id = (
-      SELECT id FROM Section WHERE blog_id = B.id AND type = 2 LIMIT 1
-    )) AS image_src
-  FROM 
-    Blog B
-    LEFT JOIN Section S ON B.id = S.blog_id AND S.type = 1
-    LEFT JOIN TitleSection TS ON S.id = TS.id
-  WHERE B.published = true
-  ORDER BY TS.publish_date DESC
-  LIMIT 1
-`
 
-		const blogs = Array(7)
-			.fill(null)
-			.map((_, index) => ({
-				...result[0],
-				id: `${result[0].id}-${index}`,
-			})) as unknown as BlogData[]
+		// const blogs = Array(7)
+		// 	.fill(null)
+		// 	.map((_, index) => ({
+		// 		...result[0],
+		// 		id: `${result[0].id}-${index}`,
+		// 	})) as unknown as BlogData[]
+		// return blogs as BlogData[]
 
-		// return blogs;
-
-		// return result as BlogData[]
-		return blogs as BlogData[]
+		return result as BlogData[]
 	} catch (error) {
 		console.error('Error:', error)
 		return { error: 'Failed to fetch blogs' }

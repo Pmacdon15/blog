@@ -71,7 +71,7 @@ export default function EditBlogComponent({
 	)
 
 	return (
-		<div className="flex min-h-screen w-full flex-col items-center justify-start gap-4 pb-4 font-[family-name:var(--font-geist-sans)] sm:w-5/6 lg:w-4/6">
+		<div className="flex min-h-screen w-full flex-col items-center justify-start gap-8 pb-4 font-[family-name:var(--font-geist-sans)] sm:w-5/6 lg:w-4/6 ">
 			{data && (
 				<div className="flex gap-4">
 					<TogglePublished

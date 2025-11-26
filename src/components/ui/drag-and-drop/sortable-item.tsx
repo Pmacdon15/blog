@@ -19,7 +19,11 @@ const SortableItem = ({ id, children }: SortableItemProps) => {
 	}
 
 	return (
-		<div className="flex w-full flex-col" ref={setNodeRef} style={style}>
+		<div
+			className="flex w-full flex-col rounded-sm border border-muted-foreground px-1"
+			ref={setNodeRef}
+			style={style}
+		>
 			<div
 				{...attributes}
 				{...listeners}
