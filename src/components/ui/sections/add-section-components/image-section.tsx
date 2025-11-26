@@ -5,7 +5,7 @@ import { throttle } from '@/lib/utils'
 export function ImageSection({
 	isPending,
 	isError,
-}: {	
+}: {
 	isPending: boolean
 	isError: boolean
 }) {

@@ -1,7 +1,7 @@
-export function TitleSection({	
+export function TitleSection({
 	isPending,
 	isError,
-}: {	
+}: {
 	isPending: boolean
 	isError: boolean
 }) {

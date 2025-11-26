@@ -1,8 +1,8 @@
 'use client'
 
 import { signOut } from 'next-auth/react'
-import { Button } from '@/components/ui/buttons/button'
 import { useIsAdmin } from '@/lib/hooks/hooks'
+import { Button } from '../button'
 
 export function LogoutButton() {
 	const handleLogout = async () => {
@@ -10,5 +10,5 @@ export function LogoutButton() {
 	}
 
 	const { data } = useIsAdmin()
-	return <>{data && <Button onClick={handleLogout} text={'Logout'} />}</>
+	return <>{data && <Button onClick={handleLogout} >Log out</Button>}</>
 }

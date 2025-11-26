@@ -6,7 +6,11 @@ import { Title } from './title'
 export function TitleSection({ section }: { section: Section }) {
 	return (
 		<div className="p-4">
-			<Title blogId={section.blog_id} sectionId={section.id} sectionTypeId={section.section_type_id} />
+			<Title
+				blogId={section.blog_id}
+				sectionId={section.id}
+				sectionTypeId={section.section_type_id}
+			/>
 			<form className="flex w-full flex-col gap-4">
 				<input
 					className="rounded-sm text-center text-5xl focus:border-2 focus:border-blue-500 focus:outline-none"

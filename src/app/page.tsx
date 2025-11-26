@@ -1,17 +1,18 @@
-import { Suspense } from 'react'
+import AboutComponent from '@/components/ui/about/about-component'
 import AddBlogForm from '@/components/ui/add-blog-form/add-blog-form'
 import { LogoutButton } from '@/components/ui/buttons/logout-button'
 import { DisplayBlogs } from '@/components/ui/display-blogs/display-blogs'
+import { getBlogs } from '@/lib/DAL/blogs-dal'
 
-export default async function Home(props: PageProps<'/'>) {
+export default function Home() {
+	const blogsPromise = getBlogs()
 	return (
 		<>
-			<Suspense
-				fallback={<div className="text-2xl">Loading blogs...</div>}
-			>
-				<DisplayBlogs props={props} />
-			</Suspense>
-			<AddBlogForm />
+			<AboutComponent />
+
+			<DisplayBlogs blogsPromise={blogsPromise} />
+
+			
 			<LogoutButton />
 		</>
 	)
