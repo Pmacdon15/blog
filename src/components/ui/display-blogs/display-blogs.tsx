@@ -36,22 +36,17 @@ export async function DisplayBlogs({
 		// <Container>
 		<>
 			{blogs.length > 0 && (
-				<div className="flex w-full flex-col items-center gap-4">
-					<h2 className="text-2xl">Published Blogs</h2>
-					<div
-						className={`flex w-full flex-wrap justify-center gap-4`}
-					>
-						<BlogCarousel blogCount={blogs?.length}>
-							{blogs.map((blog: BlogData) => (
-								<CarouselItem
-									className="basis-[31%]"
-									key={blog.id}
-								>
-									<BlogCard blog={blog} />
-								</CarouselItem>
-							))}
-						</BlogCarousel>
-					</div>
+				<div className={`flex w-full justify-center gap-4`}>
+					<BlogCarousel blogCount={blogs?.length}>
+						{blogs.map((blog: BlogData) => (
+							<CarouselItem
+								className="basis-[88%] sm:basis-[62%] md:basis-[51%] lg:basis-[31%]"
+								key={blog.id}
+							>
+								<BlogCard blog={blog} />
+							</CarouselItem>
+						))}
+					</BlogCarousel>
 				</div>
 			)}
 		</>
@@ -61,7 +56,7 @@ export async function DisplayBlogs({
 
 function BlogCard({ blog }: { blog: BlogData }) {
 	return (
-		<Card className="w-full max-w-sm">
+		<Card className="relative w-full max-w-sm">
 			<CardHeader>
 				<CardTitle className="mx-auto">{blog.title}</CardTitle>
 				<CardDescription></CardDescription>
@@ -101,8 +96,10 @@ export function BlogCarousel({
 	blogCount?: number
 }) {
 	return (
-		<Carousel className="w-full max-w-4/6">
-			<CarouselContent>{children}</CarouselContent>
+		<Carousel className="mx-auto w-full max-w-full md:w-5/6 md:max-w-5/6 lg:max-w-4/6">
+			<CarouselContent className="justify-center">
+				{children}
+			</CarouselContent>
 			{blogCount && blogCount > 1 && <CarouselPrevious />}
 			{blogCount && blogCount > 1 && <CarouselNext />}
 		</Carousel>

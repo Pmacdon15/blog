@@ -1,9 +1,7 @@
 export default function Container({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="w-4/6 border-2 bg-white p-2">
-			<div className="flex items-center gap-1 bg-muted-foreground p-8">
-				{children}
-			</div>
+		<div className="flex w-full items-center gap-1 rounded-sm border bg-muted-foreground/30 p-8 shadow-2xl backdrop-blur-md md:w-5/6 lg:w-4/6">
+			{children}
 		</div>
 	)
 }

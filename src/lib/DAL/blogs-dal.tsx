@@ -46,15 +46,17 @@ export async function getBlogs(): Promise<BlogData[] | { error: string }> {
   LIMIT 1
 `
 
-const blogs = Array(1).fill(null).map((_, index) => ({
-  ...result[0],
-  id: `${result[0].id}-${index}`,
-})) as unknown as BlogData[];
+		const blogs = Array(7)
+			.fill(null)
+			.map((_, index) => ({
+				...result[0],
+				id: `${result[0].id}-${index}`,
+			})) as unknown as BlogData[]
 
-// return blogs;
+		// return blogs;
 
 		// return result as BlogData[]
-    return blogs as BlogData[];
+		return blogs as BlogData[]
 	} catch (error) {
 		console.error('Error:', error)
 		return { error: 'Failed to fetch blogs' }

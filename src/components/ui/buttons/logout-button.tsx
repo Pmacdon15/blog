@@ -10,5 +10,5 @@ export function LogoutButton() {
 	}
 
 	const { data } = useIsAdmin()
-	return <>{data && <Button onClick={handleLogout} >Log out</Button>}</>
+	return <>{data && <Button onClick={handleLogout}>Log out</Button>}</>
 }
