@@ -44,8 +44,8 @@ export default async function BlogComponent({
 					case 1:
 						return (
 							<div
+								className="mb-4 w-full rounded-lg border border-white/10 bg-white/30 p-4 backdrop-blur-md"
 								key={section.order_index}
-								className="w-full p-4 bg-white/30 backdrop-blur-md rounded-lg border border-white/10 mb-4"
 							>
 								<h1 className="break-words text-center text-5xl">
 									{section.title_section_title}
@@ -67,7 +67,7 @@ export default async function BlogComponent({
 					case 2:
 						return (
 							<div
-								className="w-full p-4 bg-white/30 backdrop-blur-md rounded-lg border border-white/10 mb-4 flex justify-center"
+								className="mb-4 flex w-full justify-center rounded-lg border border-white/10 bg-white/30 p-4 backdrop-blur-md"
 								key={section.order_index}
 							>
 								<Image
@@ -85,7 +85,7 @@ export default async function BlogComponent({
 					case 3:
 						return (
 							<div
-								className="w-full p-4 bg-white/30 backdrop-blur-md rounded-lg border border-white/10 mb-4"
+								className="mb-4 w-full rounded-lg border border-white/10 bg-white/30 p-4 backdrop-blur-md"
 								key={section.order_index}
 							>
 								<Paragraph section={section} />
@@ -94,7 +94,7 @@ export default async function BlogComponent({
 					case 4:
 						return (
 							<div
-								className="w-full p-4 bg-white/30 backdrop-blur-md rounded-lg border border-white/10 mb-4"
+								className="mb-4 w-full rounded-lg border border-white/10 bg-white/30 p-4 backdrop-blur-md"
 								key={section.order_index}
 							>
 								<SyntaxHighlighter

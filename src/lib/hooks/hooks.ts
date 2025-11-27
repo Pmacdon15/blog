@@ -10,10 +10,10 @@ export const useIsAdmin = () => {
 	})
 }
 
-export const useSyncedSections = (
-	initialData: Section[],
-): [Section[], React.Dispatch<React.SetStateAction<Section[]>>] => {
-	const [sections, setSections] = useState<Section[]>(initialData)
+export const useSyncedSections = <T extends Section>(
+	initialData: T[],
+): [T[], React.Dispatch<React.SetStateAction<T[]>>] => {
+	const [sections, setSections] = useState<T[]>(initialData)
 
 	useEffect(() => {
 		setSections(initialData)

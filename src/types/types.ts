@@ -17,6 +17,7 @@ export interface Section {
 	code: string | null
 	published: boolean | null
 	order_index: number
+	new_file_object?: File
 }
 
 export interface FormActionInputDelete {

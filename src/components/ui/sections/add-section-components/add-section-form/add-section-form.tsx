@@ -1,6 +1,13 @@
 'use client'
 import { Activity, useState } from 'react'
-import { Button } from '@/components/ui/buttons/button'
+import { Button } from '@/components/ui/button'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 import { useAddSection } from '@/lib/mutations/mutations'
 import type { Section } from '@/types/types'
 import CodeSection from '../code-section'
@@ -22,10 +29,8 @@ export function AddSectionForm({
 	const sections = ['Title', 'Image', 'Paragraph', 'Code']
 	const [currentSection, setCurrentSection] = useState('')
 
-	const handleSectionChange = (
-		event: React.ChangeEvent<HTMLSelectElement>,
-	) => {
-		setCurrentSection(event.target.value)
+	const handleSectionChange = (value: string) => {
+		setCurrentSection(value)
 	}
 
 	const formAction = async (formData: FormData) => {
@@ -67,26 +72,29 @@ export function AddSectionForm({
 	return (
 		<form
 			action={formAction}
-			className="flex w-full flex-col gap-4 rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] p-4"
+			className="glass-card flex w-full flex-col gap-4 p-4"
 		>
 			<h1>Add Section</h1>
-			<select
-				className="rounded-sm border bg-[var(--secondary)] p-2 text-center text-white"
+			<Select
 				name="section-type"
-				onChange={handleSectionChange}
+				onValueChange={handleSectionChange}
 				value={currentSection}
 			>
-				<option value="">Select an option</option>
-				{sections.map((section, index) => (
-					<option
-						disabled={section === 'Title' && hasTitleSection}
-						key={index}
-						value={section}
-					>
-						{section}
-					</option>
-				))}
-			</select>
+				<SelectTrigger>
+					<SelectValue placeholder="Select an option" />
+				</SelectTrigger>
+				<SelectContent>
+					{sections.map((section, index) => (
+						<SelectItem
+							disabled={section === 'Title' && hasTitleSection}
+							key={index}
+							value={section}
+						>
+							{section}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
 			<Activity mode={currentSection === 'Title' ? 'visible' : 'hidden'}>
 				<TitleSection isError={isError} isPending={isPending} />
 			</Activity>
@@ -101,7 +109,9 @@ export function AddSectionForm({
 			<Activity mode={currentSection === 'Code' ? 'visible' : 'hidden'}>
 				<CodeSection isError={isError} isPending={isPending} />
 			</Activity>
-			<Button isPending={isPending} text="Submit" type={'submit'} />
+			<Button disabled={isPending} type={'submit'}>
+				Submit
+			</Button>
 		</form>
 	)
 }

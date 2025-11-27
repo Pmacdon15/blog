@@ -18,9 +18,13 @@ export function ImageSection({
 	onChange: (sectionId: number, newContent: Partial<Section>) => void
 }) {
 	const containerRef = useRef<HTMLDivElement>(null)
-	const { width } = useThrottledWidth(containerRef, section.width || 150, (newWidth) => {
-        onChange(section.id, { width: newWidth })
-    })
+	const { width } = useThrottledWidth(
+		containerRef,
+		section.width || 150,
+		(newWidth) => {
+			onChange(section.id, { width: newWidth })
+		},
+	)
 	const [preview, setPreview] = useState<string | null>(null)
 
 	const imageSrc = preview || section.src || '/placeholder.jpg'
@@ -69,12 +73,12 @@ export function ImageSection({
 			/>
 			<input
 				className="rounded-sm border border-white p-2"
-				value={section.alt || ''}
-				onChange={(e) => onChange(section.id, { alt: e.target.value })}
 				name="alt"
+				onChange={(e) => onChange(section.id, { alt: e.target.value })}
 				placeholder="Description"
 				required
 				type="text"
+				value={section.alt || ''}
 			/>
 		</div>
 	)
@@ -87,9 +91,12 @@ function useThrottledWidth(
 ) {
 	const [width, setWidth] = useState(initialWidth)
 	const isInitialRender = useRef(true)
-	const throttledOnChange = useCallback(throttle((newWidth: number) => {
-		onChange(newWidth)
-	}, 100), [onChange])
+	const throttledOnChange = useCallback(
+		throttle((newWidth: number) => {
+			onChange(newWidth)
+		}, 100),
+		[],
+	)
 
 	useEffect(() => {
 		if (!containerRef.current) return
@@ -102,7 +109,7 @@ function useThrottledWidth(
 					return
 				}
 				setWidth(newWidth)
-                throttledOnChange(newWidth)
+				throttledOnChange(newWidth)
 			}
 		})
 

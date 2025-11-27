@@ -1,5 +1,4 @@
 'use server'
-import { Session } from 'node:inspector'
 import { auth, signIn, signOut } from '@/auth'
 
 export const loginDiscord = async () => {
@@ -11,12 +10,17 @@ export const logout = async () => {
 }
 
 export const isAdmin = async () => {
-  const session = await auth()
-  return {
-    isAdmin:
-      session?.user?.email === process.env.OWNERS_EMAIL &&
-      process.env.OWNERS_EMAIL !== '' &&
-      process.env.OWNERS_EMAIL !== undefined,
-    isLoggedIn: !!session,
-  }
+	const session = await auth()
+	console.log(
+		session?.user?.email === process.env.OWNERS_EMAIL &&
+			process.env.OWNERS_EMAIL !== '' &&
+			process.env.OWNERS_EMAIL !== undefined,
+	)
+	return {
+		isAdmin:
+			session?.user?.email === process.env.OWNERS_EMAIL &&
+			process.env.OWNERS_EMAIL !== '' &&
+			process.env.OWNERS_EMAIL !== undefined,
+		isLoggedIn: !!session,
+	}
 }

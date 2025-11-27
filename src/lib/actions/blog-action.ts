@@ -110,7 +110,7 @@ export async function addSection(blogId: number, formData: FormData) {
 			newPhotoUrl || '',
 		)
 	} catch (error) {
-		return { error: `Error: ${error}` }
+		return { error: { message: `Error: ${error instanceof Error ? error.message : String(error)}` } }
 	}
 
 	return {
@@ -135,8 +135,8 @@ export async function updateSection(
 		case 1: {
 			const validatedData = schemaUpdateTitleSection.parse({
 				blog_id: blogId,
-				title: data.title,
-				publish_date: new Date(data.publish_date as string),
+				title: (data.title_section_title as string) || '', // Changed from data.title
+				publish_date: new Date((data.publish_date as string) || ''),
 			})
 			await updateSectionDb(validatedData, sectionTypeId, sectionId)
 			break
@@ -149,7 +149,7 @@ export async function updateSection(
 				blog_id: blogId,
 				alt: data.alt,
 				width: Number(data.width),
-				new_file: file.size > 0 ? file : undefined,
+				new_file: file && file.size > 0 ? file : undefined,
 			})
 
 			if (validatedData.new_file) {

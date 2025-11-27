@@ -4,9 +4,8 @@ import { loginDiscord, logout } from '@/lib/actions/auth'
 import { useIsAdmin } from '@/lib/hooks/hooks'
 
 export default function Header() {
-	
 	const { data } = useIsAdmin()
-	const isLoggedIn = data?.isLoggedIn	
+	const isLoggedIn = data?.isLoggedIn
 
 	return (
 		<header className="sticky top-4 z-50 flex w-full items-center justify-center">
