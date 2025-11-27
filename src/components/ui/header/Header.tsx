@@ -1,15 +1,12 @@
 'use client'
-import { signOut } from '@/auth'
-import { loginDiscord } from '@/lib/actions/auth'
+
+import { loginDiscord, logout } from '@/lib/actions/auth'
 import { useIsAdmin } from '@/lib/hooks/hooks'
 
 export default function Header() {
-	const handleLogout = async () => {
-		await signOut({ redirectTo: '/' })
-	}
-
+	
 	const { data } = useIsAdmin()
-	const isLoggedIn = data?.isLoggedIn
+	const isLoggedIn = data?.isLoggedIn	
 
 	return (
 		<header className="sticky top-4 z-50 flex w-full items-center justify-center">
@@ -20,7 +17,7 @@ export default function Header() {
 				{isLoggedIn ? (
 					<button
 						className="rounded-full border border-primary/20 bg-primary/10 px-6 py-2 font-medium text-bg-muted-foreground/30 text-sm transition-all hover:bg-primary/20 hover:shadow-md active:scale-95"
-						onClick={() => handleLogout()}
+						onClick={() => logout()}
 						type="button"
 					>
 						Logout

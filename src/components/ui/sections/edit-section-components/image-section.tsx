@@ -8,138 +8,90 @@ import {
 	useState,
 } from 'react'
 import { throttle } from '@/lib/utils'
-import type { Section, SectionState } from '@/types/types'
-import { UpdateButton } from '../../buttons/update-button'
-import { Title } from './title'
+import type { Section } from '@/types/types'
 
 export function ImageSection({
 	section,
-	sectionState,
-	setSectionState,
+	onChange,
 }: {
 	section: Section
-	sectionState: SectionState
-	setSectionState: React.Dispatch<React.SetStateAction<SectionState>>
+	onChange: (sectionId: number, newContent: Partial<Section>) => void
 }) {
-	const [showOldPhoto, setShowOldPhoto] = useState(true)
 	const containerRef = useRef<HTMLDivElement>(null)
-	const { width, setWidth } = useThrottledWidth(
-		containerRef,
-		section.width || 150,
-	)
+	const { width } = useThrottledWidth(containerRef, section.width || 150, (newWidth) => {
+        onChange(section.id, { width: newWidth })
+    })
+	const [preview, setPreview] = useState<string | null>(null)
 
-	// Image source: new photo if !showOldPhoto and sectionState exists, else old photo
-	const imageSrc =
-		!showOldPhoto && sectionState[section.id]
-			? sectionState[section.id]
-			: section.src || '/placeholder.jpg'
+	const imageSrc = preview || section.src || '/placeholder.jpg'
 
 	const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0]
 		if (file) {
 			const reader = new FileReader()
 			reader.onloadend = () => {
-				setSectionState((prevState: SectionState) => ({
-					...prevState,
-					[section.id]: reader.result as string,
-				}))
+				const result = reader.result as string
+				setPreview(result)
+				onChange(section.id, { src: result })
 			}
 			reader.readAsDataURL(file)
 		} else {
-			setSectionState((prevState: SectionState) => ({
-				...prevState,
-				[section.id]: null,
-			}))
+			setPreview(null)
+			onChange(section.id, { src: null })
 		}
 	}
 
 	return (
 		<div className="flex w-full flex-col items-center justify-center gap-4 p-4">
-			<Title
-				blogId={section.blog_id}
-				sectionId={section.id}
-				sectionTypeId={section.section_type_id}
+			<div
+				className="h-auto max-h-[810px] max-w-[810px] overflow-hidden rounded-sm border p-2"
+				ref={containerRef}
+				style={{
+					width: `${width}px`,
+					aspectRatio: '1 / 1',
+					resize: 'horizontal',
+				}}
+			>
+				<Image
+					alt={section.alt || ''}
+					className="h-full w-full object-contain"
+					height={800}
+					src={imageSrc || ''}
+					width={800}
+				/>
+			</div>
+			<input
+				className="w-5/6 rounded-sm border border-white p-2 md:w-4/6"
+				name="new-file"
+				onChange={handleImageChange}
+				placeholder="Select new image"
+				type="file"
 			/>
-			<form className="flex w-full flex-col items-center justify-center gap-4">
-				<div
-					className="h-auto max-h-[810px] max-w-[810px] overflow-hidden rounded-sm border p-2"
-					ref={containerRef}
-					style={{
-						width: `${width}px`, // Controlled by state
-						aspectRatio: '1 / 1',
-						resize: 'horizontal',
-					}}
-				>
-					<Image
-						alt={section.alt || ''}
-						className="h-full w-full object-contain"
-						height={800}
-						src={imageSrc || ''}
-						width={800}
-					/>
-				</div>
-				<input
-					className="w-5/6 rounded-sm border border-white p-2 md:w-4/6"
-					name="new-file"
-					onChange={(e) => {
-						handleImageChange(e)
-						setShowOldPhoto(false) // Show new photo after upload
-					}}
-					placeholder="Select new image"
-					type="file"
-				/>
-				<input
-					className="rounded-sm border border-white p-2"
-					defaultValue={section.alt || ''}
-					name="alt"
-					placeholder="Description"
-					required
-					type="text"
-				/>
-				<input
-					className="rounded-sm border border-white p-2"
-					hidden
-					min="0"
-					name="width" // Controlled by state
-					onChange={(e) =>
-						setWidth(Math.max(0, Number(e.target.value)))
-					} // Allow input changes
-					placeholder="Width (px)"
-					type="number"
-					value={width}
-				/>
-				<UpdateButton
-					blogId={section.blog_id}
-					sectionId={section.id}
-					sectionTypeId={section.section_type_id}
-				/>
-			</form>
-			{sectionState[section.id] && (
-				<button
-					className="mx-auto rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] p-2 transition-transform duration-300 hover:scale-110 hover:bg-black"
-					onClick={() => setShowOldPhoto(!showOldPhoto)}
-					type="button"
-				>
-					{showOldPhoto ? 'Preview New Photo' : 'Show Old Photo'}
-				</button>
-			)}
+			<input
+				className="rounded-sm border border-white p-2"
+				value={section.alt || ''}
+				onChange={(e) => onChange(section.id, { alt: e.target.value })}
+				name="alt"
+				placeholder="Description"
+				required
+				type="text"
+			/>
 		</div>
 	)
 }
 
-// At the bottom of the page
 function useThrottledWidth(
 	containerRef: React.RefObject<HTMLDivElement | null>,
 	initialWidth: number,
+	onChange: (newWidth: number) => void,
 ) {
 	const [width, setWidth] = useState(initialWidth)
 	const isInitialRender = useRef(true)
-	const throttledSetWidth = useCallback((newWidth: number) => {
-		setWidth(newWidth)
-	}, [])
+	const throttledOnChange = useCallback(throttle((newWidth: number) => {
+		onChange(newWidth)
+	}, 100), [onChange])
 
 	useEffect(() => {
-		const throttled = throttle(throttledSetWidth, 100)
 		if (!containerRef.current) return
 
 		const observer = new ResizeObserver((entries) => {
@@ -149,7 +101,8 @@ function useThrottledWidth(
 					isInitialRender.current = false
 					return
 				}
-				throttled(newWidth)
+				setWidth(newWidth)
+                throttledOnChange(newWidth)
 			}
 		})
 
@@ -158,7 +111,7 @@ function useThrottledWidth(
 		return () => {
 			observer.disconnect()
 		}
-	}, [throttledSetWidth, containerRef])
+	}, [throttledOnChange, containerRef])
 
 	return { width, setWidth }
 }

@@ -11,12 +11,12 @@ export const logout = async () => {
 }
 
 export const isAdmin = async () => {
-	const session = await auth()
-	return {
-		isAdmin:
-			session?.user?.email === process.env.OWNERS_EMAIL &&
-			process.env.OWNERS_EMAIL !== '' &&
-			process.env.OWNERS_EMAIL !== undefined,
-		isLoggedIn: !!Session,
-	}
+  const session = await auth()
+  return {
+    isAdmin:
+      session?.user?.email === process.env.OWNERS_EMAIL &&
+      process.env.OWNERS_EMAIL !== '' &&
+      process.env.OWNERS_EMAIL !== undefined,
+    isLoggedIn: !!session,
+  }
 }
