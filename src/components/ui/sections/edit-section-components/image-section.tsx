@@ -71,7 +71,7 @@ export function ImageSection({
 					width={width}
 				/>
 				<div
-					className="absolute bottom-0 right-0 p-2 cursor-se-resize"
+					className="absolute right-0 bottom-0 cursor-se-resize p-2"
 					onKeyDown={(e) => {
 						if (e.key === 'Enter' || e.key === ' ') {
 							e.preventDefault()

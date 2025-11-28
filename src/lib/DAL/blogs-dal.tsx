@@ -2,7 +2,9 @@ import { neon } from '@neondatabase/serverless'
 import { cacheLife, cacheTag } from 'next/cache'
 import type { BlogData, Section } from '@/types/types'
 
-export async function getBlogs(): Promise<BlogData[] | { error: string }> {
+export async function getBlogs(
+	published: boolean,
+): Promise<BlogData[] | { error: string }> {
 	'use cache'
 	cacheTag('recent-blogs')
 	cacheLife('hours')
@@ -23,11 +25,11 @@ export async function getBlogs(): Promise<BlogData[] | { error: string }> {
 		    Blog B
 		    LEFT JOIN Section S ON B.id = S.blog_id AND S.type = 1
 		    LEFT JOIN TitleSection TS ON S.id = TS.id
-		  WHERE B.published = true
+		  WHERE B.published = ${published}
 		  ORDER BY TS.publish_date DESC
 		  LIMIT 4
 		`
-		// 		const result = await sql`
+		// const result = await sql`
 		//   SELECT
 		//     B.id,
 		//     B.published,
@@ -46,7 +48,7 @@ export async function getBlogs(): Promise<BlogData[] | { error: string }> {
 		//   LIMIT 1
 		// `
 
-		// const blogs = Array(7)
+		// const blogs = Array(10)
 		// 	.fill(null)
 		// 	.map((_, index) => ({
 		// 		...result[0],
