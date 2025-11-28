@@ -1,6 +1,8 @@
 import { neon } from '@neondatabase/serverless'
 import { cacheLife, cacheTag } from 'next/cache'
+import { RedirectType, redirect } from 'next/navigation'
 import type { BlogData, Section } from '@/types/types'
+import { isAdmin } from '../actions/auth'
 
 export async function getBlogs(
 	published: boolean,
@@ -78,13 +80,17 @@ export async function getAllBlogIds(): Promise<
 		return { error: 'Failed to fetch all blog IDs' }
 	}
 }
-//TODO Add published filter
+
 export async function getSections(
 	blogId: string,
 	published?: boolean,
 ): Promise<Section[]> {
 	'use cache'
 	cacheTag(`sections-${blogId}`)
+	if (!published)
+		(await isAdmin()).isAdmin === false &&
+			redirect('/blogs', RedirectType.push)
+
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
 		const result = await sql`

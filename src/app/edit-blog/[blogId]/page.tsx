@@ -5,7 +5,7 @@ import { getSections } from '@/lib/DAL/blogs-dal'
 
 export default function BlogPage(props: PageProps<'/blog/[blogId]'>) {
 	const sectionsPromise = props.params.then((params) =>
-		getSections(params.blogId),
+		getSections(params.blogId, true),
 	)
 
 	return (
