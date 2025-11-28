@@ -100,8 +100,6 @@ const SortableItem = ({
 				sectionTypeId: currentSection.section_type_id,
 				formData,
 			})
-
-		
 		} catch (e) {
 			setError('Failed to save section.')
 			console.error('Save error:', e)
@@ -163,7 +161,7 @@ const SortableItem = ({
 				<Grip />
 			</div>
 			<div className="w-full">{children}</div>
-			{error && <p className="text-red-500 text-center">{error}</p>}
+			{error && <p className="text-center text-red-500">{error}</p>}
 		</div>
 	)
 }

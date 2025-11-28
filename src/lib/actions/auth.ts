@@ -10,7 +10,7 @@ export const logout = async () => {
 }
 
 export const isAdmin = async () => {
-	const session = await auth()	
+	const session = await auth()
 	return {
 		isAdmin:
 			session?.user?.email === process.env.OWNERS_EMAIL &&

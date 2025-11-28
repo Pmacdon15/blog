@@ -55,7 +55,7 @@ export async function addSection(blogId: number, formData: FormData) {
 	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
-	
+
 	const sectionTypeName = (formData.get('section-type') as string) ?? ''
 
 	let validatedFields: SafeParseResult
@@ -82,7 +82,7 @@ export async function addSection(blogId: number, formData: FormData) {
 	} else if (sectionTypeName === 'Paragraph') {
 		validatedFields = schemaUpdateParagraphSection.safeParse({
 			blog_id: blogId,
-			title: formData.get('title'),
+			title: formData.get('paragraph_title'),
 			text: formData.get('text'),
 		})
 	} else if (sectionTypeName === 'Code') {
@@ -110,7 +110,11 @@ export async function addSection(blogId: number, formData: FormData) {
 			newPhotoUrl || '',
 		)
 	} catch (error) {
-		return { error: { message: `Error: ${error instanceof Error ? error.message : String(error)}` } }
+		return {
+			error: {
+				message: `Error: ${error instanceof Error ? error.message : String(error)}`,
+			},
+		}
 	}
 
 	return {
@@ -168,7 +172,7 @@ export async function updateSection(
 		case 3: {
 			const validatedData = schemaUpdateParagraphSection.parse({
 				blog_id: blogId,
-				title: data.title,
+				title: data.paragraph_title,
 				text: data.text,
 			})
 			await updateSectionDb(validatedData, sectionTypeId, sectionId)

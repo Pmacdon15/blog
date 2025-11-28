@@ -11,11 +11,11 @@ import {
 import { useAddSection } from '@/lib/mutations/mutations'
 import type { Section } from '@/types/types'
 import CodeSection from '../code-section'
-import ParagraphSection from '../paragraph-section'
 import { ImageSection } from '../image-section'
+import ParagraphSection from '../paragraph-section'
 import { TitleSection } from '../title-section'
 
-type SectionWithFile = Section & { new_file_object?: File };
+type SectionWithFile = Section & { new_file_object?: File }
 
 export function AddSectionForm({
 	blogId,
@@ -23,7 +23,7 @@ export function AddSectionForm({
 	hasTitleSection = true,
 }: {
 	blogId: number
-	addSection: (newSection: SectionWithFile) => void;
+	addSection: (newSection: SectionWithFile) => void
 	hasTitleSection?: boolean
 }) {
 	const { mutate, isPending, isError } = useAddSection(blogId)
@@ -60,7 +60,8 @@ export function AddSectionForm({
 			newSection.width = parseInt(formData.get('width') as string, 10) // Get actual width from form
 		} else if (sectionType === 'Paragraph') {
 			newSection.section_type_id = 3
-			newSection.text = formData.get('paragraph') as string
+			newSection.paragraph_title = formData.get('paragraph_title') as string
+			newSection.text = formData.get('text') as string
 		} else if (sectionType === 'Code') {
 			newSection.section_type_id = 4
 			newSection.code = formData.get('code') as string

@@ -111,7 +111,7 @@ export const useDeleteSection = (blogId: number) => {
 		},
 		onSuccess: () => {
 			revalidatePathAction('/')
-			revalidatePathAction(`/blog/${blogId}`)			
+			revalidatePathAction(`/blog/${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
