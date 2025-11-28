@@ -4,6 +4,7 @@ import './globals.css'
 import { Analytics } from '@vercel/analytics/next'
 import Providers from '@/components/Providers'
 import PageContainer from '@/components/ui/containters/page-container'
+import Footer from '@/components/ui/footer/Footer'
 import Header from '@/components/ui/header/Header'
 
 const geistSans = Geist({
@@ -33,10 +34,13 @@ export default function RootLayout({
 				<body
 					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 				>
-					<Header />
 					<PageContainer>
-						{children}
+						<Header />
+						<main className="flex w-full flex-1 flex-col items-center justify-start">
+							{children}
+						</main>
 						<Analytics />
+						<Footer />
 					</PageContainer>
 				</body>
 			</html>

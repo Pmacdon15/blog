@@ -43,7 +43,10 @@ export default async function BlogComponent({
 				switch (section.section_type_id) {
 					case 1:
 						return (
-							<div key={section.order_index}>
+							<div
+								className="mb-4 w-full rounded-lg border border-white/10 bg-white/30 p-4 backdrop-blur-md"
+								key={section.order_index}
+							>
 								<h1 className="break-words text-center text-5xl">
 									{section.title_section_title}
 								</h1>
@@ -63,28 +66,37 @@ export default async function BlogComponent({
 						)
 					case 2:
 						return (
-							<Image
-								alt={section.alt || ''}
-								className={`h-auto`}
-								height={600}
+							<div
+								className="mb-4 flex w-full justify-center rounded-lg border border-white/10 bg-white/30 p-4 backdrop-blur-md"
 								key={section.order_index}
-								src={section.src || ''}
-								style={{
-									width: `${section.width}px`,
-								}}
-								width={600}
-							/>
+							>
+								<Image
+									alt={section.alt || ''}
+									className={`h-auto`}
+									height={600}
+									src={section.src || ''}
+									style={{
+										width: `${section.width}px`,
+									}}
+									width={600}
+								/>
+							</div>
 						)
 					case 3:
 						return (
-							<Paragraph
+							<div
+								className="mb-4 w-full rounded-lg border border-white/10 bg-white/30 p-4 backdrop-blur-md"
 								key={section.order_index}
-								section={section}
-							/>
+							>
+								<Paragraph section={section} />
+							</div>
 						)
 					case 4:
 						return (
-							<div className="w-full" key={section.order_index}>
+							<div
+								className="mb-4 w-full rounded-lg border border-white/10 bg-white/30 p-4 backdrop-blur-md"
+								key={section.order_index}
+							>
 								<SyntaxHighlighter
 									className="min-w-3/6 max-w-fit"
 									language={section.language || 'text'}

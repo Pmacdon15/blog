@@ -1,6 +1,13 @@
 'use client'
 import { Activity, useState } from 'react'
-import { Button } from '@/components/ui/buttons/button'
+import { Button } from '@/components/ui/button'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 import { useAddSection } from '@/lib/mutations/mutations'
 import type { Section } from '@/types/types'
 import CodeSection from '../code-section'
@@ -8,13 +15,15 @@ import { ImageSection } from '../image-section'
 import ParagraphSection from '../paragraph-section'
 import { TitleSection } from '../title-section'
 
+type SectionWithFile = Section & { new_file_object?: File }
+
 export function AddSectionForm({
 	blogId,
-	addOptimisticSection,
+	addSection,
 	hasTitleSection = true,
 }: {
 	blogId: number
-	addOptimisticSection: (action: Section) => void
+	addSection: (newSection: SectionWithFile) => void
 	hasTitleSection?: boolean
 }) {
 	const { mutate, isPending, isError } = useAddSection(blogId)
@@ -22,15 +31,13 @@ export function AddSectionForm({
 	const sections = ['Title', 'Image', 'Paragraph', 'Code']
 	const [currentSection, setCurrentSection] = useState('')
 
-	const handleSectionChange = (
-		event: React.ChangeEvent<HTMLSelectElement>,
-	) => {
-		setCurrentSection(event.target.value)
+	const handleSectionChange = (value: string) => {
+		setCurrentSection(value)
 	}
 
 	const formAction = async (formData: FormData) => {
 		const sectionType = formData.get('section-type') as string
-		const newSection: Partial<Section> = {
+		const newSection: Partial<SectionWithFile> = {
 			id: Date.now(), // Temporary ID
 			blog_id: blogId,
 			order_index: 0, // This will be updated on the server
@@ -53,40 +60,46 @@ export function AddSectionForm({
 			newSection.width = parseInt(formData.get('width') as string, 10) // Get actual width from form
 		} else if (sectionType === 'Paragraph') {
 			newSection.section_type_id = 3
-			newSection.text = formData.get('paragraph') as string
+			newSection.paragraph_title = formData.get(
+				'paragraph_title',
+			) as string
+			newSection.text = formData.get('text') as string
 		} else if (sectionType === 'Code') {
 			newSection.section_type_id = 4
 			newSection.code = formData.get('code') as string
 			newSection.language = formData.get('language') as string
 		}
 
-		addOptimisticSection(newSection as Section)
+		addSection(newSection as SectionWithFile)
 		mutate({ formData, blogId })
 	}
 
 	return (
 		<form
 			action={formAction}
-			className="flex w-full flex-col gap-4 rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] p-4"
+			className="glass-card flex w-full flex-col gap-4 p-4"
 		>
 			<h1>Add Section</h1>
-			<select
-				className="rounded-sm border bg-[var(--secondary)] p-2 text-center text-white"
+			<Select
 				name="section-type"
-				onChange={handleSectionChange}
+				onValueChange={handleSectionChange}
 				value={currentSection}
 			>
-				<option value="">Select an option</option>
-				{sections.map((section, index) => (
-					<option
-						disabled={section === 'Title' && hasTitleSection}
-						key={index}
-						value={section}
-					>
-						{section}
-					</option>
-				))}
-			</select>
+				<SelectTrigger>
+					<SelectValue placeholder="Select an option" />
+				</SelectTrigger>
+				<SelectContent>
+					{sections.map((section, index) => (
+						<SelectItem
+							disabled={section === 'Title' && hasTitleSection}
+							key={index}
+							value={section}
+						>
+							{section}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
 			<Activity mode={currentSection === 'Title' ? 'visible' : 'hidden'}>
 				<TitleSection isError={isError} isPending={isPending} />
 			</Activity>
@@ -101,7 +114,9 @@ export function AddSectionForm({
 			<Activity mode={currentSection === 'Code' ? 'visible' : 'hidden'}>
 				<CodeSection isError={isError} isPending={isPending} />
 			</Activity>
-			<Button isPending={isPending} text="Submit" type={'submit'} />
+			<Button disabled={isPending} type={'submit'}>
+				Submit
+			</Button>
 		</form>
 	)
 }

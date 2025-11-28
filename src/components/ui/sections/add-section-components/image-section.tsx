@@ -5,7 +5,7 @@ import { throttle } from '@/lib/utils'
 export function ImageSection({
 	isPending,
 	isError,
-}: {	
+}: {
 	isPending: boolean
 	isError: boolean
 }) {
@@ -21,10 +21,10 @@ export function ImageSection({
 	}
 
 	return (
-		<div className="flex w-full flex-col items-center justify-center gap-4 rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] p-4">
+		<div className="flex w-full flex-col items-center justify-center gap-4 rounded-sm border border-muted-foreground bg-white/60 p-4">
 			<div className="flex w-full flex-col items-center justify-center gap-4">
 				<div
-					className="h-auto max-h-[810px] min-w-36 max-w-[810px] overflow-hidden rounded-sm border p-2"
+					className="h-auto max-h-[810px] min-w-36 max-w-[810px] overflow-hidden rounded-sm border border-muted-foreground p-2"
 					ref={containerRef}
 					style={{
 						width: `${width}px`, // Controlled by state
@@ -35,7 +35,7 @@ export function ImageSection({
 					{imageSrc !== '' && (
 						<Image
 							alt={''}
-							className="h-full w-full object-contain"
+							className="h-full w-full border-muted-foreground object-contain"
 							height={800}
 							src={imageSrc || ''}
 							width={800}
@@ -43,20 +43,20 @@ export function ImageSection({
 					)}
 				</div>
 				<input
-					className="w-5/6 rounded-sm border border-white p-2 md:w-4/5"
+					className="w-5/6 rounded-sm border border-muted-foreground p-2 md:w-4/5"
 					name="new-file"
 					onChange={handleFileChange}
 					placeholder="Select new image"
 					type="file"
 				/>
 				<input
-					className="rounded-sm border border-white p-2"
+					className="rounded-sm border border-muted-foreground p-2"
 					name="alt"
 					placeholder="Description"
 					type="text"
 				/>
 				<input
-					className="rounded-sm border border-white p-2"
+					className="rounded-sm border border-muted-foreground p-2"
 					hidden
 					min="0"
 					name="width" // Controlled by state

@@ -1,52 +1,48 @@
 'use client'
-import { Activity, useState } from 'react'
+import { Activity, Suspense, useEffect, useState } from 'react'
 import { useIsAdmin } from '@/lib/hooks/hooks'
-import { Button } from '../buttons/button'
+import { Button } from '../button'
 import BackHomeLink from '../links/back-home-link'
 
 export default function ContextController({
-	// sectionsPromise,
 	defaultState = false,
 	child1,
 	child2,
 }: {
-	// sectionsPromise: Promise<Section[] | { error: string }>
 	child1: React.ReactNode
 	child2: React.ReactNode
 	defaultState?: boolean
 }) {
 	const [editBlog, setEditBlog] = useState(defaultState)
-	const { data: isAdmin } = useIsAdmin()
+	const [hasMounted, setHasMounted] = useState(false)
+	const { data } = useIsAdmin()
+
+	useEffect(() => {
+		setHasMounted(true)
+	}, [])
+
+	if (!hasMounted) {
+		return null // Or a loading spinner
+	}
 
 	return (
 		<>
-			<BackHomeLink />
-			{isAdmin && (
-				<Button
-					onClick={() => setEditBlog(!editBlog)}
-					text={`${editBlog ? 'Show Blog' : 'Edit Blog'}`}
-				/>
+			{/* <BackHomeLink /> */}
+			{data?.isAdmin && (
+				<Button onClick={() => setEditBlog(!editBlog)}>
+					{editBlog ? 'Show Blog' : 'Edit Blog'}
+				</Button>
 			)}
-			{isAdmin && (
+			{data?.isAdmin ? (
 				<>
-					<Activity mode={editBlog ? 'visible' : 'hidden'}>
-						{child1}
-					</Activity>
+					<Suspense>{editBlog && child1}</Suspense>
 					<Activity mode={!editBlog ? 'visible' : 'hidden'}>
-						{child2}
+						<Suspense>{child2}</Suspense>
 					</Activity>
 				</>
-			)}
-			{!isAdmin && child2}
-			{isAdmin && (
-				<button
-					className="mx-auto rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] p-2 transition-transform duration-300 hover:scale-110 hover:bg-black"
-					onClick={() => {
-						setEditBlog(!editBlog)
-					}}
-					type="button"
-				>{`${editBlog ? 'Show Blog' : 'Edit Blog'} `}</button>
-			)}
+			) : (
+				child2
+			)}			
 			<BackHomeLink />
 		</>
 	)

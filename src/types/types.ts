@@ -17,6 +17,7 @@ export interface Section {
 	code: string | null
 	published: boolean | null
 	order_index: number
+	new_file_object?: File
 }
 
 export interface FormActionInputDelete {
@@ -46,13 +47,13 @@ export type BlogData = {
 	title: string
 	publish_date: string
 	image_src?: string
-	hasMore: boolean
+	// hasMore: boolean
 }
 
-export type ResponseData = {
-	blogs: BlogData[]
-	hasMore: boolean
-}
+// export type ResponseData = {
+// 	blogs: BlogData[]
+// 	hasMore: boolean
+// }
 
 export interface PaginationProps {
 	page: number

@@ -16,13 +16,14 @@ import {
 import { isAdmin } from './auth'
 
 export async function togglePublishBlog(blogId: number) {
-	if ((await isAdmin()) === true) {
-		await togglePublishBlogDB(blogId)
-	}
+  if ((await isAdmin()).isAdmin !== true) {
+    throw new Error('Only admins can toggle publish status')
+  }
+  await togglePublishBlogDB(blogId)
 }
 
 export async function createBlog(formData: FormData) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isAdmin !== true) {
 		throw new Error('Unauthorized')
 	}
 	const title = formData.get('title')
@@ -52,10 +53,10 @@ type SafeParseResult =
 	| ReturnType<(typeof schemaUpdateCodeSection)['safeParse']>
 
 export async function addSection(blogId: number, formData: FormData) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
-	console.log("test")
+
 	const sectionTypeName = (formData.get('section-type') as string) ?? ''
 
 	let validatedFields: SafeParseResult
@@ -82,7 +83,7 @@ export async function addSection(blogId: number, formData: FormData) {
 	} else if (sectionTypeName === 'Paragraph') {
 		validatedFields = schemaUpdateParagraphSection.safeParse({
 			blog_id: blogId,
-			title: formData.get('title'),
+			title: formData.get('paragraph_title'),
 			text: formData.get('text'),
 		})
 	} else if (sectionTypeName === 'Code') {
@@ -110,7 +111,11 @@ export async function addSection(blogId: number, formData: FormData) {
 			newPhotoUrl || '',
 		)
 	} catch (error) {
-		return { error: `Error: ${error}` }
+		return {
+			error: {
+				message: `Error: ${error instanceof Error ? error.message : String(error)}`,
+			},
+		}
 	}
 
 	return {
@@ -125,7 +130,7 @@ export async function updateSection(
 	sectionId: number,
 	formData: FormData,
 ) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
 
@@ -135,8 +140,8 @@ export async function updateSection(
 		case 1: {
 			const validatedData = schemaUpdateTitleSection.parse({
 				blog_id: blogId,
-				title: data.title,
-				publish_date: new Date(data.publish_date as string),
+				title: (data.title_section_title as string) || '', // Changed from data.title
+				publish_date: new Date((data.publish_date as string) || ''),
 			})
 			await updateSectionDb(validatedData, sectionTypeId, sectionId)
 			break
@@ -149,7 +154,7 @@ export async function updateSection(
 				blog_id: blogId,
 				alt: data.alt,
 				width: Number(data.width),
-				new_file: file.size > 0 ? file : undefined,
+				new_file: file && file.size > 0 ? file : undefined,
 			})
 
 			if (validatedData.new_file) {
@@ -168,7 +173,7 @@ export async function updateSection(
 		case 3: {
 			const validatedData = schemaUpdateParagraphSection.parse({
 				blog_id: blogId,
-				title: data.title,
+				title: data.paragraph_title,
 				text: data.text,
 			})
 			await updateSectionDb(validatedData, sectionTypeId, sectionId)
@@ -218,7 +223,7 @@ export async function deleteBlogSection(
 }
 
 export async function deleteBlog(blogId: number) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
 	const sql = neon(`${process.env.DATABASE_URL}`)
@@ -257,7 +262,7 @@ export async function updateBlogOrder({
 	blogId: number
 	newOrder: { id: number; order_index: number }[]
 }) {
-	if ((await isAdmin()) !== true) {
+	if ((await isAdmin()).isLoggedIn !== true) {
 		throw new Error('Unauthorized')
 	}
 	const sql = neon(`${process.env.DATABASE_URL}`)

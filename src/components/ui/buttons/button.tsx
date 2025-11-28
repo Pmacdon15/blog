@@ -2,7 +2,7 @@ export function Button({
 	onClick,
 	text,
 	isPending,
-	type="button",
+	type = 'button',
 }: {
 	onClick?: () => void
 	text: string

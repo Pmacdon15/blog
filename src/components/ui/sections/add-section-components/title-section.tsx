@@ -1,14 +1,14 @@
-export function TitleSection({	
+export function TitleSection({
 	isPending,
 	isError,
-}: {	
+}: {
 	isPending: boolean
 	isError: boolean
 }) {
 	return (
-		<div className="flex w-full flex-col gap-4 rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] p-4">
+		<div className="flex w-full flex-col gap-4 rounded-sm border p-4">
 			<input
-				className="rounded-sm border bg-[linear-gradient(to_bottom_right,var(--primary),var(--secondary))] text-center text-5xl"
+				className="rounded-sm border text-center text-5xl"
 				name="title"
 				placeholder="Title"
 				type="text"
