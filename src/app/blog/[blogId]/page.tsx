@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import BlogComponent from '@/components/ui/blog-component/blog-component'
 import ContextController from '@/components/ui/context-controller/context-controller'
 import EditBlogComponent from '@/components/ui/sections/edit-section-components/edit-blog-component/edit-blog-component'
@@ -10,11 +9,11 @@ export default function BlogPage(props: PageProps<'/blog/[blogId]'>) {
 	)
 
 	return (
-		<Suspense>
-			<ContextController
-				child1={<EditBlogComponent dataPromise={sectionsPromise} />}
-				child2={<BlogComponent dataPromise={sectionsPromise} />}
-			/>
-		</Suspense>
+		// <Suspense>
+		<ContextController
+			child1={<EditBlogComponent dataPromise={sectionsPromise} />}
+			child2={<BlogComponent dataPromise={sectionsPromise} />}
+		/>
+		// </Suspense>
 	)
 }

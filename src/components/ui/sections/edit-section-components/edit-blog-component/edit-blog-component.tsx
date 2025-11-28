@@ -2,11 +2,10 @@
 import { closestCenter, DndContext, type DragEndEvent } from '@dnd-kit/core'
 import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 import type React from 'react'
-import { use, useEffect, useMemo, useOptimistic, useRef, useState } from 'react'
+import { use, useEffect, useRef, useState } from 'react'
 import DeleteBlog from '@/components/ui/buttons/delete-blog-button'
 import TogglePublished from '@/components/ui/buttons/toggle-published-button'
 import SortableItem from '@/components/ui/drag-and-drop/sortable-item'
-import { useSyncedSections } from '@/lib/hooks/hooks'
 import { useDeleteSection } from '@/lib/mutations/mutations'
 import { useBlogOrderMutation, useDragSensors } from '@/lib/utils/drag-and-drop'
 import type { Section } from '@/types/types'
@@ -24,24 +23,30 @@ export default function EditBlogComponent({
 	dataPromise: Promise<Section[]>
 }) {
 	const initialData = use(dataPromise)
-	const [originalSections, setOriginalSections] =
-		useState<SectionWithFile[]>(initialData)
-	const [sections, setSections] =
-		useSyncedSections<SectionWithFile>(initialData)
-
-	const { mutate: deleteSection } = useDeleteSection(initialData[0].blog_id)
-
-	const [optimisticSections, addOptimisticSection] = useOptimistic(
-		sections,
-		(state: SectionWithFile[], newSection: SectionWithFile) => [
-			...state,
-			newSection,
-		],
+	const [originalSections, setOriginalSections] = useState(initialData)
+	const [sections, setSections] = useState(initialData)
+	console.log(
+		'On remount, are sections and originalSections the same?',
+		JSON.stringify(sections) === JSON.stringify(originalSections),
 	)
+	console.log(
+		'Init data: ',
+		initialData,
+		'Original sections: ',
+		originalSections,
+		' Sections: ',
+		sections,
+	)
+	const { mutate: deleteSection } = useDeleteSection(initialData[0].blog_id)
 
 	const debouncedSaveRef = useRef<NodeJS.Timeout | null>(null)
 	const { saveOrder } = useBlogOrderMutation(initialData[0].blog_id)
 	const sensors = useDragSensors()
+
+	useEffect(() => {
+		setOriginalSections(initialData)
+		setSections(initialData)
+	}, [initialData])
 
 	useEffect(() => {
 		return () => {
@@ -75,6 +80,9 @@ export default function EditBlogComponent({
 				sectionTypeId: sectionToDelete.section_type_id,
 			})
 			setSections(sections.filter((section) => section.id !== sectionId))
+			setOriginalSections(
+				originalSections.filter((section) => section.id !== sectionId),
+			)
 		}
 	}
 
@@ -100,11 +108,18 @@ export default function EditBlogComponent({
 		}
 	}
 
-	const sectionIds = useMemo(
-		() => optimisticSections.map((section) => section.id),
-		[optimisticSections],
-	)
-
+	const handleUpdateSection = (updatedSection: SectionWithFile) => {
+		setSections((sections) =>
+			sections.map((section) =>
+				section.id === updatedSection.id ? updatedSection : section,
+			),
+		)
+		setOriginalSections((originalSections) =>
+			originalSections.map((section) =>
+				section.id === updatedSection.id ? updatedSection : section,
+			),
+		)
+	}
 	return (
 		<div className="flex min-h-screen w-full flex-col items-center justify-start gap-8 pb-4 font-[family-name:var(--font-geist-sans)] sm:w-5/6 lg:w-4/6">
 			{initialData && (
@@ -121,11 +136,12 @@ export default function EditBlogComponent({
 				onDragEnd={handleDragEnd}
 				sensors={sensors}
 			>
-				<SortableContext items={sectionIds}>
-					{optimisticSections.map((section: SectionWithFile) => {
-						const foundOriginalSection = originalSections.find(
-							(orig) => orig.id === section.id,
-						) || section // Fallback to current if original not found
+				<SortableContext items={sections.map((section) => section.id)}>
+					{sections.map((section: SectionWithFile) => {
+						const foundOriginalSection =
+							originalSections.find(
+								(org) => org.id === section.id,
+							) || section // Fallback to current if original not found
 
 						let sectionComponent: React.ReactNode | null = null
 						switch (section.section_type_id) {
@@ -172,9 +188,9 @@ export default function EditBlogComponent({
 								handleDelete={handleDeleteSection}
 								id={section.id}
 								key={section.id}
+								onUpdateSection={handleUpdateSection}
 								originalSection={foundOriginalSection}
-								setParentOriginalSections={setOriginalSections}
-								setParentSections={setSections}
+								setSections={setSections}
 							>
 								{sectionComponent}
 							</SortableItem>
@@ -184,7 +200,9 @@ export default function EditBlogComponent({
 			</DndContext>
 
 			<AddSectionForm
-				addOptimisticSection={addOptimisticSection}
+				addSection={(newSection: SectionWithFile) =>
+					setSections([...sections, newSection])
+				}
 				blogId={initialData[0].blog_id}
 			/>
 		</div>

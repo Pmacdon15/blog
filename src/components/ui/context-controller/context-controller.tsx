@@ -1,5 +1,5 @@
 'use client'
-import { Activity, useState, useEffect } from 'react'
+import { Activity, Suspense, useEffect, useState } from 'react'
 import { useIsAdmin } from '@/lib/hooks/hooks'
 import { Button } from '../button'
 import BackHomeLink from '../links/back-home-link'
@@ -35,11 +35,13 @@ export default function ContextController({
 			)}
 			{data?.isAdmin ? (
 				<>
-					<Activity mode={editBlog ? 'visible' : 'hidden'}>
-						{child1}
-					</Activity>
+					<Suspense>
+						{/* <Activity mode={editBlog ? 'visible' : 'hidden'}> */}
+						{editBlog && child1}
+						{/* </Activity> */}
+					</Suspense>
 					<Activity mode={!editBlog ? 'visible' : 'hidden'}>
-						{child2}
+						<Suspense>{!editBlog && child2}</Suspense>
 					</Activity>
 				</>
 			) : (

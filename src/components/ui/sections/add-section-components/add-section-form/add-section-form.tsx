@@ -11,17 +11,19 @@ import {
 import { useAddSection } from '@/lib/mutations/mutations'
 import type { Section } from '@/types/types'
 import CodeSection from '../code-section'
-import { ImageSection } from '../image-section'
 import ParagraphSection from '../paragraph-section'
+import { ImageSection } from '../image-section'
 import { TitleSection } from '../title-section'
+
+type SectionWithFile = Section & { new_file_object?: File };
 
 export function AddSectionForm({
 	blogId,
-	addOptimisticSection,
+	addSection,
 	hasTitleSection = true,
 }: {
 	blogId: number
-	addOptimisticSection: (action: Section) => void
+	addSection: (newSection: SectionWithFile) => void;
 	hasTitleSection?: boolean
 }) {
 	const { mutate, isPending, isError } = useAddSection(blogId)
@@ -35,7 +37,7 @@ export function AddSectionForm({
 
 	const formAction = async (formData: FormData) => {
 		const sectionType = formData.get('section-type') as string
-		const newSection: Partial<Section> = {
+		const newSection: Partial<SectionWithFile> = {
 			id: Date.now(), // Temporary ID
 			blog_id: blogId,
 			order_index: 0, // This will be updated on the server
@@ -65,7 +67,7 @@ export function AddSectionForm({
 			newSection.language = formData.get('language') as string
 		}
 
-		addOptimisticSection(newSection as Section)
+		addSection(newSection as SectionWithFile)
 		mutate({ formData, blogId })
 	}
 

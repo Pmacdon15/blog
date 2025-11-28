@@ -16,10 +16,8 @@ interface SortableItemProps {
 	handleDelete: (id: number) => void
 	currentSection: SectionWithFile
 	originalSection: SectionWithFile
-	setParentSections: React.Dispatch<React.SetStateAction<SectionWithFile[]>>
-	setParentOriginalSections: React.Dispatch<
-		React.SetStateAction<SectionWithFile[]>
-	>
+	setSections: React.Dispatch<React.SetStateAction<SectionWithFile[]>>
+	onUpdateSection: (section: SectionWithFile) => void
 }
 
 const SortableItem = ({
@@ -28,8 +26,8 @@ const SortableItem = ({
 	handleDelete,
 	currentSection,
 	originalSection,
-	setParentSections,
-	setParentOriginalSections,
+	setSections,
+	onUpdateSection,
 }: SortableItemProps) => {
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({ id })
@@ -43,9 +41,7 @@ const SortableItem = ({
 	const [isSaving, setIsSaving] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 
-	const { mutateAsync: updateSection } = useUpdateSection(
-		currentSection.blog_id,
-	)
+	const { mutate: updateSection } = useUpdateSection(currentSection.blog_id)
 
 	useEffect(() => {
 		// Exclude new_file_object from comparison as it's not stringifiable and not part of original section initially
@@ -95,6 +91,9 @@ const SortableItem = ({
 				String(currentSection.section_type_id),
 			)
 
+			// Update the original section in the parent component
+			onUpdateSection(currentSection)
+
 			await updateSection({
 				blogId: currentSection.blog_id,
 				sectionId: currentSection.id,
@@ -102,38 +101,23 @@ const SortableItem = ({
 				formData,
 			})
 
-			// Update the original section in the parent component
-			setParentSections((prevSections) =>
-				prevSections.map((s) =>
-					s.id === currentSection.id ? currentSection : s,
-				),
-			)
-			setParentOriginalSections((prevOriginalSections) =>
-				prevOriginalSections.map((s) =>
-					s.id === currentSection.id ? currentSection : s,
-				),
-			)
+		
 		} catch (e) {
 			setError('Failed to save section.')
 			console.error('Save error:', e)
 		} finally {
 			setIsSaving(false)
 		}
-	}, [
-		currentSection,
-		updateSection,
-		setParentSections,
-		setParentOriginalSections,
-	])
+	}, [currentSection, updateSection, onUpdateSection])
 
 	const handleUndo = useCallback(() => {
-		setParentSections((prevSections) =>
+		setSections((prevSections) =>
 			prevSections.map((s) =>
 				s.id === originalSection.id ? originalSection : s,
 			),
 		)
 		setError(null)
-	}, [originalSection, setParentSections])
+	}, [originalSection, setSections])
 
 	return (
 		<div
