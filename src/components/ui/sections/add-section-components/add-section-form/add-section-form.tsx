@@ -60,7 +60,9 @@ export function AddSectionForm({
 			newSection.width = parseInt(formData.get('width') as string, 10) // Get actual width from form
 		} else if (sectionType === 'Paragraph') {
 			newSection.section_type_id = 3
-			newSection.paragraph_title = formData.get('paragraph_title') as string
+			newSection.paragraph_title = formData.get(
+				'paragraph_title',
+			) as string
 			newSection.text = formData.get('text') as string
 		} else if (sectionType === 'Code') {
 			newSection.section_type_id = 4

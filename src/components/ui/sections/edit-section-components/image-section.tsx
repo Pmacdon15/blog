@@ -36,7 +36,10 @@ export function ImageSection({
 			reader.onloadend = () => {
 				const result = reader.result as string
 				setPreview(result)
-				onChange(section.id, { src: result })
+				onChange(section.id, {
+					src: result,
+					new_file_object: file,
+				})
 			}
 			reader.readAsDataURL(file)
 		} else {
