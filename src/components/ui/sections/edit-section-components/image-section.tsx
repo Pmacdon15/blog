@@ -1,13 +1,7 @@
 'use client'
+import { CornerDownRight } from 'lucide-react'
 import Image from 'next/image'
-import {
-	type ChangeEvent,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from 'react'
-import { throttle } from '@/lib/utils'
+import { type ChangeEvent, useState } from 'react'
 import type { Section } from '@/types/types'
 
 export function ImageSection({
@@ -17,15 +11,8 @@ export function ImageSection({
 	section: Section
 	onChange: (sectionId: number, newContent: Partial<Section>) => void
 }) {
-	const containerRef = useRef<HTMLDivElement>(null)
-	const { width } = useThrottledWidth(
-		containerRef,
-		section.width || 400,
-		(newWidth) => {
-			onChange(section.id, { width: newWidth })
-		},
-	)
 	const [preview, setPreview] = useState<string | null>(null)
+	const [width, setWidth] = useState(section.width || 800)
 
 	const imageSrc = preview || section.src || '/placeholder.jpg'
 
@@ -48,15 +35,32 @@ export function ImageSection({
 		}
 	}
 
+	const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+		const startX = event.clientX
+		const startWidth = width
+
+		const handleMouseMove = (event: MouseEvent) => {
+			const newWidth = startWidth + (event.clientX - startX)
+			setWidth(newWidth)
+			onChange(section.id, { width: newWidth })
+		}
+
+		const handleMouseUp = () => {
+			document.removeEventListener('mousemove', handleMouseMove)
+			document.removeEventListener('mouseup', handleMouseUp)
+		}
+
+		document.addEventListener('mousemove', handleMouseMove)
+		document.addEventListener('mouseup', handleMouseUp)
+	}
+
 	return (
 		<div className="flex w-full flex-col items-center justify-center gap-4 p-4">
 			<div
-				className="h-auto max-h-[810px] max-w-[810px] overflow-hidden rounded-sm border p-2"
-				ref={containerRef}
+				className="relative h-auto max-h-[810px] max-w-[810px] overflow-hidden rounded-sm border border-muted-foreground p-2"
 				style={{
 					width: `${width}px`,
 					aspectRatio: '1 / 1',
-					resize: 'horizontal',
 				}}
 			>
 				<Image
@@ -64,8 +68,22 @@ export function ImageSection({
 					className="h-full w-full object-contain"
 					height={800}
 					src={imageSrc || ''}
-					width={800}
+					width={width}
 				/>
+				<div
+					className="absolute bottom-0 right-0 p-2 cursor-se-resize"
+					onKeyDown={(e) => {
+						if (e.key === 'Enter' || e.key === ' ') {
+							e.preventDefault()
+							// Add your keyboard-specific logic here
+						}
+					}}
+					onMouseDown={handleMouseDown}
+					role="button"
+					tabIndex={0}
+				>
+					<CornerDownRight className="h-4 w-4" />
+				</div>
 			</div>
 			<input
 				className="w-5/6 rounded-sm border border-white p-2 md:w-4/6"
@@ -85,43 +103,4 @@ export function ImageSection({
 			/>
 		</div>
 	)
-}
-
-function useThrottledWidth(
-	containerRef: React.RefObject<HTMLDivElement | null>,
-	initialWidth: number,
-	onChange: (newWidth: number) => void,
-) {
-	const [width, setWidth] = useState(initialWidth)
-	const isInitialRender = useRef(true)
-	const throttledOnChange = useCallback(
-		throttle((newWidth: number) => {
-			onChange(newWidth)
-		}, 100),
-		[],
-	)
-
-	useEffect(() => {
-		if (!containerRef.current) return
-
-		const observer = new ResizeObserver((entries) => {
-			for (const entry of entries) {
-				const newWidth = Math.round(entry.contentRect.width)
-				if (isInitialRender.current) {
-					isInitialRender.current = false
-					return
-				}
-				setWidth(newWidth)
-				throttledOnChange(newWidth)
-			}
-		})
-
-		observer.observe(containerRef.current)
-
-		return () => {
-			observer.disconnect()
-		}
-	}, [throttledOnChange, containerRef])
-
-	return { width, setWidth }
 }

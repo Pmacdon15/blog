@@ -71,20 +71,12 @@ export default function EditBlogComponent({
 	const handleDragEnd = (event: DragEndEvent) => {
 		const { active, over } = event
 		if (over && active.id !== over.id) {
-			setSections((items) => {
-				const oldIndex = items.findIndex(
-					(item) => item.id === active.id,
-				)
-				const newIndex = items.findIndex((item) => item.id === over.id)
-				const newSections = arrayMove(items, oldIndex, newIndex)
-
-				saveOrder(newSections)
-
-				return newSections
-			})
+			const oldIndex = sections.findIndex((item) => item.id === active.id)
+			const newIndex = sections.findIndex((item) => item.id === over.id)
+			const newSections = arrayMove(sections, oldIndex, newIndex)
+			saveOrder(newSections)
 		}
 	}
-
 	const handleUpdateSection = (updatedSection: SectionWithFile) => {
 		setSections((sections) =>
 			sections.map((section) =>

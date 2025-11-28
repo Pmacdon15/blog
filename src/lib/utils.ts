@@ -20,3 +20,18 @@ export function throttle<Args extends unknown[], Return = void>(
 		}
 	}
 }
+
+export function debounce<Args extends unknown[], Return = void>(
+	func: (...args: Args) => Return,
+	delay: number,
+): (...args: Args) => void {
+	let timeoutId: NodeJS.Timeout | null
+	return (...args: Args) => {
+		if (timeoutId) {
+			clearTimeout(timeoutId)
+		}
+		timeoutId = setTimeout(() => {
+			func(...args)
+		}, delay)
+	}
+}
