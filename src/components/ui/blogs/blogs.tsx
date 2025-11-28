@@ -4,8 +4,10 @@ import { NoticeDisplay } from '../text-display/notice'
 
 export async function Blogs({
 	blogsPromise,
+	linkToEdit = false,
 }: {
 	blogsPromise: Promise<BlogData[] | { error: string }>
+	linkToEdit?: boolean
 }) {
 	const blogs = await blogsPromise
 
@@ -18,7 +20,7 @@ export async function Blogs({
 	return (
 		<div className="flex w-full flex-wrap justify-center gap-4">
 			{blogs.map((blog: BlogData) => (
-				<BlogCard blog={blog} key={blog.id} />
+				<BlogCard blog={blog} key={blog.id} linkToEdit={linkToEdit} />
 			))}
 		</div>
 	)

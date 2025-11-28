@@ -78,8 +78,11 @@ export async function getAllBlogIds(): Promise<
 		return { error: 'Failed to fetch all blog IDs' }
 	}
 }
-
-export async function getSections(blogId: string): Promise<Section[]> {
+//TODO Add published filter
+export async function getSections(
+	blogId: string,
+	published?: boolean,
+): Promise<Section[]> {
 	'use cache'
 	cacheTag(`sections-${blogId}`)
 	try {

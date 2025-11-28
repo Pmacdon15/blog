@@ -11,7 +11,13 @@ import {
 } from '@/components/ui/card'
 import type { BlogData } from '@/types/types'
 
-export function BlogCard({ blog }: { blog: BlogData }) {
+export function BlogCard({
+	blog,
+	linkToEdit,
+}: {
+	blog: BlogData
+	linkToEdit: boolean
+}) {
 	return (
 		<Card className="relative w-full max-w-sm">
 			<CardHeader>
@@ -32,7 +38,13 @@ export function BlogCard({ blog }: { blog: BlogData }) {
 				)}
 			</CardContent>
 			<CardFooter className="flex-col gap-2">
-				<Link href={`/blog/${blog.id}`}>
+				<Link
+					href={
+						linkToEdit
+							? `/edit-blog/${blog.id}`
+							: `/blog/${blog.id}`
+					}
+				>
 					<Button className="w-full" type="submit">
 						View
 					</Button>

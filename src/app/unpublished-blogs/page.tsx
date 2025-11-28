@@ -6,7 +6,7 @@ export default function Page() {
 	const blogsPromise = getBlogs(false)
 	return (
 		<div className="flex w-full flex-col items-center gap-8">
-			<Blogs blogsPromise={blogsPromise} />
+			<Blogs blogsPromise={blogsPromise} linkToEdit />
             <AddBlogForm/>
 		</div>
 	)
