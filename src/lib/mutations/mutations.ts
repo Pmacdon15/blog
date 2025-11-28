@@ -132,6 +132,9 @@ export const useUpdateBlogOrder = (blogId: number) => {
 export const useDeleteBlog = () => {
 	return useMutation({
 		mutationFn: (blogId: number) => deleteBlog(blogId),
+		onSuccess: () => {
+			revalidatePathAction('/')
+		},
 		onError: (error) => {
 			console.error('Delete blog error:', error)
 		},
