@@ -32,7 +32,7 @@ export async function BlogsCarousel({
 								className="basis-[88%] sm:basis-[62%] md:basis-[51%] lg:basis-[31%]"
 								key={blog.id}
 							>
-								<BlogCard blog={blog} />
+								<BlogCard blog={blog} linkToEdit={false} />
 							</CarouselItem>
 						))}
 					</CarouselWrapper>

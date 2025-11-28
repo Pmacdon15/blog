@@ -16,7 +16,7 @@ export default function AddBlogForm() {
 				>
 					<h1>Add Blog</h1>
 					<input
-						className="w-full rounded-sm border border-muted-foreground bg-white/30 p-2 text-center text-xl md:w-5/6"
+						className="w-full rounded-sm border border-muted-foreground bg-white/30 p-2 text-center text-xl md:w-5/6 mx-auto"
 						name="title"
 						placeholder="Title"
 						required

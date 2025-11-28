@@ -8,18 +8,16 @@ import {
 	updateBlogOrder,
 	updateSection,
 } from '../actions/blog-action'
-import {
-	revalidatePathAction,
-	updateTagAction,
-} from '../actions/revalidatePath-action'
+import { updateTagAction } from '../actions/revalidatePath-action'
 
-export const useTogglePublishBlog = (blogId: number) => {
+export const useTogglePublishBlog = () => {
 	return useMutation({
 		mutationFn: ({ blogId }: { blogId: number }) => {
 			return togglePublishBlog(blogId)
 		},
 		onSuccess: () => {
-			updateTagAction(`sections-${blogId}`)
+			// updateTagAction(`sections-${blogId}`)
+			updateTagAction('recent-blogs')
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -33,9 +31,7 @@ export const useAddBlog = () => {
 			return createBlog(formData)
 		},
 		onSuccess: () => {
-			revalidatePathAction('/')
-			revalidatePathAction('/blog')
-			revalidatePathAction('/edit-blog')
+			updateTagAction('recent-blogs')
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -133,7 +129,8 @@ export const useDeleteBlog = () => {
 	return useMutation({
 		mutationFn: (blogId: number) => deleteBlog(blogId),
 		onSuccess: () => {
-			revalidatePathAction('/')
+			updateTagAction('recent-blogs')
+			//TODO Add redirect to unpublished blogs
 		},
 		onError: (error) => {
 			console.error('Delete blog error:', error)

@@ -16,13 +16,13 @@ import {
 import { isAdmin } from './auth'
 
 export async function togglePublishBlog(blogId: number) {
-	if ((await isAdmin()).isLoggedIn !== true) {
+	if ((await isAdmin()).isAdmin !== true) {
 		await togglePublishBlogDB(blogId)
 	}
 }
 
 export async function createBlog(formData: FormData) {
-	if ((await isAdmin()).isLoggedIn !== true) {
+	if ((await isAdmin()).isAdmin !== true) {
 		throw new Error('Unauthorized')
 	}
 	const title = formData.get('title')

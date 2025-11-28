@@ -43,6 +43,7 @@ export default function ContextController({
 			) : (
 				child2
 			)}
+			<BackHomeLink />
 		</>
 	)
 }
