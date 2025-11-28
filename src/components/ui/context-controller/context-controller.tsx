@@ -35,13 +35,9 @@ export default function ContextController({
 			)}
 			{data?.isAdmin ? (
 				<>
-					<Suspense>
-						{/* <Activity mode={editBlog ? 'visible' : 'hidden'}> */}
-						{editBlog && child1}
-						{/* </Activity> */}
-					</Suspense>
+					<Suspense>{editBlog && child1}</Suspense>
 					<Activity mode={!editBlog ? 'visible' : 'hidden'}>
-						<Suspense>{!editBlog && child2}</Suspense>
+						<Suspense>{child2}</Suspense>
 					</Activity>
 				</>
 			) : (
