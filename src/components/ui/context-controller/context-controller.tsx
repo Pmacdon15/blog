@@ -27,7 +27,7 @@ export default function ContextController({
 
 	return (
 		<>
-			<BackHomeLink />
+			{/* <BackHomeLink /> */}
 			{data?.isAdmin && (
 				<Button onClick={() => setEditBlog(!editBlog)}>
 					{editBlog ? 'Show Blog' : 'Edit Blog'}
@@ -42,7 +42,7 @@ export default function ContextController({
 				</>
 			) : (
 				child2
-			)}
+			)}			
 			<BackHomeLink />
 		</>
 	)

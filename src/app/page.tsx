@@ -3,7 +3,7 @@ import { BlogsCarousel } from '@/components/ui/blogs-carousel/blogs-carousel' //
 import { getBlogs } from '@/lib/DAL/blogs-dal'
 
 export default function Home() {
-	const blogsPromise = getBlogs(true)
+	const blogsPromise = getBlogs()
 	return (
 		<div className="flex w-full flex-col items-center gap-8">
 			<AboutComponent />

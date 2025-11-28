@@ -8,7 +8,11 @@ import {
 	updateBlogOrder,
 	updateSection,
 } from '../actions/blog-action'
-import { updateTagAction } from '../actions/revalidatePath-action'
+import {
+	redirectAction,
+	revalidatePathAction,
+	updateTagAction,
+} from '../actions/revalidatePath-action'
 
 export const useTogglePublishBlog = (blogId: number) => {
 	return useMutation({
@@ -17,7 +21,10 @@ export const useTogglePublishBlog = (blogId: number) => {
 		},
 		onSuccess: () => {
 			updateTagAction(`sections-${blogId}`)
-			updateTagAction('recent-blogs')
+			updateTagAction('blogs')
+			revalidatePathAction(`edit-blog/${blogId}`)
+			revalidatePathAction(`unpublished-blogs`)
+			redirectAction("/unpublished-blogs")
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -31,7 +38,8 @@ export const useAddBlog = () => {
 			return createBlog(formData)
 		},
 		onSuccess: () => {
-			updateTagAction('recent-blogs')
+			// updateTagAction('blogs')
+			revalidatePathAction(`unpublished-blogs`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -52,6 +60,7 @@ export const useAddSection = (blogId: number) => {
 		},
 		onSuccess: () => {
 			updateTagAction(`sections-${blogId}`)
+			revalidatePathAction(`edit-blog/${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -76,6 +85,7 @@ export const useUpdateSection = (blogId: number) => {
 		},
 		onSuccess: () => {
 			updateTagAction(`sections-${blogId}`)
+			revalidatePathAction(`edit-blog/${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -98,6 +108,7 @@ export const useDeleteSection = (blogId: number) => {
 		},
 		onSuccess: () => {
 			updateTagAction(`sections-${blogId}`)
+			revalidatePathAction(`edit-blog/${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -118,6 +129,7 @@ export const useUpdateBlogOrder = (blogId: number) => {
 		},
 		onSuccess: () => {
 			updateTagAction(`sections-${blogId}`)
+			revalidatePathAction(`edit-blog/${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -129,7 +141,7 @@ export const useDeleteBlog = () => {
 	return useMutation({
 		mutationFn: (blogId: number) => deleteBlog(blogId),
 		onSuccess: () => {
-			updateTagAction('recent-blogs')
+			updateTagAction('blogs')
 			updateTagAction('unpublished-blogs')
 		},
 		onError: (error) => {
