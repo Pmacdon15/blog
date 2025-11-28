@@ -16,9 +16,10 @@ import {
 import { isAdmin } from './auth'
 
 export async function togglePublishBlog(blogId: number) {
-	if ((await isAdmin()).isAdmin !== true) {
-		await togglePublishBlogDB(blogId)
-	}
+  if ((await isAdmin()).isAdmin !== true) {
+    throw new Error('Only admins can toggle publish status')
+  }
+  await togglePublishBlogDB(blogId)
 }
 
 export async function createBlog(formData: FormData) {

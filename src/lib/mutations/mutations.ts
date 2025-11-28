@@ -10,13 +10,13 @@ import {
 } from '../actions/blog-action'
 import { updateTagAction } from '../actions/revalidatePath-action'
 
-export const useTogglePublishBlog = () => {
+export const useTogglePublishBlog = (blogId: number) => {
 	return useMutation({
 		mutationFn: ({ blogId }: { blogId: number }) => {
 			return togglePublishBlog(blogId)
 		},
 		onSuccess: () => {
-			// updateTagAction(`sections-${blogId}`)
+			updateTagAction(`sections-${blogId}`)
 			updateTagAction('recent-blogs')
 		},
 		onError: (error) => {
@@ -130,7 +130,7 @@ export const useDeleteBlog = () => {
 		mutationFn: (blogId: number) => deleteBlog(blogId),
 		onSuccess: () => {
 			updateTagAction('recent-blogs')
-			//TODO Add redirect to unpublished blogs
+			updateTagAction('unpublished-blogs')
 		},
 		onError: (error) => {
 			console.error('Delete blog error:', error)

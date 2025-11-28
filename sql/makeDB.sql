@@ -1,15 +1,15 @@
 -- Active: 1758343744287@@ep-long-sun-a6ypub65-pooler.us-west-2.aws.neon.tech@5432@neondb
-DROP TABLE IF EXISTS CodeSection;
+-- DROP TABLE IF EXISTS CodeSection;
 
-DROP TABLE IF EXISTS ParagraphSection;
+-- DROP TABLE IF EXISTS ParagraphSection;
 
-DROP TABLE IF EXISTS ImageSection;
+-- DROP TABLE IF EXISTS ImageSection;
 
-DROP TABLE IF EXISTS TitleSection;
+-- DROP TABLE IF EXISTS TitleSection;
 
-DROP TABLE IF EXISTS Section;
+-- DROP TABLE IF EXISTS Section;
 
-DROP TABLE IF EXISTS Blog;
+-- DROP TABLE IF EXISTS Blog;
 
 SELECT * From Blog;
 CREATE TABLE Blog (
