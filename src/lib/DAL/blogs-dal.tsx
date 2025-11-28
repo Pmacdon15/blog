@@ -78,8 +78,8 @@ export async function getAllBlogIds(): Promise<
 }
 
 export async function getSections(blogId: string): Promise<Section[]> {
-	// 'use cache'
-	// cacheTag('sections')
+	'use cache'
+	cacheTag(`sections-${blogId}`)
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
 		const result = await sql`

@@ -2,7 +2,7 @@
 import { closestCenter, DndContext, type DragEndEvent } from '@dnd-kit/core'
 import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 import type React from 'react'
-import { use, useEffect, useRef, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import DeleteBlog from '@/components/ui/buttons/delete-blog-button'
 import TogglePublished from '@/components/ui/buttons/toggle-published-button'
 import SortableItem from '@/components/ui/drag-and-drop/sortable-item'
@@ -29,32 +29,14 @@ export default function EditBlogComponent({
 		'On remount, are sections and originalSections the same?',
 		JSON.stringify(sections) === JSON.stringify(originalSections),
 	)
-	console.log(
-		'Init data: ',
-		initialData,
-		'Original sections: ',
-		originalSections,
-		' Sections: ',
-		sections,
-	)
-	const { mutate: deleteSection } = useDeleteSection(initialData[0].blog_id)
 
-	const debouncedSaveRef = useRef<NodeJS.Timeout | null>(null)
 	const { saveOrder } = useBlogOrderMutation(initialData[0].blog_id)
 	const sensors = useDragSensors()
-
+	const { mutate: deleteSection } = useDeleteSection(initialData[0].blog_id)
 	useEffect(() => {
 		setOriginalSections(initialData)
 		setSections(initialData)
 	}, [initialData])
-
-	useEffect(() => {
-		return () => {
-			if (debouncedSaveRef.current) {
-				clearTimeout(debouncedSaveRef.current)
-			}
-		}
-	}, [])
 
 	const handleSectionContentChange = (
 		sectionId: number,
@@ -96,12 +78,7 @@ export default function EditBlogComponent({
 				const newIndex = items.findIndex((item) => item.id === over.id)
 				const newSections = arrayMove(items, oldIndex, newIndex)
 
-				if (debouncedSaveRef.current) {
-					clearTimeout(debouncedSaveRef.current)
-				}
-				debouncedSaveRef.current = setTimeout(() => {
-					saveOrder(newSections)
-				}, 500) // Debounce for 500ms
+				saveOrder(newSections)
 
 				return newSections
 			})

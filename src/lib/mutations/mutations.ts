@@ -8,7 +8,10 @@ import {
 	updateBlogOrder,
 	updateSection,
 } from '../actions/blog-action'
-import { revalidatePathAction } from '../actions/revalidatePath-action'
+import {
+	revalidatePathAction,
+	updateTagAction,
+} from '../actions/revalidatePath-action'
 
 export const useTogglePublishBlog = (blogId: number) => {
 	return useMutation({
@@ -16,11 +19,7 @@ export const useTogglePublishBlog = (blogId: number) => {
 			return togglePublishBlog(blogId)
 		},
 		onSuccess: () => {
-			revalidatePathAction('/')
-			revalidatePathAction('/blog')
-			revalidatePathAction('/edit-blog')
-			revalidatePathAction(`/blog/${blogId}`)
-			revalidatePathAction(`/edit-blog/${blogId}`)
+			updateTagAction(`sections-${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -56,11 +55,7 @@ export const useAddSection = (blogId: number) => {
 			return addSection(blogId, formData)
 		},
 		onSuccess: () => {
-			revalidatePathAction('/')
-			revalidatePathAction('/blog')
-			revalidatePathAction('/edit-blog')
-			revalidatePathAction(`/blog/${blogId}`)
-			revalidatePathAction(`/edit-blog/${blogId}`)
+			updateTagAction(`sections-${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -84,11 +79,7 @@ export const useUpdateSection = (blogId: number) => {
 			return updateSection(blogId, sectionTypeId, sectionId, formData)
 		},
 		onSuccess: () => {
-			revalidatePathAction('/')
-			revalidatePathAction('/blog')
-			revalidatePathAction('/edit-blog')
-			revalidatePathAction(`/blog/${blogId}`)
-			revalidatePathAction(`/edit-blog/${blogId}`)
+			updateTagAction(`sections-${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -110,8 +101,7 @@ export const useDeleteSection = (blogId: number) => {
 			return deleteBlogSection(blogId, sectionId, sectionTypeId)
 		},
 		onSuccess: () => {
-			revalidatePathAction('/')
-			revalidatePathAction(`/blog/${blogId}`)
+			updateTagAction(`sections-${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)
@@ -131,11 +121,7 @@ export const useUpdateBlogOrder = (blogId: number) => {
 			return updateBlogOrder({ blogId, newOrder })
 		},
 		onSuccess: () => {
-			revalidatePathAction('/')
-			revalidatePathAction('/blog')
-			revalidatePathAction('/edit-blog')
-			revalidatePathAction(`/blog/${blogId}`)
-			revalidatePathAction(`/edit-blog/${blogId}`)
+			updateTagAction(`sections-${blogId}`)
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)

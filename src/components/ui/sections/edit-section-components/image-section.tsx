@@ -20,7 +20,7 @@ export function ImageSection({
 	const containerRef = useRef<HTMLDivElement>(null)
 	const { width } = useThrottledWidth(
 		containerRef,
-		section.width || 150,
+		section.width || 400,
 		(newWidth) => {
 			onChange(section.id, { width: newWidth })
 		},
