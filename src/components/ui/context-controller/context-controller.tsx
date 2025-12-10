@@ -35,14 +35,16 @@ export default function ContextController({
 			)}
 			{data?.isAdmin ? (
 				<>
-					<Suspense>{editBlog && child1}</Suspense>
+					<Activity mode={editBlog ? 'visible' : 'hidden'}>
+						<Suspense>{child1}</Suspense>
+					</Activity>
 					<Activity mode={!editBlog ? 'visible' : 'hidden'}>
 						<Suspense>{child2}</Suspense>
 					</Activity>
 				</>
 			) : (
 				child2
-			)}			
+			)}
 			<BackHomeLink />
 		</>
 	)

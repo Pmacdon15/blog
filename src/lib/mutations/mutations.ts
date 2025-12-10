@@ -85,6 +85,7 @@ export const useUpdateSection = (blogId: number) => {
 		},
 		onSuccess: () => {
 			updateTagAction(`sections-${blogId}`)
+			updateTagAction(`blogs`)
 			revalidatePathAction(`edit-blog/${blogId}`)
 		},
 		onError: (error) => {

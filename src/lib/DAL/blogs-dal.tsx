@@ -65,6 +65,8 @@ export async function getBlogs(): Promise<BlogData[] | { error: string }> {
 export async function getUnpublishedBlogs(): Promise<
 	BlogData[] | { error: string }
 > {
+	'use cache: private'
+	cacheTag('unpublished-blogs')
 	;(await isAdmin()).isAdmin === false &&
 		redirect('/blogs', RedirectType.push)
 
