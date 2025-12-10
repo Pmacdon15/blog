@@ -14,16 +14,21 @@ import {
 	updateSectionDb,
 } from '../db'
 import { isAdmin } from './auth'
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 
 export async function togglePublishBlog(blogId: number) {
-	if ((await isAdmin()).isAdmin !== true) {
-		throw new Error('Only admins can toggle publish status')
+	const { isAuthenticated } = getKindeServerSession()
+
+	if (await isAuthenticated()) {
+		throw new Error('Unauthorized')
 	}
 	await togglePublishBlogDB(blogId)
 }
 
 export async function createBlog(formData: FormData) {
-	if ((await isAdmin()).isAdmin !== true) {
+	const { isAuthenticated } = getKindeServerSession()
+
+	if (await isAuthenticated()) {
 		throw new Error('Unauthorized')
 	}
 	const title = formData.get('title')
@@ -53,7 +58,9 @@ type SafeParseResult =
 	| ReturnType<(typeof schemaUpdateCodeSection)['safeParse']>
 
 export async function addSection(blogId: number, formData: FormData) {
-	if ((await isAdmin()).isLoggedIn !== true) {
+	const { isAuthenticated } = getKindeServerSession()
+
+	if (await isAuthenticated()) {
 		throw new Error('Unauthorized')
 	}
 
@@ -130,7 +137,9 @@ export async function updateSection(
 	sectionId: number,
 	formData: FormData,
 ) {
-	if ((await isAdmin()).isLoggedIn !== true) {
+	const { isAuthenticated } = getKindeServerSession()
+
+	if (await isAuthenticated()) {
 		throw new Error('Unauthorized')
 	}
 
@@ -198,6 +207,11 @@ export async function deleteBlogSection(
 	sectionId: number,
 	sectionTypeId: number,
 ) {
+	const { isAuthenticated } = getKindeServerSession()
+
+	if (await isAuthenticated()) {
+		throw new Error('Unauthorized')
+	}
 	const sql = neon(`${process.env.DATABASE_URL}`)
 	let srcToDelete: string | null = null
 
@@ -223,7 +237,9 @@ export async function deleteBlogSection(
 }
 
 export async function deleteBlog(blogId: number) {
-	if ((await isAdmin()).isLoggedIn !== true) {
+	const { isAuthenticated } = getKindeServerSession()
+
+	if (await isAuthenticated()) {
 		throw new Error('Unauthorized')
 	}
 	const sql = neon(`${process.env.DATABASE_URL}`)
@@ -262,7 +278,9 @@ export async function updateBlogOrder({
 	blogId: number
 	newOrder: { id: number; order_index: number }[]
 }) {
-	if ((await isAdmin()).isLoggedIn !== true) {
+	const { isAuthenticated } = getKindeServerSession()
+
+	if (await isAuthenticated()) {
 		throw new Error('Unauthorized')
 	}
 	const sql = neon(`${process.env.DATABASE_URL}`)

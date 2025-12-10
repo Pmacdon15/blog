@@ -1,21 +1,14 @@
 'use server'
-import { auth, signIn, signOut } from '@/auth'
-
-export const loginDiscord = async () => {
-	await signIn('discord', { redirectTo: '/' })
-}
-
-export const logout = async () => {
-	await signOut({ redirectTo: '/' })
-}
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 
 export const isAdmin = async () => {
-	const session = await auth()
+	const { getUser } = getKindeServerSession()
+	const user = await getUser()
+
 	return {
 		isAdmin:
-			session?.user?.email === process.env.OWNERS_EMAIL &&
+			user?.email === process.env.OWNERS_EMAIL &&
 			process.env.OWNERS_EMAIL !== '' &&
-			process.env.OWNERS_EMAIL !== undefined,
-		isLoggedIn: !!session,
+			process.env.OWNERS_EMAIL !== undefined,		
 	}
 }

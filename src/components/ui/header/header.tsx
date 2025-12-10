@@ -1,11 +1,13 @@
 'use client'
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
+import { LoginLink, LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components'
 import Link from 'next/link'
-import { loginDiscord, logout } from '@/lib/actions/auth'
 import { useIsAdmin } from '@/lib/hooks/hooks'
 
 export default function Header() {
 	const { data } = useIsAdmin()
-	const isLoggedIn = data?.isLoggedIn
+	const { isAuthenticated } = useKindeBrowserClient()
+	const isLoggedIn = isAuthenticated
 
 	return (
 		<header className="sticky top-4 z-50 flex w-11/12 flex-col items-center justify-between rounded-full border bg-muted-foreground/30 px-8 py-4 shadow-lg backdrop-blur-md transition-all hover:bg-muted-foreground/20 md:w-3/4 md:flex-row lg:w-2/3">
@@ -36,21 +38,12 @@ export default function Header() {
 				)}
 
 				{isLoggedIn ? (
-					<button
-						className="rounded-full border border-primary/20 bg-primary/10 px-6 py-2 font-medium text-bg-muted-foreground/30 text-sm transition-all hover:bg-primary/20 hover:shadow-md active:scale-95"
-						onClick={() => logout()}
-						type="button"
-					>
-						Logout
-					</button>
+					<LogoutLink>
+						{/* <Button>Log out</Button> */}
+						logout
+					</LogoutLink>
 				) : (
-					<button
-						className="rounded-full border border-primary/20 bg-primary/10 px-6 py-2 font-medium text-bg-muted-foreground/30 text-sm transition-all hover:bg-primary/20 hover:shadow-md active:scale-95"
-						onClick={() => loginDiscord()}
-						type="button"
-					>
-						Login
-					</button>
+					<LoginLink>Login</LoginLink>
 				)}
 			</div>
 		</header>

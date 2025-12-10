@@ -2,10 +2,11 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/next'
-import Providers from '@/components/Providers'
+import Providers from '@/components/query-providers'
 import PageContainer from '@/components/ui/containters/page-container'
 import Footer from '@/components/ui/footer/Footer'
 import Header from '@/components/ui/header/header'
+import { AuthProvider } from '@/components/auth-provider'
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -30,20 +31,22 @@ export default function RootLayout({
 }>) {
 	return (
 		<Providers>
-			<html lang="en">
-				<body
-					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-				>
-					<PageContainer>
-						<Header />
-						<main className="flex w-full flex-1 flex-col items-center justify-start">
-							{children}
-						</main>
-						<Analytics />
-						<Footer />
-					</PageContainer>
-				</body>
-			</html>
+			<AuthProvider>
+				<html lang="en">
+					<body
+						className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+					>
+						<PageContainer>
+							<Header />
+							<main className="flex w-full flex-1 flex-col items-center justify-start">
+								{children}
+							</main>
+							<Analytics />
+							<Footer />
+						</PageContainer>
+					</body>
+				</html>
+			</AuthProvider>
 		</Providers>
 	)
 }
