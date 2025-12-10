@@ -117,8 +117,8 @@ export async function getUnpublishedBlogs(): Promise<
 export async function getSections(blogId: string): Promise<Section[]> {
 	'use cache'
 	cacheTag(`sections-${blogId}`)
-	// cacheLife("days")
-	await new Promise(resolve => setTimeout(resolve, 10000));
+	cacheLife("hours")
+	
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
 		const result = await sql`

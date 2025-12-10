@@ -5,7 +5,7 @@ import { Analytics } from '@vercel/analytics/next'
 import Providers from '@/components/Providers'
 import PageContainer from '@/components/ui/containters/page-container'
 import Footer from '@/components/ui/footer/Footer'
-import Header from '@/components/ui/header/Header'
+import Header from '@/components/ui/header/header'
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',

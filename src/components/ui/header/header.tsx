@@ -10,7 +10,7 @@ export default function Header() {
 	return (
 		<header className="sticky top-4 z-50 flex w-11/12 flex-col items-center justify-between rounded-full border bg-muted-foreground/30 px-8 py-4 shadow-lg backdrop-blur-md transition-all hover:bg-muted-foreground/20 md:w-3/4 md:flex-row lg:w-2/3">
 			<Link href={'/'}>
-				<h1 className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text font-bold text-4xl text-bg-muted-foreground/30 md:text-3xl underline">
+				<h1 className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text font-bold text-4xl text-bg-muted-foreground/30 underline md:text-3xl">
 					{process.env.NEXT_PUBLIC_OWNER_NAME}&apos;s Blogs
 				</h1>
 			</Link>

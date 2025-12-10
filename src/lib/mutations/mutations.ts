@@ -24,7 +24,7 @@ export const useTogglePublishBlog = (blogId: number) => {
 			updateTagAction('blogs')
 			revalidatePathAction(`edit-blog/${blogId}`)
 			revalidatePathAction(`unpublished-blogs`)
-			redirectAction("/unpublished-blogs")
+			redirectAction('/unpublished-blogs')
 		},
 		onError: (error) => {
 			console.error('Mutation error:', error)

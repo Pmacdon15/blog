@@ -12,11 +12,11 @@ export default function AddBlogForm() {
 			{data?.isAdmin && (
 				<form
 					action={mutate}
-					className="glass-card flex w-full md:w-4/6 flex-col gap-4 p-4 "
+					className="glass-card flex w-full flex-col gap-4 p-4 md:w-4/6"
 				>
 					<h1>Add Blog</h1>
 					<input
-						className="w-full rounded-sm border border-muted-foreground bg-white/30 p-2 text-center text-xl md:w-5/6 mx-auto"
+						className="mx-auto w-full rounded-sm border border-muted-foreground bg-white/30 p-2 text-center text-xl md:w-5/6"
 						name="title"
 						placeholder="Title"
 						required
