@@ -39,7 +39,13 @@ export default function ContextController({
 						<Suspense>{child1}</Suspense>
 					</Activity>
 					<Activity mode={!editBlog ? 'visible' : 'hidden'}>
-						<Suspense>{child2}</Suspense>
+						<Suspense
+							fallback={
+								<div className="relative mb-4 flex w-full flex-col rounded-lg border border-white/10 bg-white/30 backdrop-blur-md">Loading ...</div>
+							}
+						>
+							{child2}
+						</Suspense>
 					</Activity>
 				</>
 			) : (
