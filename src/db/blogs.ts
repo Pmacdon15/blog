@@ -1,5 +1,5 @@
 import { neon } from '@neondatabase/serverless'
-import { cacheTag } from 'next/cache'
+import { cacheLife, cacheTag } from 'next/cache'
 import type { BlogData, Section } from '@/types/types'
 
 export async function getUnpublishedOrPublishedSectionsDb(
@@ -7,7 +7,7 @@ export async function getUnpublishedOrPublishedSectionsDb(
 ): Promise<Section[]> {
 	'use cache'
 	cacheTag(`sections-unpublished-published-${blogId}`)
-
+	cacheLife('weeks')
 	const sql = neon(`${process.env.DATABASE_URL}`)
 	const result = await sql`
                 SELECT 
@@ -46,6 +46,7 @@ export async function getUnpublishedOrPublishedSectionsDb(
 export async function getUnpublishedBlogsDb(): Promise<BlogData[]> {
 	'use cache'
 	cacheTag(`blogs-unpublished`)
+	cacheLife('weeks')
 
 	const sql = neon(`${process.env.DATABASE_URL}`)
 

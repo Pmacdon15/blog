@@ -11,7 +11,7 @@ import { isAdmin } from '../actions/auth'
 export async function getBlogs(): Promise<BlogData[] | { error: string }> {
 	'use cache'
 	cacheTag('blogs')
-	cacheLife('hours')
+	cacheLife('weeks')
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
 
