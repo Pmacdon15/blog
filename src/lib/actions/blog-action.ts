@@ -24,30 +24,39 @@ export async function togglePublishBlog(blogId: number) {
 	await togglePublishBlogDB(blogId)
 }
 
-export async function createBlog(formData: FormData) {
-	const { isAuthenticated } = getKindeServerSession()
+export async function createBlog(formData: FormData): Promise<{ id: string }> {
+    const { isAuthenticated } = getKindeServerSession();
 
-	if (!(await isAuthenticated())) {
-		throw new Error('Unauthorized')
-	}
-	const title = formData.get('title')
-	const sql = neon(`${process.env.DATABASE_URL}`)
+    if (!(await isAuthenticated())) {
+        throw new Error('Unauthorized');
+    }
 
-	await sql`
+    const title = formData.get('title') as string;
+    const sql = neon(`${process.env.DATABASE_URL}`);
+
+    // We use a single query block. 
+    // The final 'SELECT' pulls from the 'new_blog' CTE defined at the top.
+    const result = await sql`
     WITH new_blog AS (
-    INSERT INTO Blog (published)
-    VALUES (false)
-    RETURNING id
-  ),
-  new_section AS (
-    INSERT INTO Section (blog_id, type)
-    SELECT id, 1 FROM new_blog
-    RETURNING id
-  )
-  INSERT INTO TitleSection (id, title, publish_date)
-  SELECT id, ${title}, CURRENT_DATE
-  FROM new_section;
-  `
+        INSERT INTO Blog (published)
+        VALUES (false)
+        RETURNING id
+    ),
+    new_section AS (
+        INSERT INTO Section (blog_id, type)
+        SELECT id, 1 FROM new_blog
+        RETURNING id
+    ),
+    inserted_title AS (
+        INSERT INTO TitleSection (id, title, publish_date)
+        SELECT id, ${title}, CURRENT_DATE
+        FROM new_section
+        RETURNING id
+    )
+    SELECT id FROM new_blog; 
+    `;
+
+    return { id: result[0].id };
 }
 
 type SafeParseResult =
