@@ -42,7 +42,7 @@ export async function getBlogs(): Promise<BlogData[] | { error: string }> {
 
 export async function getUnpublishedBlogs(): Promise<
 	BlogData[] | { error: string }
-> {	
+> {
 	;(await isAdmin()).isAdmin === false &&
 		redirect('/blogs', RedirectType.push)
 
@@ -111,7 +111,7 @@ export async function getSections(blogId: string): Promise<Section[]> {
 		return result as Section[]
 	} catch (error) {
 		console.error('Error:', error)
-		throw new Error('Error fetching sections')
+		return []
 	}
 }
 
@@ -126,6 +126,6 @@ export async function getUnpublishedOrPublishedSections(
 		return await getUnpublishedOrPublishedSectionsDb(blogId)
 	} catch (error) {
 		console.error('Error:', error)
-		throw new Error('Error fetching sections')
+		return []
 	}
 }
