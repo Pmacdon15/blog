@@ -10,7 +10,6 @@ import {
 } from '../actions/blog-action'
 import {
 	redirectAction,
-	revalidatePathAction,
 	updateTagAction,
 } from '../actions/revalidatePath-action'
 
@@ -132,12 +131,13 @@ export const useUpdateBlogOrder = (blogId: number) => {
 		}) => {
 			return updateBlogOrder({ blogId, newOrder })
 		},
-		onSuccess: () => {
-			updateTagAction(`sections-${blogId}`)
-			updateTagAction(`sections-unpublished-published-${blogId}`)
-		},
+
 		onError: (error) => {
 			console.error('Mutation error:', error)
+		},
+		onSettled: () => {
+			updateTagAction(`sections-${blogId}`)
+			updateTagAction(`sections-unpublished-published-${blogId}`)
 		},
 	})
 }
@@ -152,7 +152,6 @@ export const useDeleteBlog = () => {
 			updateTagAction(`sections-unpublished-published-${blogId}`)
 			// revalidatePathAction(`/blog/${blogId}`)
 			// revalidatePathAction(`/edit-blog/${blogId}`)
-			
 		},
 		onError: (error) => {
 			console.error('Delete blog error:', error)

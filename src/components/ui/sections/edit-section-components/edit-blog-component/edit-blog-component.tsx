@@ -74,6 +74,7 @@ export default function EditBlogComponent({
 			const oldIndex = sections.findIndex((item) => item.id === active.id)
 			const newIndex = sections.findIndex((item) => item.id === over.id)
 			const newSections = arrayMove(sections, oldIndex, newIndex)
+			setSections(newSections)
 			saveOrder(newSections)
 		}
 	}
