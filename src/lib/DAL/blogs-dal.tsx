@@ -98,21 +98,21 @@ export async function getUnpublishedBlogs(): Promise<
 	}
 }
 
-// export async function getAllBlogIds(): Promise<
-// 	{ blogId: string }[] | { error: string }
-// > {
-// 	try {
-// 		const sql = neon(`${process.env.DATABASE_URL}`)
-// 		const result = await sql`SELECT id FROM Blog`
+export async function getAllBlogIds(): Promise<
+	{ blogId: string }[] | { error: string }
+> {
+	try {
+		const sql = neon(`${process.env.DATABASE_URL}`)
+		const result = await sql`SELECT id FROM Blog`
 
-// 		return (result as { id: number }[]).map((blog) => ({
-// 			blogId: String(blog.id),
-// 		}))
-// 	} catch (error) {
-// 		console.error('Error fetching all blog IDs:', error)
-// 		return { error: 'Failed to fetch all blog IDs' }
-// 	}
-// }
+		return (result as { id: number }[]).map((blog) => ({
+			blogId: String(blog.id),
+		}))
+	} catch (error) {
+		console.error('Error fetching all blog IDs:', error)
+		return { error: 'Failed to fetch all blog IDs' }
+	}
+}
 
 export async function getSections(blogId: string): Promise<Section[]> {
 	'use cache'
