@@ -150,8 +150,8 @@ export const useDeleteBlog = () => {
 			updateTagAction('blogs-unpublished')
 			updateTagAction(`sections-${blogId}`)
 			updateTagAction(`sections-unpublished-published-${blogId}`)
-			revalidatePathAction(`/blog/${blogId}`)
-			revalidatePathAction(`/edit-blog/${blogId}`)
+			// revalidatePathAction(`/blog/${blogId}`)
+			// revalidatePathAction(`/edit-blog/${blogId}`)
 			
 		},
 		onError: (error) => {
