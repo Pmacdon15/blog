@@ -14,16 +14,16 @@ export default function ContextController({
 	defaultState?: boolean
 }) {
 	const [editBlog, setEditBlog] = useState(defaultState)
-	const [hasMounted, setHasMounted] = useState(false)
+	// const [hasMounted, setHasMounted] = useState(false)
 	const { data } = useIsAdmin()
 
-	useEffect(() => {
-		setHasMounted(true)
-	}, [])
+	// useEffect(() => {
+	// 	setHasMounted(true)
+	// }, [])
 
-	if (!hasMounted) {
-		return null // Or a loading spinner
-	}
+	// if (!hasMounted) {
+	// 	return null // Or a loading spinner
+	// }
 
 	return (
 		<>
