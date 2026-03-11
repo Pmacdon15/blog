@@ -1,7 +1,7 @@
 'use server'
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { neon } from '@neondatabase/serverless'
 import { revalidatePath } from 'next/cache'
+import { RedirectType, redirect } from 'next/navigation'
 import {
 	schemaUpdateCodeSection,
 	schemaUpdateImageSection,
@@ -14,29 +14,25 @@ import {
 	togglePublishBlogDB,
 	updateSectionDb,
 } from '../db'
+import { isAdmin } from './auth'
 
 export async function togglePublishBlog(blogId: number) {
-	const { isAuthenticated } = getKindeServerSession()
+	;(await isAdmin()).isAdmin === false &&
+		redirect('/blogs', RedirectType.push)
 
-	if (!(await isAuthenticated())) {
-		throw new Error('Unauthorized')
-	}
 	await togglePublishBlogDB(blogId)
 }
 
 export async function createBlog(formData: FormData): Promise<{ id: string }> {
-    const { isAuthenticated } = getKindeServerSession();
+	;(await isAdmin()).isAdmin === false &&
+		redirect('/blogs', RedirectType.push)
 
-    if (!(await isAuthenticated())) {
-        throw new Error('Unauthorized');
-    }
+	const title = formData.get('title') as string
+	const sql = neon(`${process.env.DATABASE_URL}`)
 
-    const title = formData.get('title') as string;
-    const sql = neon(`${process.env.DATABASE_URL}`);
-
-    // We use a single query block. 
-    // The final 'SELECT' pulls from the 'new_blog' CTE defined at the top.
-    const result = await sql`
+	// We use a single query block.
+	// The final 'SELECT' pulls from the 'new_blog' CTE defined at the top.
+	const result = await sql`
     WITH new_blog AS (
         INSERT INTO Blog (published)
         VALUES (false)
@@ -54,9 +50,9 @@ export async function createBlog(formData: FormData): Promise<{ id: string }> {
         RETURNING id
     )
     SELECT id FROM new_blog; 
-    `;
+    `
 
-    return { id: result[0].id };
+	return { id: result[0].id }
 }
 
 type SafeParseResult =
@@ -66,11 +62,8 @@ type SafeParseResult =
 	| ReturnType<(typeof schemaUpdateCodeSection)['safeParse']>
 
 export async function addSection(blogId: number, formData: FormData) {
-	const { isAuthenticated } = getKindeServerSession()
-
-	if (!(await isAuthenticated())) {
-		throw new Error('Unauthorized')
-	}
+	;(await isAdmin()).isAdmin === false &&
+		redirect('/blogs', RedirectType.push)
 
 	const sectionTypeName = (formData.get('section-type') as string) ?? ''
 
@@ -145,11 +138,8 @@ export async function updateSection(
 	sectionId: number,
 	formData: FormData,
 ) {
-	const { isAuthenticated } = getKindeServerSession()
-
-	if (!(await isAuthenticated())) {
-		throw new Error('Unauthorized')
-	}
+	;(await isAdmin()).isAdmin === false &&
+		redirect('/blogs', RedirectType.push)
 
 	const data = Object.fromEntries(formData.entries())
 
@@ -215,11 +205,9 @@ export async function deleteBlogSection(
 	sectionId: number,
 	sectionTypeId: number,
 ) {
-	const { isAuthenticated } = getKindeServerSession()
+	;(await isAdmin()).isAdmin === false &&
+		redirect('/blogs', RedirectType.push)
 
-	if (!(await isAuthenticated())) {
-		throw new Error('Unauthorized')
-	}
 	const sql = neon(`${process.env.DATABASE_URL}`)
 	let srcToDelete: string | null = null
 
@@ -245,11 +233,9 @@ export async function deleteBlogSection(
 }
 
 export async function deleteBlog(blogId: number) {
-	const { isAuthenticated } = getKindeServerSession()
+	;(await isAdmin()).isAdmin === false &&
+		redirect('/blogs', RedirectType.push)
 
-	if (!(await isAuthenticated())) {
-		throw new Error('Unauthorized')
-	}
 	const sql = neon(`${process.env.DATABASE_URL}`)
 
 	const imageSections = await sql`
@@ -286,11 +272,9 @@ export async function updateBlogOrder({
 	blogId: number
 	newOrder: { id: number; order_index: number }[]
 }) {
-	const { isAuthenticated } = getKindeServerSession()
+	;(await isAdmin()).isAdmin === false &&
+		redirect('/blogs', RedirectType.push)
 
-	if (!(await isAuthenticated())) {
-		throw new Error('Unauthorized')
-	}
 	const sql = neon(`${process.env.DATABASE_URL}`)
 
 	try {
