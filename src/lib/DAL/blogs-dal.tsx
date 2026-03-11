@@ -103,7 +103,7 @@ export async function getAllBlogIds(): Promise<
 > {
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
-		const result = await sql`SELECT id FROM Blog`
+		const result = await sql`SELECT id FROM Blog WHERE published = true`
 
 		return (result as { id: number }[]).map((blog) => ({
 			blogId: String(blog.id),
