@@ -73,7 +73,7 @@ export async function getAllBlogIds(): Promise<
 export async function getSections(blogId: string): Promise<Section[]> {
 	'use cache'
 	cacheTag(`sections-${blogId}`)
-	cacheLife('hours')
+	cacheLife('weeks')
 
 	try {
 		const sql = neon(`${process.env.DATABASE_URL}`)
